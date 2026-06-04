@@ -38,14 +38,14 @@ kubectl apply -f compositiondefinition.yaml   # publishes the AwsRdsDbsubnetgrou
 kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
-This publishes a `AwsRdsDbsubnetgroup` Composition type (`composition.krateo.io/v0-1-0`,
+This publishes a `AwsRdsDbsubnetgroup` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsrdsdbsubnetgroups`), pulling the chart from
 `oci://ghcr.io/braghettos/charts/aws-rds-dbsubnetgroup`.
 
 ### Create a Composition
 
 ```yaml
-apiVersion: composition.krateo.io/v0-1-0
+apiVersion: composition.krateo.io/v0-1-1
 kind: AwsRdsDbsubnetgroup
 metadata:
   name: my-dbsubnetgroup

@@ -38,14 +38,14 @@ kubectl apply -f compositiondefinition.yaml   # publishes the AwsIamGroup type
 kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
-This publishes a `AwsIamGroup` Composition type (`composition.krateo.io/v0-1-0`,
+This publishes a `AwsIamGroup` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsiamgroups`), pulling the chart from
 `oci://ghcr.io/braghettos/charts/aws-iam-group`.
 
 ### Create a Composition
 
 ```yaml
-apiVersion: composition.krateo.io/v0-1-0
+apiVersion: composition.krateo.io/v0-1-1
 kind: AwsIamGroup
 metadata:
   name: my-group

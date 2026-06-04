@@ -38,14 +38,14 @@ kubectl apply -f compositiondefinition.yaml   # publishes the AwsEksCapability t
 kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
-This publishes a `AwsEksCapability` Composition type (`composition.krateo.io/v0-1-0`,
+This publishes a `AwsEksCapability` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsekscapabilities`), pulling the chart from
 `oci://ghcr.io/braghettos/charts/aws-eks-capability`.
 
 ### Create a Composition
 
 ```yaml
-apiVersion: composition.krateo.io/v0-1-0
+apiVersion: composition.krateo.io/v0-1-1
 kind: AwsEksCapability
 metadata:
   name: my-capability

@@ -1,6 +1,5 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "additionalProperties": false,
   "description": "Provision an AWS Quicksight Dashboard via the ACK quicksight controller. Fields mirror the quicksight.services.k8s.aws/v1alpha1 Dashboard spec.",
   "properties": {
     "awsAccountID": {

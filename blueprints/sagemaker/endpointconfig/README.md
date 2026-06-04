@@ -38,14 +38,14 @@ kubectl apply -f compositiondefinition.yaml   # publishes the AwsSagemakerEndpoi
 kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
-This publishes a `AwsSagemakerEndpointconfig` Composition type (`composition.krateo.io/v0-1-0`,
+This publishes a `AwsSagemakerEndpointconfig` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awssagemakerendpointconfigs`), pulling the chart from
 `oci://ghcr.io/braghettos/charts/aws-sagemaker-endpointconfig`.
 
 ### Create a Composition
 
 ```yaml
-apiVersion: composition.krateo.io/v0-1-0
+apiVersion: composition.krateo.io/v0-1-1
 kind: AwsSagemakerEndpointconfig
 metadata:
   name: my-endpointconfig

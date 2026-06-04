@@ -38,14 +38,14 @@ kubectl apply -f compositiondefinition.yaml   # publishes the AwsMemorydbUser ty
 kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
-This publishes a `AwsMemorydbUser` Composition type (`composition.krateo.io/v0-1-0`,
+This publishes a `AwsMemorydbUser` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsmemorydbusers`), pulling the chart from
 `oci://ghcr.io/braghettos/charts/aws-memorydb-user`.
 
 ### Create a Composition
 
 ```yaml
-apiVersion: composition.krateo.io/v0-1-0
+apiVersion: composition.krateo.io/v0-1-1
 kind: AwsMemorydbUser
 metadata:
   name: my-user

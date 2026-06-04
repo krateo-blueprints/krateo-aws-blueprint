@@ -1,6 +1,5 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "additionalProperties": false,
   "description": "Provision an AWS Elasticsearchservice ElasticsearchDomain via the ACK elasticsearchservice controller. Fields mirror the elasticsearchservice.services.k8s.aws/v1alpha1 ElasticsearchDomain spec.",
   "properties": {
     "accessPolicies": {

@@ -1,6 +1,5 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "additionalProperties": false,
   "description": "Provision an AWS Ecs Service via the ACK ecs controller. Fields mirror the ecs.services.k8s.aws/v1alpha1 Service spec.",
   "properties": {
     "capacityProviderStrategy": {

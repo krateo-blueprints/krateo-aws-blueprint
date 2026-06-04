@@ -1,6 +1,5 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "additionalProperties": false,
   "description": "Provision an AWS Iam OpenIDConnectProvider via the ACK iam controller. Fields mirror the iam.services.k8s.aws/v1alpha1 OpenIDConnectProvider spec.",
   "properties": {
     "clientIDs": {

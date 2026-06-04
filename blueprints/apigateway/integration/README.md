@@ -38,14 +38,14 @@ kubectl apply -f compositiondefinition.yaml   # publishes the AwsApigatewayInteg
 kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
-This publishes a `AwsApigatewayIntegration` Composition type (`composition.krateo.io/v0-1-0`,
+This publishes a `AwsApigatewayIntegration` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsapigatewayintegrations`), pulling the chart from
 `oci://ghcr.io/braghettos/charts/aws-apigateway-integration`.
 
 ### Create a Composition
 
 ```yaml
-apiVersion: composition.krateo.io/v0-1-0
+apiVersion: composition.krateo.io/v0-1-1
 kind: AwsApigatewayIntegration
 metadata:
   name: my-integration

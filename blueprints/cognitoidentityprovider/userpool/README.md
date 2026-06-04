@@ -38,14 +38,14 @@ kubectl apply -f compositiondefinition.yaml   # publishes the AwsCognitoidentity
 kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
-This publishes a `AwsCognitoidentityproviderUserpool` Composition type (`composition.krateo.io/v0-1-0`,
+This publishes a `AwsCognitoidentityproviderUserpool` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awscognitoidentityprovideruserpools`), pulling the chart from
 `oci://ghcr.io/braghettos/charts/aws-cognitoidentityprovider-userpool`.
 
 ### Create a Composition
 
 ```yaml
-apiVersion: composition.krateo.io/v0-1-0
+apiVersion: composition.krateo.io/v0-1-1
 kind: AwsCognitoidentityproviderUserpool
 metadata:
   name: my-userpool

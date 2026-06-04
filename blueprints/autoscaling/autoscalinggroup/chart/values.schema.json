@@ -1,6 +1,5 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "additionalProperties": false,
   "description": "Provision an AWS Autoscaling AutoScalingGroup via the ACK autoscaling controller. Fields mirror the autoscaling.services.k8s.aws/v1alpha1 AutoScalingGroup spec.",
   "properties": {
     "availabilityZoneDistribution": {

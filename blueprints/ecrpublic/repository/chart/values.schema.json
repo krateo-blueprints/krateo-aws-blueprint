@@ -1,6 +1,5 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "additionalProperties": false,
   "description": "Provision an AWS Ecrpublic Repository via the ACK ecrpublic controller. Fields mirror the ecrpublic.services.k8s.aws/v1alpha1 Repository spec.",
   "properties": {
     "name": {

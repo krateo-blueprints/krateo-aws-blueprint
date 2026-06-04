@@ -38,14 +38,14 @@ kubectl apply -f compositiondefinition.yaml   # publishes the AwsPrometheusservi
 kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
-This publishes a `AwsPrometheusserviceRulegroupsnamespace` Composition type (`composition.krateo.io/v0-1-0`,
+This publishes a `AwsPrometheusserviceRulegroupsnamespace` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsprometheusservicerulegroupsnamespaces`), pulling the chart from
 `oci://ghcr.io/braghettos/charts/aws-prometheusservice-rulegroupsnamespace`.
 
 ### Create a Composition
 
 ```yaml
-apiVersion: composition.krateo.io/v0-1-0
+apiVersion: composition.krateo.io/v0-1-1
 kind: AwsPrometheusserviceRulegroupsnamespace
 metadata:
   name: my-rulegroupsnamespace

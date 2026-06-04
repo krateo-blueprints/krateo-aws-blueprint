@@ -38,14 +38,14 @@ kubectl apply -f compositiondefinition.yaml   # publishes the AwsS3filesFilesyst
 kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
-This publishes a `AwsS3filesFilesystem` Composition type (`composition.krateo.io/v0-1-0`,
+This publishes a `AwsS3filesFilesystem` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awss3filesfilesystems`), pulling the chart from
 `oci://ghcr.io/braghettos/charts/aws-s3files-filesystem`.
 
 ### Create a Composition
 
 ```yaml
-apiVersion: composition.krateo.io/v0-1-0
+apiVersion: composition.krateo.io/v0-1-1
 kind: AwsS3filesFilesystem
 metadata:
   name: my-filesystem

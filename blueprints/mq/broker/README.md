@@ -38,14 +38,14 @@ kubectl apply -f compositiondefinition.yaml   # publishes the AwsMqBroker type
 kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
-This publishes a `AwsMqBroker` Composition type (`composition.krateo.io/v0-1-0`,
+This publishes a `AwsMqBroker` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsmqbrokers`), pulling the chart from
 `oci://ghcr.io/braghettos/charts/aws-mq-broker`.
 
 ### Create a Composition
 
 ```yaml
-apiVersion: composition.krateo.io/v0-1-0
+apiVersion: composition.krateo.io/v0-1-1
 kind: AwsMqBroker
 metadata:
   name: my-broker

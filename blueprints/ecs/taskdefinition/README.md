@@ -38,14 +38,14 @@ kubectl apply -f compositiondefinition.yaml   # publishes the AwsEcsTaskdefiniti
 kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
-This publishes a `AwsEcsTaskdefinition` Composition type (`composition.krateo.io/v0-1-0`,
+This publishes a `AwsEcsTaskdefinition` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsecstaskdefinitions`), pulling the chart from
 `oci://ghcr.io/braghettos/charts/aws-ecs-taskdefinition`.
 
 ### Create a Composition
 
 ```yaml
-apiVersion: composition.krateo.io/v0-1-0
+apiVersion: composition.krateo.io/v0-1-1
 kind: AwsEcsTaskdefinition
 metadata:
   name: my-taskdefinition

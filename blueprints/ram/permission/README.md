@@ -38,14 +38,14 @@ kubectl apply -f compositiondefinition.yaml   # publishes the AwsRAMPermission t
 kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
-This publishes a `AwsRAMPermission` Composition type (`composition.krateo.io/v0-1-0`,
+This publishes a `AwsRAMPermission` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsrampermissions`), pulling the chart from
 `oci://ghcr.io/braghettos/charts/aws-ram-permission`.
 
 ### Create a Composition
 
 ```yaml
-apiVersion: composition.krateo.io/v0-1-0
+apiVersion: composition.krateo.io/v0-1-1
 kind: AwsRAMPermission
 metadata:
   name: my-permission

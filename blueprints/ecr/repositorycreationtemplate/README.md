@@ -38,14 +38,14 @@ kubectl apply -f compositiondefinition.yaml   # publishes the AwsEcrRepositorycr
 kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
-This publishes a `AwsEcrRepositorycreationtemplate` Composition type (`composition.krateo.io/v0-1-0`,
+This publishes a `AwsEcrRepositorycreationtemplate` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsecrrepositorycreationtemplates`), pulling the chart from
 `oci://ghcr.io/braghettos/charts/aws-ecr-repositorycreationtemplate`.
 
 ### Create a Composition
 
 ```yaml
-apiVersion: composition.krateo.io/v0-1-0
+apiVersion: composition.krateo.io/v0-1-1
 kind: AwsEcrRepositorycreationtemplate
 metadata:
   name: my-repositorycreationtemplate

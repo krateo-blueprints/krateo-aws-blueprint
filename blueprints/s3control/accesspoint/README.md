@@ -38,14 +38,14 @@ kubectl apply -f compositiondefinition.yaml   # publishes the AwsS3controlAccess
 kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
-This publishes a `AwsS3controlAccesspoint` Composition type (`composition.krateo.io/v0-1-0`,
+This publishes a `AwsS3controlAccesspoint` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awss3controlaccesspoints`), pulling the chart from
 `oci://ghcr.io/braghettos/charts/aws-s3control-accesspoint`.
 
 ### Create a Composition
 
 ```yaml
-apiVersion: composition.krateo.io/v0-1-0
+apiVersion: composition.krateo.io/v0-1-1
 kind: AwsS3controlAccesspoint
 metadata:
   name: my-accesspoint

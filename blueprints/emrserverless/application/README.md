@@ -38,14 +38,14 @@ kubectl apply -f compositiondefinition.yaml   # publishes the AwsEmrserverlessAp
 kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
-This publishes a `AwsEmrserverlessApplication` Composition type (`composition.krateo.io/v0-1-0`,
+This publishes a `AwsEmrserverlessApplication` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsemrserverlessapplications`), pulling the chart from
 `oci://ghcr.io/braghettos/charts/aws-emrserverless-application`.
 
 ### Create a Composition
 
 ```yaml
-apiVersion: composition.krateo.io/v0-1-0
+apiVersion: composition.krateo.io/v0-1-1
 kind: AwsEmrserverlessApplication
 metadata:
   name: my-application

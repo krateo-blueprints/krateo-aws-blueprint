@@ -1,6 +1,5 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "additionalProperties": false,
   "description": "Provision an AWS Networkfirewall FirewallPolicy via the ACK networkfirewall controller. Fields mirror the networkfirewall.services.k8s.aws/v1alpha1 FirewallPolicy spec.",
   "properties": {
     "description": {

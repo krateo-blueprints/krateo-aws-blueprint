@@ -38,14 +38,14 @@ kubectl apply -f compositiondefinition.yaml   # publishes the AwsKafkaCluster ty
 kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
-This publishes a `AwsKafkaCluster` Composition type (`composition.krateo.io/v0-1-0`,
+This publishes a `AwsKafkaCluster` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awskafkaclusters`), pulling the chart from
 `oci://ghcr.io/braghettos/charts/aws-kafka-cluster`.
 
 ### Create a Composition
 
 ```yaml
-apiVersion: composition.krateo.io/v0-1-0
+apiVersion: composition.krateo.io/v0-1-1
 kind: AwsKafkaCluster
 metadata:
   name: my-cluster

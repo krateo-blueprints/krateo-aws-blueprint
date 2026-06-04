@@ -1,6 +1,5 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "additionalProperties": false,
   "description": "Provision an AWS Prometheusservice LoggingConfiguration via the ACK prometheusservice controller. Fields mirror the prometheusservice.services.k8s.aws/v1alpha1 LoggingConfiguration spec.",
   "properties": {
     "logGroupARN": {

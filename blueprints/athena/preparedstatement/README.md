@@ -38,14 +38,14 @@ kubectl apply -f compositiondefinition.yaml   # publishes the AwsAthenaPrepareds
 kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
-This publishes a `AwsAthenaPreparedstatement` Composition type (`composition.krateo.io/v0-1-0`,
+This publishes a `AwsAthenaPreparedstatement` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsathenapreparedstatements`), pulling the chart from
 `oci://ghcr.io/braghettos/charts/aws-athena-preparedstatement`.
 
 ### Create a Composition
 
 ```yaml
-apiVersion: composition.krateo.io/v0-1-0
+apiVersion: composition.krateo.io/v0-1-1
 kind: AwsAthenaPreparedstatement
 metadata:
   name: my-preparedstatement

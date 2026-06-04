@@ -1,6 +1,5 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "additionalProperties": false,
   "description": "Provision an AWS Ses ConfigurationSet via the ACK ses controller. Fields mirror the ses.services.k8s.aws/v1alpha1 ConfigurationSet spec.",
   "properties": {
     "name": {

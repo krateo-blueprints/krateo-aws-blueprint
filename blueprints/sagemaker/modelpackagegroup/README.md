@@ -38,14 +38,14 @@ kubectl apply -f compositiondefinition.yaml   # publishes the AwsSagemakerModelp
 kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
-This publishes a `AwsSagemakerModelpackagegroup` Composition type (`composition.krateo.io/v0-1-0`,
+This publishes a `AwsSagemakerModelpackagegroup` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awssagemakermodelpackagegroups`), pulling the chart from
 `oci://ghcr.io/braghettos/charts/aws-sagemaker-modelpackagegroup`.
 
 ### Create a Composition
 
 ```yaml
-apiVersion: composition.krateo.io/v0-1-0
+apiVersion: composition.krateo.io/v0-1-1
 kind: AwsSagemakerModelpackagegroup
 metadata:
   name: my-modelpackagegroup

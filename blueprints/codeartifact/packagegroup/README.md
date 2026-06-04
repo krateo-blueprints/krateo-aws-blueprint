@@ -38,14 +38,14 @@ kubectl apply -f compositiondefinition.yaml   # publishes the AwsCodeartifactPac
 kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
-This publishes a `AwsCodeartifactPackagegroup` Composition type (`composition.krateo.io/v0-1-0`,
+This publishes a `AwsCodeartifactPackagegroup` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awscodeartifactpackagegroups`), pulling the chart from
 `oci://ghcr.io/braghettos/charts/aws-codeartifact-packagegroup`.
 
 ### Create a Composition
 
 ```yaml
-apiVersion: composition.krateo.io/v0-1-0
+apiVersion: composition.krateo.io/v0-1-1
 kind: AwsCodeartifactPackagegroup
 metadata:
   name: my-packagegroup

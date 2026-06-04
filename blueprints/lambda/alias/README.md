@@ -38,14 +38,14 @@ kubectl apply -f compositiondefinition.yaml   # publishes the AwsLambdaAlias typ
 kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
-This publishes a `AwsLambdaAlias` Composition type (`composition.krateo.io/v0-1-0`,
+This publishes a `AwsLambdaAlias` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awslambdaalias`), pulling the chart from
 `oci://ghcr.io/braghettos/charts/aws-lambda-alias`.
 
 ### Create a Composition
 
 ```yaml
-apiVersion: composition.krateo.io/v0-1-0
+apiVersion: composition.krateo.io/v0-1-1
 kind: AwsLambdaAlias
 metadata:
   name: my-alias

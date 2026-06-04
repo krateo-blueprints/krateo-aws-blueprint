@@ -1,6 +1,5 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "additionalProperties": false,
   "description": "Provision an AWS Ram ResourceShare via the ACK ram controller. Fields mirror the ram.services.k8s.aws/v1alpha1 ResourceShare spec.",
   "properties": {
     "allowExternalPrincipals": {

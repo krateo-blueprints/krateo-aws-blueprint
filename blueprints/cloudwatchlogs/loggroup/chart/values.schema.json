@@ -1,6 +1,5 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "additionalProperties": false,
   "description": "Provision an AWS Cloudwatchlogs LogGroup via the ACK cloudwatchlogs controller. Fields mirror the cloudwatchlogs.services.k8s.aws/v1alpha1 LogGroup spec.",
   "properties": {
     "kmsKeyID": {

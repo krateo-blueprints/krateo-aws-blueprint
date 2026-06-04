@@ -1,6 +1,5 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "additionalProperties": false,
   "description": "Provision an AWS Route53 HealthCheck via the ACK route53 controller. Fields mirror the route53.services.k8s.aws/v1alpha1 HealthCheck spec.",
   "properties": {
     "healthCheckConfig": {

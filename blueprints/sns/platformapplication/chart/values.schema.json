@@ -1,6 +1,5 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "additionalProperties": false,
   "description": "Provision an AWS Sns PlatformApplication via the ACK sns controller. Fields mirror the sns.services.k8s.aws/v1alpha1 PlatformApplication spec.",
   "properties": {
     "eventDeliveryFailure": {

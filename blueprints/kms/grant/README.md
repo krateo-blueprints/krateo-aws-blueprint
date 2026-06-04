@@ -38,14 +38,14 @@ kubectl apply -f compositiondefinition.yaml   # publishes the AwsKmsGrant type
 kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
-This publishes a `AwsKmsGrant` Composition type (`composition.krateo.io/v0-1-0`,
+This publishes a `AwsKmsGrant` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awskmsgrants`), pulling the chart from
 `oci://ghcr.io/braghettos/charts/aws-kms-grant`.
 
 ### Create a Composition
 
 ```yaml
-apiVersion: composition.krateo.io/v0-1-0
+apiVersion: composition.krateo.io/v0-1-1
 kind: AwsKmsGrant
 metadata:
   name: my-grant

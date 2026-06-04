@@ -1,6 +1,5 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "additionalProperties": false,
   "description": "Provision an AWS Keyspaces Table via the ACK keyspaces controller. Fields mirror the keyspaces.services.k8s.aws/v1alpha1 Table spec.",
   "properties": {
     "capacitySpecification": {

@@ -1,6 +1,5 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "additionalProperties": false,
   "description": "Provision an AWS Kinesis Stream via the ACK kinesis controller. Fields mirror the kinesis.services.k8s.aws/v1alpha1 Stream spec.",
   "properties": {
     "name": {

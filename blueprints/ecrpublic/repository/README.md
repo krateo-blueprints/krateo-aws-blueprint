@@ -38,14 +38,14 @@ kubectl apply -f compositiondefinition.yaml   # publishes the AwsEcrpublicReposi
 kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
-This publishes a `AwsEcrpublicRepository` Composition type (`composition.krateo.io/v0-1-0`,
+This publishes a `AwsEcrpublicRepository` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsecrpublicrepositories`), pulling the chart from
 `oci://ghcr.io/braghettos/charts/aws-ecrpublic-repository`.
 
 ### Create a Composition
 
 ```yaml
-apiVersion: composition.krateo.io/v0-1-0
+apiVersion: composition.krateo.io/v0-1-1
 kind: AwsEcrpublicRepository
 metadata:
   name: my-repository

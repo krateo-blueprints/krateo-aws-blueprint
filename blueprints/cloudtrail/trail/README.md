@@ -38,14 +38,14 @@ kubectl apply -f compositiondefinition.yaml   # publishes the AwsCloudtrailTrail
 kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
-This publishes a `AwsCloudtrailTrail` Composition type (`composition.krateo.io/v0-1-0`,
+This publishes a `AwsCloudtrailTrail` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awscloudtrailtrails`), pulling the chart from
 `oci://ghcr.io/braghettos/charts/aws-cloudtrail-trail`.
 
 ### Create a Composition
 
 ```yaml
-apiVersion: composition.krateo.io/v0-1-0
+apiVersion: composition.krateo.io/v0-1-1
 kind: AwsCloudtrailTrail
 metadata:
   name: my-trail

@@ -38,14 +38,14 @@ kubectl apply -f compositiondefinition.yaml   # publishes the AwsSesConfiguratio
 kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
-This publishes a `AwsSesConfigurationset` Composition type (`composition.krateo.io/v0-1-0`,
+This publishes a `AwsSesConfigurationset` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awssesconfigurationsets`), pulling the chart from
 `oci://ghcr.io/braghettos/charts/aws-ses-configurationset`.
 
 ### Create a Composition
 
 ```yaml
-apiVersion: composition.krateo.io/v0-1-0
+apiVersion: composition.krateo.io/v0-1-1
 kind: AwsSesConfigurationset
 metadata:
   name: my-configurationset

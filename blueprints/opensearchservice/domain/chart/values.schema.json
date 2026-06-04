@@ -1,6 +1,5 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "additionalProperties": false,
   "description": "Provision an AWS Opensearchservice Domain via the ACK opensearchservice controller. Fields mirror the opensearchservice.services.k8s.aws/v1alpha1 Domain spec.",
   "properties": {
     "accessPolicies": {

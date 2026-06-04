@@ -38,14 +38,14 @@ kubectl apply -f compositiondefinition.yaml   # publishes the AwsApplicationauto
 kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
-This publishes a `AwsApplicationautoscalingScalabletarget` Composition type (`composition.krateo.io/v0-1-0`,
+This publishes a `AwsApplicationautoscalingScalabletarget` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsapplicationautoscalingscalabletargets`), pulling the chart from
 `oci://ghcr.io/braghettos/charts/aws-applicationautoscaling-scalabletarget`.
 
 ### Create a Composition
 
 ```yaml
-apiVersion: composition.krateo.io/v0-1-0
+apiVersion: composition.krateo.io/v0-1-1
 kind: AwsApplicationautoscalingScalabletarget
 metadata:
   name: my-scalabletarget

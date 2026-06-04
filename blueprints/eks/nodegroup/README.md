@@ -38,14 +38,14 @@ kubectl apply -f compositiondefinition.yaml   # publishes the AwsEksNodegroup ty
 kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
-This publishes a `AwsEksNodegroup` Composition type (`composition.krateo.io/v0-1-0`,
+This publishes a `AwsEksNodegroup` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awseksnodegroups`), pulling the chart from
 `oci://ghcr.io/braghettos/charts/aws-eks-nodegroup`.
 
 ### Create a Composition
 
 ```yaml
-apiVersion: composition.krateo.io/v0-1-0
+apiVersion: composition.krateo.io/v0-1-1
 kind: AwsEksNodegroup
 metadata:
   name: my-nodegroup

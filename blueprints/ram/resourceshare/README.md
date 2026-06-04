@@ -38,14 +38,14 @@ kubectl apply -f compositiondefinition.yaml   # publishes the AwsRAMResourceshar
 kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
-This publishes a `AwsRAMResourceshare` Composition type (`composition.krateo.io/v0-1-0`,
+This publishes a `AwsRAMResourceshare` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsramresourceshares`), pulling the chart from
 `oci://ghcr.io/braghettos/charts/aws-ram-resourceshare`.
 
 ### Create a Composition
 
 ```yaml
-apiVersion: composition.krateo.io/v0-1-0
+apiVersion: composition.krateo.io/v0-1-1
 kind: AwsRAMResourceshare
 metadata:
   name: my-resourceshare

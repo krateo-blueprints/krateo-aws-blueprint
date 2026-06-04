@@ -38,14 +38,14 @@ kubectl apply -f compositiondefinition.yaml   # publishes the AwsElasticsearchse
 kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
-This publishes a `AwsElasticsearchserviceElasticsearchdomain` Composition type (`composition.krateo.io/v0-1-0`,
+This publishes a `AwsElasticsearchserviceElasticsearchdomain` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awselasticsearchserviceelasticsearchdomains`), pulling the chart from
 `oci://ghcr.io/braghettos/charts/aws-elasticsearchservice-elasticsearchdomain`.
 
 ### Create a Composition
 
 ```yaml
-apiVersion: composition.krateo.io/v0-1-0
+apiVersion: composition.krateo.io/v0-1-1
 kind: AwsElasticsearchserviceElasticsearchdomain
 metadata:
   name: my-elasticsearchdomain

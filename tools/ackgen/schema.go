@@ -94,13 +94,16 @@ func buildValuesSchema(spec map[string]interface{}, title, desc string) map[stri
 		"default":     "",
 	}
 
+	// NOTE: do not set additionalProperties:false at the root. Krateo/Helm inject a `global`
+	// values key when installing the chart, and a strict root would reject it (chart-inspector
+	// fails with "additional properties 'global' not allowed"). This matches the canonical
+	// Krateo blueprint schema (e.g. krateo-rancher-blueprint), which omits root additionalProperties.
 	out := map[string]interface{}{
-		"$schema":              "http://json-schema.org/draft-07/schema",
-		"type":                 "object",
-		"title":                title,
-		"description":          desc,
-		"additionalProperties": false,
-		"properties":           props,
+		"$schema":     "http://json-schema.org/draft-07/schema",
+		"type":        "object",
+		"title":       title,
+		"description": desc,
+		"properties":  props,
 	}
 	if req, ok := curated["required"]; ok {
 		out["required"] = req

@@ -38,14 +38,14 @@ kubectl apply -f compositiondefinition.yaml   # publishes the AwsEventbridgeEven
 kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
-This publishes a `AwsEventbridgeEventbus` Composition type (`composition.krateo.io/v0-1-0`,
+This publishes a `AwsEventbridgeEventbus` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awseventbridgeeventbuses`), pulling the chart from
 `oci://ghcr.io/braghettos/charts/aws-eventbridge-eventbus`.
 
 ### Create a Composition
 
 ```yaml
-apiVersion: composition.krateo.io/v0-1-0
+apiVersion: composition.krateo.io/v0-1-1
 kind: AwsEventbridgeEventbus
 metadata:
   name: my-eventbus

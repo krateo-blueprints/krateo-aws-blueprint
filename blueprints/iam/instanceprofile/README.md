@@ -38,14 +38,14 @@ kubectl apply -f compositiondefinition.yaml   # publishes the AwsIamInstanceprof
 kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
-This publishes a `AwsIamInstanceprofile` Composition type (`composition.krateo.io/v0-1-0`,
+This publishes a `AwsIamInstanceprofile` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsiaminstanceprofiles`), pulling the chart from
 `oci://ghcr.io/braghettos/charts/aws-iam-instanceprofile`.
 
 ### Create a Composition
 
 ```yaml
-apiVersion: composition.krateo.io/v0-1-0
+apiVersion: composition.krateo.io/v0-1-1
 kind: AwsIamInstanceprofile
 metadata:
   name: my-instanceprofile

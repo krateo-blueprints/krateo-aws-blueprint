@@ -1,6 +1,5 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "additionalProperties": false,
   "description": "Provision an AWS S3files MountTarget via the ACK s3files controller. Fields mirror the s3files.services.k8s.aws/v1alpha1 MountTarget spec.",
   "properties": {
     "fileSystemID": {

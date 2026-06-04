@@ -38,14 +38,14 @@ kubectl apply -f compositiondefinition.yaml   # publishes the AwsRoute53Hostedzo
 kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
-This publishes a `AwsRoute53Hostedzone` Composition type (`composition.krateo.io/v0-1-0`,
+This publishes a `AwsRoute53Hostedzone` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsroute53hostedzones`), pulling the chart from
 `oci://ghcr.io/braghettos/charts/aws-route53-hostedzone`.
 
 ### Create a Composition
 
 ```yaml
-apiVersion: composition.krateo.io/v0-1-0
+apiVersion: composition.krateo.io/v0-1-1
 kind: AwsRoute53Hostedzone
 metadata:
   name: my-hostedzone

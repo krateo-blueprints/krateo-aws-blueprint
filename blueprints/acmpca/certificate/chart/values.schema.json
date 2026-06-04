@@ -1,6 +1,5 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "additionalProperties": false,
   "description": "Provision an AWS Acmpca Certificate via the ACK acmpca controller. Fields mirror the acmpca.services.k8s.aws/v1alpha1 Certificate spec.",
   "properties": {
     "apiPassthrough": {

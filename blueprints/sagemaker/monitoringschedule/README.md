@@ -38,14 +38,14 @@ kubectl apply -f compositiondefinition.yaml   # publishes the AwsSagemakerMonito
 kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
-This publishes a `AwsSagemakerMonitoringschedule` Composition type (`composition.krateo.io/v0-1-0`,
+This publishes a `AwsSagemakerMonitoringschedule` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awssagemakermonitoringschedules`), pulling the chart from
 `oci://ghcr.io/braghettos/charts/aws-sagemaker-monitoringschedule`.
 
 ### Create a Composition
 
 ```yaml
-apiVersion: composition.krateo.io/v0-1-0
+apiVersion: composition.krateo.io/v0-1-1
 kind: AwsSagemakerMonitoringschedule
 metadata:
   name: my-monitoringschedule

@@ -38,14 +38,14 @@ kubectl apply -f compositiondefinition.yaml   # publishes the AwsEc2Managedprefi
 kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
-This publishes a `AwsEc2Managedprefixlist` Composition type (`composition.krateo.io/v0-1-0`,
+This publishes a `AwsEc2Managedprefixlist` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsec2managedprefixlists`), pulling the chart from
 `oci://ghcr.io/braghettos/charts/aws-ec2-managedprefixlist`.
 
 ### Create a Composition
 
 ```yaml
-apiVersion: composition.krateo.io/v0-1-0
+apiVersion: composition.krateo.io/v0-1-1
 kind: AwsEc2Managedprefixlist
 metadata:
   name: my-managedprefixlist

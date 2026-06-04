@@ -38,14 +38,14 @@ kubectl apply -f compositiondefinition.yaml   # publishes the AwsCloudfrontRespo
 kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
-This publishes a `AwsCloudfrontResponseheaderspolicy` Composition type (`composition.krateo.io/v0-1-0`,
+This publishes a `AwsCloudfrontResponseheaderspolicy` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awscloudfrontresponseheaderspolicies`), pulling the chart from
 `oci://ghcr.io/braghettos/charts/aws-cloudfront-responseheaderspolicy`.
 
 ### Create a Composition
 
 ```yaml
-apiVersion: composition.krateo.io/v0-1-0
+apiVersion: composition.krateo.io/v0-1-1
 kind: AwsCloudfrontResponseheaderspolicy
 metadata:
   name: my-responseheaderspolicy

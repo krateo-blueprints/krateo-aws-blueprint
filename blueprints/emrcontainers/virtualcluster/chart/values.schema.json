@@ -1,6 +1,5 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "additionalProperties": false,
   "description": "Provision an AWS Emrcontainers VirtualCluster via the ACK emrcontainers controller. Fields mirror the emrcontainers.services.k8s.aws/v1alpha1 VirtualCluster spec.",
   "properties": {
     "containerProvider": {

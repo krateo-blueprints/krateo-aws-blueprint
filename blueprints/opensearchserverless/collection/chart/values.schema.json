@@ -1,6 +1,5 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "additionalProperties": false,
   "description": "Provision an AWS Opensearchserverless Collection via the ACK opensearchserverless controller. Fields mirror the opensearchserverless.services.k8s.aws/v1alpha1 Collection spec.",
   "properties": {
     "description": {

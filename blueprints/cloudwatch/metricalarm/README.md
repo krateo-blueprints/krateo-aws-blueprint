@@ -38,14 +38,14 @@ kubectl apply -f compositiondefinition.yaml   # publishes the AwsCloudwatchMetri
 kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
-This publishes a `AwsCloudwatchMetricalarm` Composition type (`composition.krateo.io/v0-1-0`,
+This publishes a `AwsCloudwatchMetricalarm` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awscloudwatchmetricalarms`), pulling the chart from
 `oci://ghcr.io/braghettos/charts/aws-cloudwatch-metricalarm`.
 
 ### Create a Composition
 
 ```yaml
-apiVersion: composition.krateo.io/v0-1-0
+apiVersion: composition.krateo.io/v0-1-1
 kind: AwsCloudwatchMetricalarm
 metadata:
   name: my-metricalarm

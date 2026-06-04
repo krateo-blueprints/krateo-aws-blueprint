@@ -33,7 +33,7 @@ spec:
       color: ${ .getCompositionDefinition.status.conditions[] | select(.type == "Ready") | if .status == "False" then "orange" elif .status == "True" then "green" else "grey" end }
       content: Provision an AWS Sagemaker HyperParameterTuningJob via the ACK sagemaker controller.
       icon: fa-brands fa-aws
-      tags: aws-sagemaker-system,0.1.0
+      tags: aws-sagemaker-system,0.1.1
       title: aws-sagemaker-hyperparametertuningjob
       status: ${ .getCompositionDefinition.status.conditions[] | select(.type == "Ready") | "Ready:" + .status }
       date: ${ .getCompositionDefinition.metadata.creationTimestamp }
@@ -73,7 +73,7 @@ spec:
   actions:
     - template:
         id: submit
-        apiVersion: composition.krateo.io/v0-1-0
+        apiVersion: composition.krateo.io/v0-1-1
         verb: POST
         resource: awssagemakerhyperparametertuningjobs
         payloadToOverride:
@@ -81,7 +81,7 @@ spec:
           value: ${ "aws-sagemaker-system" }
   app:
     template:
-      schema: ${ .getCRD | .spec.versions[] | select(.name == "v0-1-0") | .schema.openAPIV3Schema.properties.spec }
+      schema: ${ .getCRD | .spec.versions[] | select(.name == "v0-1-1") | .schema.openAPIV3Schema.properties.spec }
   api:
   - name: getCRD
     path: "/apis/apiextensions.k8s.io/v1/customresourcedefinitions/awssagemakerhyperparametertuningjobs.composition.krateo.io"

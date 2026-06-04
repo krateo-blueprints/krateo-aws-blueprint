@@ -1,6 +1,5 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "additionalProperties": false,
   "description": "Provision an AWS Elbv2 Listener via the ACK elbv2 controller. Fields mirror the elbv2.services.k8s.aws/v1alpha1 Listener spec.",
   "properties": {
     "alpnPolicy": {

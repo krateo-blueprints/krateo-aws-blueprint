@@ -38,14 +38,14 @@ kubectl apply -f compositiondefinition.yaml   # publishes the AwsSfnActivity typ
 kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
-This publishes a `AwsSfnActivity` Composition type (`composition.krateo.io/v0-1-0`,
+This publishes a `AwsSfnActivity` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awssfnactivities`), pulling the chart from
 `oci://ghcr.io/braghettos/charts/aws-sfn-activity`.
 
 ### Create a Composition
 
 ```yaml
-apiVersion: composition.krateo.io/v0-1-0
+apiVersion: composition.krateo.io/v0-1-1
 kind: AwsSfnActivity
 metadata:
   name: my-activity

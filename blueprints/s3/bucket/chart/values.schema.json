@@ -1,6 +1,5 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "additionalProperties": false,
   "description": "Provision an AWS S3 Bucket via the ACK s3 controller. Fields mirror the s3.services.k8s.aws/v1alpha1 Bucket spec.",
   "properties": {
     "accelerate": {

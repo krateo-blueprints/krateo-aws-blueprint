@@ -1,6 +1,5 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "additionalProperties": false,
   "description": "Provision an AWS Documentdb DBCluster via the ACK documentdb controller. Fields mirror the documentdb.services.k8s.aws/v1alpha1 DBCluster spec.",
   "properties": {
     "availabilityZones": {

@@ -38,14 +38,14 @@ kubectl apply -f compositiondefinition.yaml   # publishes the AwsSagemakerProces
 kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
-This publishes a `AwsSagemakerProcessingjob` Composition type (`composition.krateo.io/v0-1-0`,
+This publishes a `AwsSagemakerProcessingjob` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awssagemakerprocessingjobs`), pulling the chart from
 `oci://ghcr.io/braghettos/charts/aws-sagemaker-processingjob`.
 
 ### Create a Composition
 
 ```yaml
-apiVersion: composition.krateo.io/v0-1-0
+apiVersion: composition.krateo.io/v0-1-1
 kind: AwsSagemakerProcessingjob
 metadata:
   name: my-processingjob

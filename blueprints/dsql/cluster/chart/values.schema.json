@@ -1,6 +1,5 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "additionalProperties": false,
   "description": "Provision an AWS Dsql Cluster via the ACK dsql controller. Fields mirror the dsql.services.k8s.aws/v1alpha1 Cluster spec.",
   "properties": {
     "deletionProtectionEnabled": {

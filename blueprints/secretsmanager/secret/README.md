@@ -38,14 +38,14 @@ kubectl apply -f compositiondefinition.yaml   # publishes the AwsSecretsmanagerS
 kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
-This publishes a `AwsSecretsmanagerSecret` Composition type (`composition.krateo.io/v0-1-0`,
+This publishes a `AwsSecretsmanagerSecret` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awssecretsmanagersecrets`), pulling the chart from
 `oci://ghcr.io/braghettos/charts/aws-secretsmanager-secret`.
 
 ### Create a Composition
 
 ```yaml
-apiVersion: composition.krateo.io/v0-1-0
+apiVersion: composition.krateo.io/v0-1-1
 kind: AwsSecretsmanagerSecret
 metadata:
   name: my-secret

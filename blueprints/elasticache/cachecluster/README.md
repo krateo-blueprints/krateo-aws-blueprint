@@ -38,14 +38,14 @@ kubectl apply -f compositiondefinition.yaml   # publishes the AwsElasticacheCach
 kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
-This publishes a `AwsElasticacheCachecluster` Composition type (`composition.krateo.io/v0-1-0`,
+This publishes a `AwsElasticacheCachecluster` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awselasticachecacheclusters`), pulling the chart from
 `oci://ghcr.io/braghettos/charts/aws-elasticache-cachecluster`.
 
 ### Create a Composition
 
 ```yaml
-apiVersion: composition.krateo.io/v0-1-0
+apiVersion: composition.krateo.io/v0-1-1
 kind: AwsElasticacheCachecluster
 metadata:
   name: my-cachecluster

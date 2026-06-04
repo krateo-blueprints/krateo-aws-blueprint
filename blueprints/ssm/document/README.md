@@ -38,14 +38,14 @@ kubectl apply -f compositiondefinition.yaml   # publishes the AwsSsmDocument typ
 kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
-This publishes a `AwsSsmDocument` Composition type (`composition.krateo.io/v0-1-0`,
+This publishes a `AwsSsmDocument` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsssmdocuments`), pulling the chart from
 `oci://ghcr.io/braghettos/charts/aws-ssm-document`.
 
 ### Create a Composition
 
 ```yaml
-apiVersion: composition.krateo.io/v0-1-0
+apiVersion: composition.krateo.io/v0-1-1
 kind: AwsSsmDocument
 metadata:
   name: my-document

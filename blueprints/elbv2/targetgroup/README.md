@@ -38,14 +38,14 @@ kubectl apply -f compositiondefinition.yaml   # publishes the AwsElbv2Targetgrou
 kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
-This publishes a `AwsElbv2Targetgroup` Composition type (`composition.krateo.io/v0-1-0`,
+This publishes a `AwsElbv2Targetgroup` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awselbv2targetgroups`), pulling the chart from
 `oci://ghcr.io/braghettos/charts/aws-elbv2-targetgroup`.
 
 ### Create a Composition
 
 ```yaml
-apiVersion: composition.krateo.io/v0-1-0
+apiVersion: composition.krateo.io/v0-1-1
 kind: AwsElbv2Targetgroup
 metadata:
   name: my-targetgroup

@@ -38,14 +38,14 @@ kubectl apply -f compositiondefinition.yaml   # publishes the AwsApigatewayApime
 kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
-This publishes a `AwsApigatewayApimethodresponse` Composition type (`composition.krateo.io/v0-1-0`,
+This publishes a `AwsApigatewayApimethodresponse` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsapigatewayapimethodresponses`), pulling the chart from
 `oci://ghcr.io/braghettos/charts/aws-apigateway-apimethodresponse`.
 
 ### Create a Composition
 
 ```yaml
-apiVersion: composition.krateo.io/v0-1-0
+apiVersion: composition.krateo.io/v0-1-1
 kind: AwsApigatewayApimethodresponse
 metadata:
   name: my-apimethodresponse

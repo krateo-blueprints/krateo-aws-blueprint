@@ -38,14 +38,14 @@ kubectl apply -f compositiondefinition.yaml   # publishes the AwsLambdaLayervers
 kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
-This publishes a `AwsLambdaLayerversion` Composition type (`composition.krateo.io/v0-1-0`,
+This publishes a `AwsLambdaLayerversion` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awslambdalayerversions`), pulling the chart from
 `oci://ghcr.io/braghettos/charts/aws-lambda-layerversion`.
 
 ### Create a Composition
 
 ```yaml
-apiVersion: composition.krateo.io/v0-1-0
+apiVersion: composition.krateo.io/v0-1-1
 kind: AwsLambdaLayerversion
 metadata:
   name: my-layerversion

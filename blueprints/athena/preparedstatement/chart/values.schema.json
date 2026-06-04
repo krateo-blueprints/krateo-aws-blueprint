@@ -1,6 +1,5 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "additionalProperties": false,
   "description": "Provision an AWS Athena PreparedStatement via the ACK athena controller. Fields mirror the athena.services.k8s.aws/v1alpha1 PreparedStatement spec.",
   "properties": {
     "description": {

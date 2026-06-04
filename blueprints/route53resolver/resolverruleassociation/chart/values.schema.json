@@ -1,6 +1,5 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "additionalProperties": false,
   "description": "Provision an AWS Route53resolver ResolverRuleAssociation via the ACK route53resolver controller. Fields mirror the route53resolver.services.k8s.aws/v1alpha1 ResolverRuleAssociation spec.",
   "properties": {
     "name": {

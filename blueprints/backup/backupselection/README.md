@@ -38,14 +38,14 @@ kubectl apply -f compositiondefinition.yaml   # publishes the AwsBackupBackupsel
 kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
-This publishes a `AwsBackupBackupselection` Composition type (`composition.krateo.io/v0-1-0`,
+This publishes a `AwsBackupBackupselection` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsbackupbackupselections`), pulling the chart from
 `oci://ghcr.io/braghettos/charts/aws-backup-backupselection`.
 
 ### Create a Composition
 
 ```yaml
-apiVersion: composition.krateo.io/v0-1-0
+apiVersion: composition.krateo.io/v0-1-1
 kind: AwsBackupBackupselection
 metadata:
   name: my-backupselection

@@ -38,14 +38,14 @@ kubectl apply -f compositiondefinition.yaml   # publishes the AwsElbv2Listener t
 kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
-This publishes a `AwsElbv2Listener` Composition type (`composition.krateo.io/v0-1-0`,
+This publishes a `AwsElbv2Listener` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awselbv2listeners`), pulling the chart from
 `oci://ghcr.io/braghettos/charts/aws-elbv2-listener`.
 
 ### Create a Composition
 
 ```yaml
-apiVersion: composition.krateo.io/v0-1-0
+apiVersion: composition.krateo.io/v0-1-1
 kind: AwsElbv2Listener
 metadata:
   name: my-listener

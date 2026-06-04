@@ -38,14 +38,14 @@ kubectl apply -f compositiondefinition.yaml   # publishes the AwsElasticacheRepl
 kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
-This publishes a `AwsElasticacheReplicationgroup` Composition type (`composition.krateo.io/v0-1-0`,
+This publishes a `AwsElasticacheReplicationgroup` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awselasticachereplicationgroups`), pulling the chart from
 `oci://ghcr.io/braghettos/charts/aws-elasticache-replicationgroup`.
 
 ### Create a Composition
 
 ```yaml
-apiVersion: composition.krateo.io/v0-1-0
+apiVersion: composition.krateo.io/v0-1-1
 kind: AwsElasticacheReplicationgroup
 metadata:
   name: my-replicationgroup

@@ -38,14 +38,14 @@ kubectl apply -f compositiondefinition.yaml   # publishes the AwsMemorydbACL typ
 kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
-This publishes a `AwsMemorydbACL` Composition type (`composition.krateo.io/v0-1-0`,
+This publishes a `AwsMemorydbACL` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsmemorydbacls`), pulling the chart from
 `oci://ghcr.io/braghettos/charts/aws-memorydb-acl`.
 
 ### Create a Composition
 
 ```yaml
-apiVersion: composition.krateo.io/v0-1-0
+apiVersion: composition.krateo.io/v0-1-1
 kind: AwsMemorydbACL
 metadata:
   name: my-acl

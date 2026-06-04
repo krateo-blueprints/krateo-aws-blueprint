@@ -1,6 +1,5 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "additionalProperties": false,
   "description": "Provision an AWS Apigateway Authorizer via the ACK apigateway controller. Fields mirror the apigateway.services.k8s.aws/v1alpha1 Authorizer spec.",
   "properties": {
     "authType": {

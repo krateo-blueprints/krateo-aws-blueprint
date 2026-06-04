@@ -38,14 +38,14 @@ kubectl apply -f compositiondefinition.yaml   # publishes the AwsApigatewayv2Aut
 kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
-This publishes a `AwsApigatewayv2Authorizer` Composition type (`composition.krateo.io/v0-1-0`,
+This publishes a `AwsApigatewayv2Authorizer` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsapigatewayv2authorizers`), pulling the chart from
 `oci://ghcr.io/braghettos/charts/aws-apigatewayv2-authorizer`.
 
 ### Create a Composition
 
 ```yaml
-apiVersion: composition.krateo.io/v0-1-0
+apiVersion: composition.krateo.io/v0-1-1
 kind: AwsApigatewayv2Authorizer
 metadata:
   name: my-authorizer

@@ -38,14 +38,14 @@ kubectl apply -f compositiondefinition.yaml   # publishes the AwsEventbridgeRule
 kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
-This publishes a `AwsEventbridgeRule` Composition type (`composition.krateo.io/v0-1-0`,
+This publishes a `AwsEventbridgeRule` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awseventbridgerules`), pulling the chart from
 `oci://ghcr.io/braghettos/charts/aws-eventbridge-rule`.
 
 ### Create a Composition
 
 ```yaml
-apiVersion: composition.krateo.io/v0-1-0
+apiVersion: composition.krateo.io/v0-1-1
 kind: AwsEventbridgeRule
 metadata:
   name: my-rule

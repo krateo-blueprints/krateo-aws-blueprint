@@ -38,14 +38,14 @@ kubectl apply -f compositiondefinition.yaml   # publishes the AwsEcsCluster type
 kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
-This publishes a `AwsEcsCluster` Composition type (`composition.krateo.io/v0-1-0`,
+This publishes a `AwsEcsCluster` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsecsclusters`), pulling the chart from
 `oci://ghcr.io/braghettos/charts/aws-ecs-cluster`.
 
 ### Create a Composition
 
 ```yaml
-apiVersion: composition.krateo.io/v0-1-0
+apiVersion: composition.krateo.io/v0-1-1
 kind: AwsEcsCluster
 metadata:
   name: my-cluster

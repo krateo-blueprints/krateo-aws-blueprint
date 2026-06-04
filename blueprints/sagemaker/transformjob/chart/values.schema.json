@@ -1,6 +1,5 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "additionalProperties": false,
   "description": "Provision an AWS Sagemaker TransformJob via the ACK sagemaker controller. Fields mirror the sagemaker.services.k8s.aws/v1alpha1 TransformJob spec.",
   "properties": {
     "batchStrategy": {

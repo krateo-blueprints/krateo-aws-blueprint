@@ -38,14 +38,14 @@ kubectl apply -f compositiondefinition.yaml   # publishes the AwsApigatewayv2Rou
 kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
-This publishes a `AwsApigatewayv2Route` Composition type (`composition.krateo.io/v0-1-0`,
+This publishes a `AwsApigatewayv2Route` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsapigatewayv2routes`), pulling the chart from
 `oci://ghcr.io/braghettos/charts/aws-apigatewayv2-route`.
 
 ### Create a Composition
 
 ```yaml
-apiVersion: composition.krateo.io/v0-1-0
+apiVersion: composition.krateo.io/v0-1-1
 kind: AwsApigatewayv2Route
 metadata:
   name: my-route

@@ -38,14 +38,14 @@ kubectl apply -f compositiondefinition.yaml   # publishes the AwsSagemakerHyperp
 kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
-This publishes a `AwsSagemakerHyperparametertuningjob` Composition type (`composition.krateo.io/v0-1-0`,
+This publishes a `AwsSagemakerHyperparametertuningjob` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awssagemakerhyperparametertuningjobs`), pulling the chart from
 `oci://ghcr.io/braghettos/charts/aws-sagemaker-hyperparametertuningjob`.
 
 ### Create a Composition
 
 ```yaml
-apiVersion: composition.krateo.io/v0-1-0
+apiVersion: composition.krateo.io/v0-1-1
 kind: AwsSagemakerHyperparametertuningjob
 metadata:
   name: my-hyperparametertuningjob

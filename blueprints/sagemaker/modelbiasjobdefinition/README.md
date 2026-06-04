@@ -38,14 +38,14 @@ kubectl apply -f compositiondefinition.yaml   # publishes the AwsSagemakerModelb
 kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
-This publishes a `AwsSagemakerModelbiasjobdefinition` Composition type (`composition.krateo.io/v0-1-0`,
+This publishes a `AwsSagemakerModelbiasjobdefinition` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awssagemakermodelbiasjobdefinitions`), pulling the chart from
 `oci://ghcr.io/braghettos/charts/aws-sagemaker-modelbiasjobdefinition`.
 
 ### Create a Composition
 
 ```yaml
-apiVersion: composition.krateo.io/v0-1-0
+apiVersion: composition.krateo.io/v0-1-1
 kind: AwsSagemakerModelbiasjobdefinition
 metadata:
   name: my-modelbiasjobdefinition

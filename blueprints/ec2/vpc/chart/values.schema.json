@@ -1,6 +1,5 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "additionalProperties": false,
   "description": "Provision an AWS Ec2 VPC via the ACK ec2 controller. Fields mirror the ec2.services.k8s.aws/v1alpha1 VPC spec.",
   "properties": {
     "amazonProvidedIPv6CIDRBlock": {

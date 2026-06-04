@@ -1,6 +1,5 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "additionalProperties": false,
   "description": "Provision an AWS Cognitoidentityprovider UserPool via the ACK cognitoidentityprovider controller. Fields mirror the cognitoidentityprovider.services.k8s.aws/v1alpha1 UserPool spec.",
   "properties": {
     "accountRecoverySetting": {

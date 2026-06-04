@@ -1,6 +1,5 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "additionalProperties": false,
   "description": "Provision an AWS Pipes Pipe via the ACK pipes controller. Fields mirror the pipes.services.k8s.aws/v1alpha1 Pipe spec.",
   "properties": {
     "description": {

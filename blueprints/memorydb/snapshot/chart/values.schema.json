@@ -1,6 +1,5 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "additionalProperties": false,
   "description": "Provision an AWS Memorydb Snapshot via the ACK memorydb controller. Fields mirror the memorydb.services.k8s.aws/v1alpha1 Snapshot spec.",
   "properties": {
     "clusterName": {

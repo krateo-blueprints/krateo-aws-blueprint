@@ -1,6 +1,5 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "additionalProperties": false,
   "description": "Provision an AWS Bedrockagent Agent via the ACK bedrockagent controller. Fields mirror the bedrockagent.services.k8s.aws/v1alpha1 Agent spec.",
   "properties": {
     "agentCollaboration": {

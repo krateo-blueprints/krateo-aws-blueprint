@@ -38,14 +38,14 @@ kubectl apply -f compositiondefinition.yaml   # publishes the AwsEc2Natgateway t
 kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
-This publishes a `AwsEc2Natgateway` Composition type (`composition.krateo.io/v0-1-0`,
+This publishes a `AwsEc2Natgateway` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsec2natgateways`), pulling the chart from
 `oci://ghcr.io/braghettos/charts/aws-ec2-natgateway`.
 
 ### Create a Composition
 
 ```yaml
-apiVersion: composition.krateo.io/v0-1-0
+apiVersion: composition.krateo.io/v0-1-1
 kind: AwsEc2Natgateway
 metadata:
   name: my-natgateway

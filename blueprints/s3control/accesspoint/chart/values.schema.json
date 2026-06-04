@@ -1,6 +1,5 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "additionalProperties": false,
   "description": "Provision an AWS S3control AccessPoint via the ACK s3control controller. Fields mirror the s3control.services.k8s.aws/v1alpha1 AccessPoint spec.",
   "properties": {
     "accountID": {

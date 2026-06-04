@@ -1,6 +1,5 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "additionalProperties": false,
   "description": "Provision an AWS Cloudwatch MetricStream via the ACK cloudwatch controller. Fields mirror the cloudwatch.services.k8s.aws/v1alpha1 MetricStream spec.",
   "properties": {
     "excludeFilters": {

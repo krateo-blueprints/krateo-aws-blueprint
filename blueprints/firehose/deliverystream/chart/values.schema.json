@@ -1,6 +1,5 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "additionalProperties": false,
   "description": "Provision an AWS Firehose DeliveryStream via the ACK firehose controller. Fields mirror the firehose.services.k8s.aws/v1alpha1 DeliveryStream spec.",
   "properties": {
     "deliveryStreamEncryptionConfiguration": {

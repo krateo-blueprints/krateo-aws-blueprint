@@ -38,14 +38,14 @@ kubectl apply -f compositiondefinition.yaml   # publishes the AwsEc2Routetable t
 kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
-This publishes a `AwsEc2Routetable` Composition type (`composition.krateo.io/v0-1-0`,
+This publishes a `AwsEc2Routetable` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsec2routetables`), pulling the chart from
 `oci://ghcr.io/braghettos/charts/aws-ec2-routetable`.
 
 ### Create a Composition
 
 ```yaml
-apiVersion: composition.krateo.io/v0-1-0
+apiVersion: composition.krateo.io/v0-1-1
 kind: AwsEc2Routetable
 metadata:
   name: my-routetable
