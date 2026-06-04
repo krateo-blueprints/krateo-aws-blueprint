@@ -7,8 +7,10 @@ publishes the `AwsS3Bucket` type, you create one `AwsS3Bucket` Composition, and 
 
 Verified with: kind `v0.24`, Helm `v3.19`, `core-provider 1.0.0`, ACK `s3-controller 1.6.0`,
 `aws-s3-bucket 0.1.1`. Result — the Composition reaches `Ready=True`, the ACK `Bucket` reaches
-`ACK.ResourceSynced=True`, and the real bucket carries the versioning and tags set on the
-Composition spec (verified in step 7 below, and visible in the S3 console).
+`ACK.ResourceSynced=True`, and the bucket appears in the S3 console — region `eu-central-1`, with
+the versioning and tags set on the Composition spec:
+
+![The provisioned bucket in the S3 console — General purpose buckets list, region eu-central-1](docs/s3-quickstart-buckets-list.png)
 
 ## Prerequisites
 
@@ -154,9 +156,15 @@ aws --profile krateo-ack s3api get-bucket-versioning --bucket "$BUCKET"   # Stat
 aws --profile krateo-ack s3api get-bucket-tagging    --bucket "$BUCKET"
 ```
 
-The S3 console shows the same: the bucket's **Properties** report the region, ARN, and **Bucket
-Versioning: Enabled** (from `spec.versioning.status`), and its **Tags** include the `tagSet` from
-the Composition (`managed-by=krateo`, `purpose=ack-e2e`) alongside the tags ACK adds automatically.
+The S3 console shows the same. The bucket's **Properties** report the region, ARN, and **Bucket
+Versioning: Enabled** (from `spec.versioning.status`):
+
+![Bucket Properties: region eu-central-1, ARN, and Bucket Versioning Enabled](docs/s3-quickstart-bucket-versioning.png)
+
+…and its **Tags** include the `tagSet` from the Composition (`managed-by=krateo`, `purpose=ack-e2e`)
+alongside the tags ACK adds automatically:
+
+![Bucket Tags including managed-by=krateo and purpose=ack-e2e](docs/s3-quickstart-bucket-tags.png)
 
 ## 8. Clean up
 
