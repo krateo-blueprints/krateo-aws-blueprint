@@ -1,0 +1,151 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS Athena WorkGroup via the ACK athena controller. Fields mirror the athena.services.k8s.aws/v1alpha1 WorkGroup spec.",
+  "properties": {
+    "configuration": {
+      "description": "Contains configuration information for creating an Athena SQL workgroup or\nSpark enabled Athena workgroup. Athena SQL workgroup configuration includes\nthe location in Amazon S3 where query and calculation results are stored,\nthe encryption configuration, if any, used for encrypting query results,\nwhether the Amazon CloudWatch Metrics are enabled for the workgroup, the\nlimit for the amount of bytes scanned (cutoff) per query, if it is specified,\nand whether workgroup's settings (specified with EnforceWorkGroupConfiguration)\nin the WorkGroupConfiguration override client-side settings. See WorkGroupConfiguration$EnforceWorkGroupConfiguration.",
+      "properties": {
+        "additionalConfiguration": {
+          "type": "string"
+        },
+        "bytesScannedCutoffPerQuery": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "customerContentEncryptionConfiguration": {
+          "description": "Specifies the customer managed KMS key that is used to encrypt the user's\ndata stores in Athena. When an Amazon Web Services managed key is used, this\nvalue is null. This setting does not apply to Athena SQL workgroups.",
+          "properties": {
+            "kmsKey": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "enableMinimumEncryptionConfiguration": {
+          "type": "boolean"
+        },
+        "enforceWorkGroupConfiguration": {
+          "type": "boolean"
+        },
+        "engineVersion": {
+          "description": "The Athena engine version for running queries, or the PySpark engine version\nfor running sessions.",
+          "properties": {
+            "effectiveEngineVersion": {
+              "type": "string"
+            },
+            "selectedEngineVersion": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "executionRole": {
+          "type": "string"
+        },
+        "identityCenterConfiguration": {
+          "description": "Specifies whether the workgroup is IAM Identity Center supported.",
+          "properties": {
+            "enableIdentityCenter": {
+              "type": "boolean"
+            },
+            "identityCenterInstanceARN": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "publishCloudWatchMetricsEnabled": {
+          "type": "boolean"
+        },
+        "queryResultsS3AccessGrantsConfiguration": {
+          "description": "Specifies whether Amazon S3 access grants are enabled for query results.",
+          "properties": {
+            "authenticationType": {
+              "type": "string"
+            },
+            "createUserLevelPrefix": {
+              "type": "boolean"
+            },
+            "enableS3AccessGrants": {
+              "type": "boolean"
+            }
+          },
+          "type": "object"
+        },
+        "requesterPaysEnabled": {
+          "type": "boolean"
+        },
+        "resultConfiguration": {
+          "description": "The location in Amazon S3 where query and calculation results are stored\nand the encryption option, if any, used for query and calculation results.\nThese are known as \"client-side settings\". If workgroup settings override\nclient-side settings, then the query uses the workgroup settings.",
+          "properties": {
+            "aclConfiguration": {
+              "description": "Indicates that an Amazon S3 canned ACL should be set to control ownership\nof stored query results, including data files inserted by Athena as the result\nof statements like CTAS or INSERT INTO. When Athena stores query results\nin Amazon S3, the canned ACL is set with the x-amz-acl request header. For\nmore information about S3 Object Ownership, see Object Ownership settings\n(https://docs.aws.amazon.com/AmazonS3/latest/userguide/about-object-ownership.html#object-ownership-overview)\nin the Amazon S3 User Guide.",
+              "properties": {
+                "s3ACLOption": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "encryptionConfiguration": {
+              "description": "If query and calculation results are encrypted in Amazon S3, indicates the\nencryption option used (for example, SSE_KMS or CSE_KMS) and key information.",
+              "properties": {
+                "encryptionOption": {
+                  "type": "string"
+                },
+                "kmsKey": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "expectedBucketOwner": {
+              "type": "string"
+            },
+            "outputLocation": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "description": {
+      "description": "The workgroup description.",
+      "type": "string"
+    },
+    "name": {
+      "description": "The workgroup name.\n\nRegex Pattern: `^[a-zA-Z0-9._-]{1,128}$`",
+      "type": "string"
+    },
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    },
+    "tags": {
+      "description": "A list of comma separated tags to add to the workgroup that is created.",
+      "items": {
+        "description": "A label that you assign to a resource. Athena resources include workgroups,\ndata catalogs, and capacity reservations. Each tag consists of a key and\nan optional value, both of which you define. For example, you can use tags\nto categorize Athena resources by purpose, owner, or environment. Use a consistent\nset of tag keys to make it easier to search and filter the resources in your\naccount. For best practices, see Tagging Best Practices (https://docs.aws.amazon.com/whitepapers/latest/tagging-best-practices/tagging-best-practices.html).\nTag keys can be from 1 to 128 UTF-8 Unicode characters, and tag values can\nbe from 0 to 256 UTF-8 Unicode characters. Tags can use letters and numbers\nrepresentable in UTF-8, and the following characters: + - = . _ : / @. Tag\nkeys and values are case-sensitive. Tag keys must be unique per resource.\nIf you specify more than one tag, separate them by commas.",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "title": "AWS Athena WorkGroup",
+  "type": "object"
+}

@@ -1,0 +1,90 @@
+apiVersion: v1
+data:
+  drawer: "true"
+  form: "true"
+  showFormStructure: "true"
+  drawerSize: large
+kind: ConfigMap
+metadata:
+  name: template-aws-eventbridge-endpoint-card
+  namespace: aws-eventbridge-system
+---
+apiVersion: templates.krateo.io/v1alpha1
+kind: Widget
+metadata:
+  name: template-aws-eventbridge-endpoint-card
+  namespace: aws-eventbridge-system
+spec:
+  actions:
+  - template:
+      apiVersion: templates.krateo.io/v1alpha1
+      name: template-aws-eventbridge-endpoint-customform
+      namespace: aws-eventbridge-system
+      resource: customforms
+      verb: GET
+  - template:
+      apiVersion: core.krateo.io/v1alpha1
+      name: aws-eventbridge-endpoint
+      namespace: aws-eventbridge-system
+      resource: compositiondefinitions
+      verb: DELETE
+  app:
+    template:
+      color: ${ .getCompositionDefinition.status.conditions[] | select(.type == "Ready") | if .status == "False" then "orange" elif .status == "True" then "green" else "grey" end }
+      content: Provision an AWS Eventbridge Endpoint via the ACK eventbridge controller.
+      icon: fa-brands fa-aws
+      tags: aws-eventbridge-system,0.1.0
+      title: aws-eventbridge-endpoint
+      status: ${ .getCompositionDefinition.status.conditions[] | select(.type == "Ready") | "Ready:" + .status }
+      date: ${ .getCompositionDefinition.metadata.creationTimestamp }
+  propsRef:
+    name: template-aws-eventbridge-endpoint-card
+    namespace: aws-eventbridge-system
+  type: card
+  api:
+  - name: getCompositionDefinition
+    path: "/apis/core.krateo.io/v1alpha1/namespaces/aws-eventbridge-system/compositiondefinitions/aws-eventbridge-endpoint"
+    verb: GET
+    headers:
+    - 'Accept: application/json'
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: template-aws-eventbridge-endpoint-customform
+  namespace: aws-eventbridge-system
+data:
+  onSubmitId: submit
+  onSubmitVerb: POST
+  payloadFormKey: spec
+  redirectRoute: /compositions/${metadata.namespace}/${metadata.name}
+  redirectTimeout: "50"
+---
+apiVersion: templates.krateo.io/v1alpha1
+kind: CustomForm
+metadata:
+  name: template-aws-eventbridge-endpoint-customform
+  namespace: aws-eventbridge-system
+spec:
+  type: customform
+  propsRef:
+    name: template-aws-eventbridge-endpoint-customform
+    namespace: aws-eventbridge-system
+  actions:
+    - template:
+        id: submit
+        apiVersion: composition.krateo.io/v0-1-0
+        verb: POST
+        resource: awseventbridgeendpoints
+        payloadToOverride:
+        - name: metadata.namespace
+          value: ${ "aws-eventbridge-system" }
+  app:
+    template:
+      schema: ${ .getCRD | .spec.versions[] | select(.name == "v0-1-0") | .schema.openAPIV3Schema.properties.spec }
+  api:
+  - name: getCRD
+    path: "/apis/apiextensions.k8s.io/v1/customresourcedefinitions/awseventbridgeendpoints.composition.krateo.io"
+    verb: GET
+    headers:
+    - 'Accept: application/json'

@@ -1,0 +1,50 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS Elasticache UserGroup via the ACK elasticache controller. Fields mirror the elasticache.services.k8s.aws/v1alpha1 UserGroup spec.",
+  "properties": {
+    "engine": {
+      "description": "Sets the engine listed in a user group. The options are valkey or redis.\n\nRegex Pattern: `^[a-zA-Z]*$`",
+      "type": "string"
+    },
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    },
+    "tags": {
+      "description": "A list of tags to be added to this resource. A tag is a key-value pair. A\ntag key must be accompanied by a tag value, although null is accepted. Available\nfor Valkey and Redis OSS only.",
+      "items": {
+        "description": "A tag that can be added to an ElastiCache cluster or replication group. Tags\nare composed of a Key/Value pair. You can use tags to categorize and track\nall your ElastiCache resources, with the exception of global replication\ngroup. When you add or remove tags on replication groups, those actions will\nbe replicated to all nodes in the replication group. A tag with a null Value\nis permitted.",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "userGroupID": {
+      "description": "The ID of the user group.",
+      "type": "string"
+    },
+    "userIDs": {
+      "description": "The list of user IDs that belong to the user group.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "engine",
+    "userGroupID"
+  ],
+  "title": "AWS Elasticache UserGroup",
+  "type": "object"
+}

@@ -1,0 +1,101 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS Rds DBClusterParameterGroup via the ACK rds controller. Fields mirror the rds.services.k8s.aws/v1alpha1 DBClusterParameterGroup spec.",
+  "properties": {
+    "description": {
+      "description": "The description for the DB cluster parameter group.",
+      "type": "string"
+    },
+    "family": {
+      "description": "The DB cluster parameter group family name. A DB cluster parameter group\ncan be associated with one and only one DB cluster parameter group family,\nand can be applied only to a DB cluster running a database engine and engine\nversion compatible with that DB cluster parameter group family.\n\nAurora MySQL\n\nExample: aurora-mysql5.7, aurora-mysql8.0\n\nAurora PostgreSQL\n\nExample: aurora-postgresql14\n\nRDS for MySQL\n\nExample: mysql8.0\n\nRDS for PostgreSQL\n\nExample: postgres13\n\nTo list all of the available parameter group families for a DB engine, use\nthe following command:\n\naws rds describe-db-engine-versions --query \"DBEngineVersions[].DBParameterGroupFamily\"\n--engine\n\nFor example, to list all of the available parameter group families for the\nAurora PostgreSQL DB engine, use the following command:\n\naws rds describe-db-engine-versions --query \"DBEngineVersions[].DBParameterGroupFamily\"\n--engine aurora-postgresql\n\nThe output contains duplicates.\n\nThe following are the valid DB engine values:\n\n   * aurora-mysql\n\n   * aurora-postgresql\n\n   * mysql\n\n   * postgres",
+      "type": "string"
+    },
+    "name": {
+      "description": "The name of the DB cluster parameter group.\n\nConstraints:\n\n   * Must not match the name of an existing DB cluster parameter group.\n\nThis value is stored as a lowercase string.",
+      "type": "string"
+    },
+    "parameterOverrides": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "Map keys are the parameter name and the values are the parameter value.\n\nThe \"apply method\" for parameters is automatically determined.\n\nThese are ONLY user-defined parameter overrides for the DB cluster parameter group.\n\nThis does not contain default or system parameters.",
+      "type": "object"
+    },
+    "parameters": {
+      "description": "DEPRECATED - do not use.  Prefer ParameterOverrides instead.",
+      "items": {
+        "description": "This data type is used as a request parameter in the ModifyDBParameterGroup\nand ResetDBParameterGroup actions.\n\nThis data type is used as a response element in the DescribeEngineDefaultParameters\nand DescribeDBParameters actions.",
+        "properties": {
+          "allowedValues": {
+            "type": "string"
+          },
+          "applyMethod": {
+            "type": "string"
+          },
+          "applyType": {
+            "type": "string"
+          },
+          "dataType": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "isModifiable": {
+            "type": "boolean"
+          },
+          "minimumEngineVersion": {
+            "type": "string"
+          },
+          "parameterName": {
+            "type": "string"
+          },
+          "parameterValue": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string"
+          },
+          "supportedEngineModes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    },
+    "tags": {
+      "description": "Tags to assign to the DB cluster parameter group.",
+      "items": {
+        "description": "Metadata assigned to an Amazon RDS resource consisting of a key-value pair.\n\nFor more information, see Tagging Amazon RDS resources (https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.html)\nin the Amazon RDS User Guide or Tagging Amazon Aurora and Amazon RDS resources\n(https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_Tagging.html)\nin the Amazon Aurora User Guide.",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "description",
+    "family",
+    "name"
+  ],
+  "title": "AWS Rds DBClusterParameterGroup",
+  "type": "object"
+}

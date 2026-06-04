@@ -1,0 +1,161 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS Backup BackupSelection via the ACK backup controller. Fields mirror the backup.services.k8s.aws/v1alpha1 BackupSelection spec.",
+  "properties": {
+    "backupPlanID": {
+      "type": "string"
+    },
+    "backupPlanRef": {
+      "description": "AWSResourceReferenceWrapper provides a wrapper around *AWSResourceReference\ntype to provide more user friendly syntax for references using 'from' field\nEx:\nAPIIDRef:\n\n\tfrom:\n\t  name: my-api",
+      "properties": {
+        "from": {
+          "description": "AWSResourceReference provides all the values necessary to reference another\nk8s resource for finding the identifier(Id/ARN/Name)",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "namespace": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "conditions": {
+      "description": "The conditions that you define to assign resources to your backup plans using\ntags. For example, \"StringEquals\": { \"ConditionKey\": \"aws:ResourceTag/backup\",\n\"ConditionValue\": \"daily\" }.\n\nConditions supports StringEquals, StringLike, StringNotEquals, and StringNotLike.\nCondition operators are case sensitive.\n\nIf you specify multiple conditions, the resources much match all conditions\n(AND logic).",
+      "properties": {
+        "stringEquals": {
+          "items": {
+            "description": "Includes information about tags you define to assign tagged resources to\na backup plan.\n\nInclude the prefix aws:ResourceTag in your tags. For example, \"aws:ResourceTag/TagKey1\":\n\"Value1\".",
+            "properties": {
+              "conditionKey": {
+                "type": "string"
+              },
+              "conditionValue": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "stringLike": {
+          "items": {
+            "description": "Includes information about tags you define to assign tagged resources to\na backup plan.\n\nInclude the prefix aws:ResourceTag in your tags. For example, \"aws:ResourceTag/TagKey1\":\n\"Value1\".",
+            "properties": {
+              "conditionKey": {
+                "type": "string"
+              },
+              "conditionValue": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "stringNotEquals": {
+          "items": {
+            "description": "Includes information about tags you define to assign tagged resources to\na backup plan.\n\nInclude the prefix aws:ResourceTag in your tags. For example, \"aws:ResourceTag/TagKey1\":\n\"Value1\".",
+            "properties": {
+              "conditionKey": {
+                "type": "string"
+              },
+              "conditionValue": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "stringNotLike": {
+          "items": {
+            "description": "Includes information about tags you define to assign tagged resources to\na backup plan.\n\nInclude the prefix aws:ResourceTag in your tags. For example, \"aws:ResourceTag/TagKey1\":\n\"Value1\".",
+            "properties": {
+              "conditionKey": {
+                "type": "string"
+              },
+              "conditionValue": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "iamRoleARN": {
+      "description": "The ARN of the IAM role that Backup uses to authenticate when backing up\nthe target resource; for example, arn:aws:iam::123456789012:role/S3Access.",
+      "type": "string"
+    },
+    "iamRoleRef": {
+      "description": "AWSResourceReferenceWrapper provides a wrapper around *AWSResourceReference\ntype to provide more user friendly syntax for references using 'from' field\nEx:\nAPIIDRef:\n\n\tfrom:\n\t  name: my-api",
+      "properties": {
+        "from": {
+          "description": "AWSResourceReference provides all the values necessary to reference another\nk8s resource for finding the identifier(Id/ARN/Name)",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "namespace": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "listOfTags": {
+      "description": "The conditions that you define to assign resources to your backup plans using\ntags. For example, \"StringEquals\": { \"ConditionKey\": \"backup\", \"ConditionValue\":\n\"daily\"}.\n\nListOfTags supports only StringEquals. Condition operators are case sensitive.\n\nIf you specify multiple conditions, the resources much match any of the conditions\n(OR logic).",
+      "items": {
+        "description": "Contains an array of triplets made up of a condition type (such as StringEquals),\na key, and a value. Used to filter resources using their tags and assign\nthem to a backup plan. Case sensitive.",
+        "properties": {
+          "conditionKey": {
+            "type": "string"
+          },
+          "conditionType": {
+            "type": "string"
+          },
+          "conditionValue": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "name": {
+      "description": "The display name of a resource selection document. Must contain 1 to 50 alphanumeric\nor '-_.' characters.\n\nRegex Pattern: `^[a-zA-Z0-9\\-\\_\\.]{1,50}$`",
+      "type": "string"
+    },
+    "notResources": {
+      "description": "The Amazon Resource Names (ARNs) of the resources to exclude from a backup\nplan. The maximum number of ARNs is 500 without wildcards, or 30 ARNs with\nwildcards.\n\nIf you need to exclude many resources from a backup plan, consider a different\nresource selection strategy, such as assigning only one or a few resource\ntypes or refining your resource selection using tags.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    },
+    "resources": {
+      "description": "The Amazon Resource Names (ARNs) of the resources to assign to a backup plan.\nThe maximum number of ARNs is 500 without wildcards, or 30 ARNs with wildcards.\n\nIf you need to assign many resources to a backup plan, consider a different\nresource selection strategy, such as assigning all resources of a resource\ntype or refining your resource selection using tags.\n\nIf you specify multiple ARNs, the resources much match any of the ARNs (OR\nlogic).\n\nWhen using wildcards in ARN patterns for backup selections, the asterisk\n(*) must appear at the end of the ARN string (prefix pattern). For example,\narn:aws:s3:::my-bucket-* is valid, but arn:aws:s3:::*-logs is not supported.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    }
+  },
+  "title": "AWS Backup BackupSelection",
+  "type": "object"
+}

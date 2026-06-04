@@ -1,0 +1,90 @@
+apiVersion: v1
+data:
+  drawer: "true"
+  form: "true"
+  showFormStructure: "true"
+  drawerSize: large
+kind: ConfigMap
+metadata:
+  name: template-aws-kms-grant-card
+  namespace: aws-kms-system
+---
+apiVersion: templates.krateo.io/v1alpha1
+kind: Widget
+metadata:
+  name: template-aws-kms-grant-card
+  namespace: aws-kms-system
+spec:
+  actions:
+  - template:
+      apiVersion: templates.krateo.io/v1alpha1
+      name: template-aws-kms-grant-customform
+      namespace: aws-kms-system
+      resource: customforms
+      verb: GET
+  - template:
+      apiVersion: core.krateo.io/v1alpha1
+      name: aws-kms-grant
+      namespace: aws-kms-system
+      resource: compositiondefinitions
+      verb: DELETE
+  app:
+    template:
+      color: ${ .getCompositionDefinition.status.conditions[] | select(.type == "Ready") | if .status == "False" then "orange" elif .status == "True" then "green" else "grey" end }
+      content: Provision an AWS Kms Grant via the ACK kms controller.
+      icon: fa-brands fa-aws
+      tags: aws-kms-system,0.1.0
+      title: aws-kms-grant
+      status: ${ .getCompositionDefinition.status.conditions[] | select(.type == "Ready") | "Ready:" + .status }
+      date: ${ .getCompositionDefinition.metadata.creationTimestamp }
+  propsRef:
+    name: template-aws-kms-grant-card
+    namespace: aws-kms-system
+  type: card
+  api:
+  - name: getCompositionDefinition
+    path: "/apis/core.krateo.io/v1alpha1/namespaces/aws-kms-system/compositiondefinitions/aws-kms-grant"
+    verb: GET
+    headers:
+    - 'Accept: application/json'
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: template-aws-kms-grant-customform
+  namespace: aws-kms-system
+data:
+  onSubmitId: submit
+  onSubmitVerb: POST
+  payloadFormKey: spec
+  redirectRoute: /compositions/${metadata.namespace}/${metadata.name}
+  redirectTimeout: "50"
+---
+apiVersion: templates.krateo.io/v1alpha1
+kind: CustomForm
+metadata:
+  name: template-aws-kms-grant-customform
+  namespace: aws-kms-system
+spec:
+  type: customform
+  propsRef:
+    name: template-aws-kms-grant-customform
+    namespace: aws-kms-system
+  actions:
+    - template:
+        id: submit
+        apiVersion: composition.krateo.io/v0-1-0
+        verb: POST
+        resource: awskmsgrants
+        payloadToOverride:
+        - name: metadata.namespace
+          value: ${ "aws-kms-system" }
+  app:
+    template:
+      schema: ${ .getCRD | .spec.versions[] | select(.name == "v0-1-0") | .schema.openAPIV3Schema.properties.spec }
+  api:
+  - name: getCRD
+    path: "/apis/apiextensions.k8s.io/v1/customresourcedefinitions/awskmsgrants.composition.krateo.io"
+    verb: GET
+    headers:
+    - 'Accept: application/json'

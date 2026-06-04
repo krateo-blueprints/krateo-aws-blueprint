@@ -1,0 +1,97 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS Route53resolver ResolverRule via the ACK route53resolver controller. Fields mirror the route53resolver.services.k8s.aws/v1alpha1 ResolverRule spec.",
+  "properties": {
+    "associations": {
+      "items": {
+        "description": "In the response to an AssociateResolverRule (https://docs.aws.amazon.com/Route53/latest/APIReference/API_route53resolver_AssociateResolverRule.html),\nDisassociateResolverRule (https://docs.aws.amazon.com/Route53/latest/APIReference/API_route53resolver_DisassociateResolverRule.html),\nor ListResolverRuleAssociations (https://docs.aws.amazon.com/Route53/latest/APIReference/API_route53resolver_ListResolverRuleAssociations.html)\nrequest, provides information about an association between a Resolver rule\nand a VPC. The association determines which DNS queries that originate in\nthe VPC are forwarded to your network.",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "resolverRuleID": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "statusMessage": {
+            "type": "string"
+          },
+          "vpcID": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "domainName": {
+      "description": "DNS queries for this domain name are forwarded to the IP addresses that you\nspecify in TargetIps. If a query matches multiple Resolver rules (example.com\nand www.example.com), outbound DNS queries are routed using the Resolver\nrule that contains the most specific domain name (www.example.com).",
+      "type": "string"
+    },
+    "name": {
+      "description": "A friendly name that lets you easily find a rule in the Resolver dashboard\nin the Route 53 console.\n\nRegex Pattern: `^(?!^[0-9]+$)([a-zA-Z0-9\\-_' ']+)$`",
+      "type": "string"
+    },
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    },
+    "resolverEndpointID": {
+      "description": "The ID of the outbound Resolver endpoint that you want to use to route DNS\nqueries to the IP addresses that you specify in TargetIps.",
+      "type": "string"
+    },
+    "ruleType": {
+      "description": "When you want to forward DNS queries for specified domain name to resolvers\non your network, specify FORWARD.\n\nWhen you have a forwarding rule to forward DNS queries for a domain to your\nnetwork and you want Resolver to process queries for a subdomain of that\ndomain, specify SYSTEM.\n\nFor example, to forward DNS queries for example.com to resolvers on your\nnetwork, you create a rule and specify FORWARD for RuleType. To then have\nResolver process queries for apex.example.com, you create a rule and specify\nSYSTEM for RuleType.\n\nCurrently, only Resolver can create rules that have a value of RECURSIVE\nfor RuleType.",
+      "type": "string"
+    },
+    "tags": {
+      "description": "A list of the tag keys and values that you want to associate with the endpoint.",
+      "items": {
+        "description": "One tag that you want to add to the specified resource. A tag consists of\na Key (a name for the tag) and a Value.",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "targetIPs": {
+      "description": "The IPs that you want Resolver to forward DNS queries to. You can specify\neither Ipv4 or Ipv6 addresses but not both in the same rule. Separate IP\naddresses with a space.\n\nTargetIps is available only when the value of Rule type is FORWARD.",
+      "items": {
+        "description": "In a CreateResolverRule (https://docs.aws.amazon.com/Route53/latest/APIReference/API_route53resolver_CreateResolverRule.html)\nrequest, an array of the IPs that you want to forward DNS queries to.",
+        "properties": {
+          "ip": {
+            "type": "string"
+          },
+          "ipv6": {
+            "type": "string"
+          },
+          "port": {
+            "format": "int64",
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "ruleType"
+  ],
+  "title": "AWS Route53resolver ResolverRule",
+  "type": "object"
+}

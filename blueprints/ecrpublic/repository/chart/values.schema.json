@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS Ecrpublic Repository via the ACK ecrpublic controller. Fields mirror the ecrpublic.services.k8s.aws/v1alpha1 Repository spec.",
+  "properties": {
+    "name": {
+      "description": "The name to use for the repository. This appears publicly in the Amazon ECR\nPublic Gallery. The repository name can be specified on its own (for example\nnginx-web-app) or prepended with a namespace to group the repository into\na category (for example project-a/nginx-web-app).\n\nRegex Pattern: `^(?:[a-z0-9]+(?:[._-][a-z0-9]+)*/)*[a-z0-9]+(?:[._-][a-z0-9]+)*$`",
+      "type": "string"
+    },
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    },
+    "tags": {
+      "description": "The metadata that you apply to each repository to help categorize and organize\nyour repositories. Each tag consists of a key and an optional value. You\ndefine both of them. Tag keys can have a maximum character length of 128\ncharacters, and tag values can have a maximum length of 256 characters.",
+      "items": {
+        "description": "The metadata that you apply to a resource to help you categorize and organize\nthem. Each tag consists of a key and an optional value. You define both.\nTag keys can have a maximum character length of 128 characters, and tag values\ncan have a maximum length of 256 characters.",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "title": "AWS Ecrpublic Repository",
+  "type": "object"
+}

@@ -1,0 +1,150 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS Sns Topic via the ACK sns controller. Fields mirror the sns.services.k8s.aws/v1alpha1 Topic spec.",
+  "properties": {
+    "applicationFailureFeedbackRoleARN": {
+      "type": "string"
+    },
+    "applicationSuccessFeedbackRoleARN": {
+      "type": "string"
+    },
+    "applicationSuccessFeedbackSampleRate": {
+      "type": "string"
+    },
+    "contentBasedDeduplication": {
+      "type": "string"
+    },
+    "dataProtectionPolicy": {
+      "description": "The body of the policy document you want to use for this topic.\n\nYou can only add one policy per topic.\n\nThe policy must be in JSON string format.\n\nLength Constraints: Maximum length of 30,720.",
+      "type": "string"
+    },
+    "deliveryPolicy": {
+      "type": "string"
+    },
+    "displayName": {
+      "type": "string"
+    },
+    "fifoThroughputScope": {
+      "type": "string"
+    },
+    "fifoTopic": {
+      "type": "string"
+    },
+    "firehoseFailureFeedbackRoleARN": {
+      "type": "string"
+    },
+    "firehoseSuccessFeedbackRoleARN": {
+      "type": "string"
+    },
+    "firehoseSuccessFeedbackSampleRate": {
+      "type": "string"
+    },
+    "httpFailureFeedbackRoleARN": {
+      "type": "string"
+    },
+    "httpSuccessFeedbackRoleARN": {
+      "type": "string"
+    },
+    "httpSuccessFeedbackSampleRate": {
+      "type": "string"
+    },
+    "kmsMasterKeyID": {
+      "type": "string"
+    },
+    "kmsMasterKeyRef": {
+      "description": "AWSResourceReferenceWrapper provides a wrapper around *AWSResourceReference\ntype to provide more user friendly syntax for references using 'from' field\nEx:\nAPIIDRef:\n\n\tfrom:\n\t  name: my-api",
+      "properties": {
+        "from": {
+          "description": "AWSResourceReference provides all the values necessary to reference another\nk8s resource for finding the identifier(Id/ARN/Name)",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "namespace": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "lambdaFailureFeedbackRoleARN": {
+      "type": "string"
+    },
+    "lambdaSuccessFeedbackRoleARN": {
+      "type": "string"
+    },
+    "lambdaSuccessFeedbackSampleRate": {
+      "type": "string"
+    },
+    "name": {
+      "description": "The name of the topic you want to create.\n\nConstraints: Topic names must be made up of only uppercase and lowercase\nASCII letters, numbers, underscores, and hyphens, and must be between 1 and\n256 characters long.\n\nFor a FIFO (first-in-first-out) topic, the name must end with the .fifo suffix.",
+      "type": "string"
+    },
+    "policy": {
+      "type": "string"
+    },
+    "policyRef": {
+      "description": "AWSResourceReferenceWrapper provides a wrapper around *AWSResourceReference\ntype to provide more user friendly syntax for references using 'from' field\nEx:\nAPIIDRef:\n\n\tfrom:\n\t  name: my-api",
+      "properties": {
+        "from": {
+          "description": "AWSResourceReference provides all the values necessary to reference another\nk8s resource for finding the identifier(Id/ARN/Name)",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "namespace": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    },
+    "signatureVersion": {
+      "type": "string"
+    },
+    "sqsFailureFeedbackRoleARN": {
+      "type": "string"
+    },
+    "sqsSuccessFeedbackRoleARN": {
+      "type": "string"
+    },
+    "sqsSuccessFeedbackSampleRate": {
+      "type": "string"
+    },
+    "tags": {
+      "description": "The list of tags to add to a new topic.\n\nTo be able to tag a topic on creation, you must have the sns:CreateTopic\nand sns:TagResource permissions.",
+      "items": {
+        "description": "The list of tags to be added to the specified topic.",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "tracingConfig": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "title": "AWS Sns Topic",
+  "type": "object"
+}

@@ -1,0 +1,334 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS Elasticsearchservice ElasticsearchDomain via the ACK elasticsearchservice controller. Fields mirror the elasticsearchservice.services.k8s.aws/v1alpha1 ElasticsearchDomain spec.",
+  "properties": {
+    "accessPolicies": {
+      "description": "IAM access policy as a JSON-formatted string.",
+      "type": "string"
+    },
+    "advancedOptions": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "Option to allow references to indices in an HTTP request body. Must be false when configuring access to individual sub-resources. By default, the value is true. See Configuration Advanced Options (http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-createupdatedomains.html#es-createdomain-configure-advanced-options) for more information.",
+      "type": "object"
+    },
+    "advancedSecurityOptions": {
+      "description": "Specifies advanced security options.",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "internalUserDatabaseEnabled": {
+          "type": "boolean"
+        },
+        "masterUserOptions": {
+          "description": "Credentials for the master user: username and password, ARN, or both.",
+          "properties": {
+            "masterUserARN": {
+              "description": "The Amazon Resource Name (ARN) of the Elasticsearch domain. See Identifiers for IAM Entities (http://docs.aws.amazon.com/IAM/latest/UserGuide/index.html?Using_Identifiers.html) in Using AWS Identity and Access Management for more information.",
+              "type": "string"
+            },
+            "masterUserName": {
+              "type": "string"
+            },
+            "masterUserPassword": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "sAMLOptions": {
+          "description": "Specifies the SAML application configuration for the domain.",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "idp": {
+              "description": "Specifies the SAML Identity Provider's information.",
+              "properties": {
+                "entityID": {
+                  "type": "string"
+                },
+                "metadataContent": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "masterBackendRole": {
+              "type": "string"
+            },
+            "masterUserName": {
+              "type": "string"
+            },
+            "rolesKey": {
+              "type": "string"
+            },
+            "sessionTimeoutMinutes": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "subjectKey": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "autoTuneOptions": {
+      "description": "Specifies Auto-Tune options.",
+      "properties": {
+        "desiredState": {
+          "description": "Specifies the Auto-Tune desired state. Valid values are ENABLED, DISABLED.",
+          "type": "string"
+        },
+        "maintenanceSchedules": {
+          "items": {
+            "description": "Specifies Auto-Tune maitenance schedule. See the Developer Guide (https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/auto-tune.html) for more information.",
+            "properties": {
+              "cronExpressionForRecurrence": {
+                "type": "string"
+              },
+              "duration": {
+                "description": "Specifies maintenance schedule duration: duration value and duration unit. See the Developer Guide (https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/auto-tune.html) for more information.",
+                "properties": {
+                  "unit": {
+                    "description": "Specifies the unit of a maintenance schedule duration. Valid value is HOUR. See the Developer Guide (https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/auto-tune.html) for more information.",
+                    "type": "string"
+                  },
+                  "value": {
+                    "description": "Integer to specify the value of a maintenance schedule duration. See the Developer Guide (https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/auto-tune.html) for more information.",
+                    "format": "int64",
+                    "type": "integer"
+                  }
+                },
+                "type": "object"
+              },
+              "startAt": {
+                "format": "date-time",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "cognitoOptions": {
+      "description": "Options to specify the Cognito user and identity pools for Kibana authentication. For more information, see Amazon Cognito Authentication for Kibana (http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-cognito-auth.html).",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "identityPoolID": {
+          "type": "string"
+        },
+        "roleARN": {
+          "type": "string"
+        },
+        "userPoolID": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "domainEndpointOptions": {
+      "description": "Options to specify configuration that will be applied to the domain endpoint.",
+      "properties": {
+        "customEndpoint": {
+          "type": "string"
+        },
+        "customEndpointCertificateARN": {
+          "description": "The Amazon Resource Name (ARN) of the Elasticsearch domain. See Identifiers for IAM Entities (http://docs.aws.amazon.com/IAM/latest/UserGuide/index.html?Using_Identifiers.html) in Using AWS Identity and Access Management for more information.",
+          "type": "string"
+        },
+        "customEndpointEnabled": {
+          "type": "boolean"
+        },
+        "enforceHTTPS": {
+          "type": "boolean"
+        },
+        "tlsSecurityPolicy": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "domainName": {
+      "description": "The name of the Elasticsearch domain that you are creating. Domain names are unique across the domains owned by an account within an AWS region. Domain names must start with a lowercase letter and can contain the following characters: a-z (lowercase), 0-9, and - (hyphen).",
+      "type": "string"
+    },
+    "ebsOptions": {
+      "description": "Options to enable, disable and specify the type and size of EBS storage volumes.",
+      "properties": {
+        "ebsEnabled": {
+          "type": "boolean"
+        },
+        "iops": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "volumeSize": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "volumeType": {
+          "description": "The type of EBS volume, standard, gp2, or io1. See Configuring EBS-based Storage (http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-createupdatedomains.html#es-createdomain-configure-ebs)for more information.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "elasticsearchClusterConfig": {
+      "description": "Configuration options for an Elasticsearch domain. Specifies the instance type and number of instances in the domain cluster.",
+      "properties": {
+        "dedicatedMasterCount": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "dedicatedMasterEnabled": {
+          "type": "boolean"
+        },
+        "dedicatedMasterType": {
+          "type": "string"
+        },
+        "instanceCount": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "instanceType": {
+          "type": "string"
+        },
+        "warmCount": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "warmEnabled": {
+          "type": "boolean"
+        },
+        "warmType": {
+          "type": "string"
+        },
+        "zoneAwarenessConfig": {
+          "description": "Specifies the zone awareness configuration for the domain cluster, such as the number of availability zones.",
+          "properties": {
+            "availabilityZoneCount": {
+              "format": "int64",
+              "type": "integer"
+            }
+          },
+          "type": "object"
+        },
+        "zoneAwarenessEnabled": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "elasticsearchVersion": {
+      "description": "String of format X.Y to specify version for the Elasticsearch domain eg. \"1.5\" or \"2.3\". For more information, see Creating Elasticsearch Domains (http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-createupdatedomains.html#es-createdomains) in the Amazon Elasticsearch Service Developer Guide.",
+      "type": "string"
+    },
+    "encryptionAtRestOptions": {
+      "description": "Specifies the Encryption At Rest Options.",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "kmsKeyID": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "logPublishingOptions": {
+      "additionalProperties": {
+        "description": "Log Publishing option that is set for given domain. Attributes and their details:    * CloudWatchLogsLogGroupArn: ARN of the Cloudwatch log group to which    log needs to be published. \n    * Enabled: Whether the log publishing for given log type is enabled or    not",
+        "properties": {
+          "cloudWatchLogsLogGroupARN": {
+            "description": "ARN of the Cloudwatch log group to which log needs to be published.",
+            "type": "string"
+          },
+          "enabled": {
+            "type": "boolean"
+          }
+        },
+        "type": "object"
+      },
+      "description": "Map of LogType and LogPublishingOption, each containing options to publish a given type of Elasticsearch log.",
+      "type": "object"
+    },
+    "nodeToNodeEncryptionOptions": {
+      "description": "Specifies the NodeToNodeEncryptionOptions.",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    },
+    "snapshotOptions": {
+      "description": "Option to set time, in UTC format, of the daily automated snapshot. Default value is 0 hours.",
+      "properties": {
+        "automatedSnapshotStartHour": {
+          "format": "int64",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "tagList": {
+      "description": "A list of Tag added during domain creation.",
+      "items": {
+        "description": "Specifies a key value pair for a resource tag.",
+        "properties": {
+          "key": {
+            "description": "A string of length from 1 to 128 characters that specifies the key for a Tag. Tag keys must be unique for the Elasticsearch domain to which they are attached.",
+            "type": "string"
+          },
+          "value": {
+            "description": "A string of length from 0 to 256 characters that specifies the value for a Tag. Tag values can be null and do not have to be unique in a tag set.",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "vpcOptions": {
+      "description": "Options to specify the subnets and security groups for VPC endpoint. For more information, see Creating a VPC (http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-vpc.html#es-creating-vpc) in VPC Endpoints for Amazon Elasticsearch Service Domains",
+      "properties": {
+        "securityGroupIDs": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "subnetIDs": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "required": [
+    "domainName"
+  ],
+  "title": "AWS Elasticsearchservice ElasticsearchDomain",
+  "type": "object"
+}

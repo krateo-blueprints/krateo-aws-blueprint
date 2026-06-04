@@ -1,0 +1,55 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS Codeartifact PackageGroup via the ACK codeartifact controller. Fields mirror the codeartifact.services.k8s.aws/v1alpha1 PackageGroup spec.",
+  "properties": {
+    "contactInfo": {
+      "description": "The contact information for the created package group.\n\nRegex Pattern: `^\\P{C}*$`",
+      "type": "string"
+    },
+    "description": {
+      "description": "A description of the package group.\n\nRegex Pattern: `^\\P{C}*$`",
+      "type": "string"
+    },
+    "domain": {
+      "description": "The name of the domain in which you want to create a package group.\n\nRegex Pattern: `^[a-z][a-z0-9\\-]{0,48}[a-z0-9]$`",
+      "type": "string"
+    },
+    "domainOwner": {
+      "description": "The 12-digit account number of the Amazon Web Services account that owns\nthe domain. It does not include dashes or spaces.\n\nRegex Pattern: `^[0-9]{12}$`",
+      "type": "string"
+    },
+    "pattern": {
+      "description": "The pattern of the package group to create. The pattern is also the identifier\nof the package group.\n\nRegex Pattern: `^[^\\p{C}\\p{IsWhitespace}]+$`",
+      "type": "string"
+    },
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    },
+    "tags": {
+      "description": "One or more tag key-value pairs for the package group.",
+      "items": {
+        "description": "A tag is a key-value pair that can be used to manage, search for, or filter\nresources in CodeArtifact.",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "domain",
+    "pattern"
+  ],
+  "title": "AWS Codeartifact PackageGroup",
+  "type": "object"
+}

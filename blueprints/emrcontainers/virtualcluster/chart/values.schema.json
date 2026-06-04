@@ -1,0 +1,57 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS Emrcontainers VirtualCluster via the ACK emrcontainers controller. Fields mirror the emrcontainers.services.k8s.aws/v1alpha1 VirtualCluster spec.",
+  "properties": {
+    "containerProvider": {
+      "description": "The container provider of the virtual cluster.",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "info": {
+          "description": "The information about the container used for a job run or a managed endpoint.",
+          "properties": {
+            "eksInfo": {
+              "description": "The information about the Amazon EKS cluster.",
+              "properties": {
+                "namespace": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "type": "object"
+        },
+        "type_": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "name": {
+      "description": "The specified name of the virtual cluster.\n\nRegex Pattern: `^[\\.\\-_/#A-Za-z0-9]+$`",
+      "type": "string"
+    },
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    },
+    "tags": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "The tags assigned to the virtual cluster.",
+      "type": "object"
+    }
+  },
+  "required": [
+    "containerProvider",
+    "name"
+  ],
+  "title": "AWS Emrcontainers VirtualCluster",
+  "type": "object"
+}

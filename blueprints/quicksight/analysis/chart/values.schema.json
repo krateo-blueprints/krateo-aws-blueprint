@@ -1,0 +1,215 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS Quicksight Analysis via the ACK quicksight controller. Fields mirror the quicksight.services.k8s.aws/v1alpha1 Analysis spec.",
+  "properties": {
+    "awsAccountID": {
+      "description": "The ID of the Amazon Web Services account where you are creating an analysis.\n\nRegex Pattern: `^[0-9]{12}$`",
+      "type": "string"
+    },
+    "folderARNs": {
+      "description": "When you create the analysis, Amazon Quick Sight adds the analysis to these\nfolders.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "id": {
+      "description": "The ID for the analysis that you're creating. This ID displays in the URL\nof the analysis.\n\nRegex Pattern: `^[\\w\\-]+$`",
+      "type": "string"
+    },
+    "name": {
+      "description": "A descriptive name for the analysis that you're creating. This name displays\nfor the analysis in the Amazon Quick Sight console.",
+      "type": "string"
+    },
+    "parameters": {
+      "description": "The parameter names and override values that you want to use. An analysis\ncan have any parameter type, and some parameters might accept multiple values.",
+      "properties": {
+        "dateTimeParameters": {
+          "items": {
+            "description": "A date-time parameter.",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "values": {
+                "items": {
+                  "format": "date-time",
+                  "type": "string"
+                },
+                "type": "array"
+              }
+            },
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "decimalParameters": {
+          "items": {
+            "description": "A decimal parameter.",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "values": {
+                "items": {
+                  "type": "number"
+                },
+                "type": "array"
+              }
+            },
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "integerParameters": {
+          "items": {
+            "description": "An integer parameter.",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "values": {
+                "items": {
+                  "format": "int64",
+                  "type": "integer"
+                },
+                "type": "array"
+              }
+            },
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "stringParameters": {
+          "items": {
+            "description": "A string parameter.",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "values": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              }
+            },
+            "type": "object"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "permissions": {
+      "description": "A structure that describes the principals and the resource-level permissions\non an analysis. You can use the Permissions structure to grant permissions\nby providing a list of Identity and Access Management (IAM) action information\nfor each principal listed by Amazon Resource Name (ARN).\n\nTo specify no permissions, omit Permissions.",
+      "items": {
+        "description": "Permission for the resource.",
+        "properties": {
+          "actions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "principal": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    },
+    "sourceEntity": {
+      "description": "A source entity to use for the analysis that you're creating. This metadata\nstructure contains details that describe a source template and one or more\ndatasets.\n\nEither a SourceEntity or a Definition must be provided in order for the request\nto be valid.",
+      "properties": {
+        "sourceTemplate": {
+          "description": "The source template of an analysis.",
+          "properties": {
+            "arn": {
+              "type": "string"
+            },
+            "dataSetReferences": {
+              "items": {
+                "description": "Dataset reference.",
+                "properties": {
+                  "dataSetARN": {
+                    "type": "string"
+                  },
+                  "dataSetPlaceholder": {
+                    "type": "string"
+                  },
+                  "dataSetRef": {
+                    "description": "Reference field for DataSetARN",
+                    "properties": {
+                      "from": {
+                        "description": "AWSResourceReference provides all the values necessary to reference another\nk8s resource for finding the identifier(Id/ARN/Name)",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "namespace": {
+                            "type": "string"
+                          }
+                        },
+                        "type": "object"
+                      }
+                    },
+                    "type": "object"
+                  }
+                },
+                "type": "object"
+              },
+              "type": "array"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "tags": {
+      "description": "Contains a map of the key-value pairs for the resource tag or tags assigned\nto the analysis.",
+      "items": {
+        "description": "The key or keys of the key-value pairs for the resource tag or tags assigned\nto the resource.",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "themeARN": {
+      "description": "The ARN for the theme to apply to the analysis that you're creating. To see\nthe theme in the Amazon Quick Sight console, make sure that you have access\nto it.",
+      "type": "string"
+    },
+    "validationStrategy": {
+      "description": "The option to relax the validation needed to create an analysis with definition\nobjects. This skips the validation step for specific errors.",
+      "properties": {
+        "mode": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "required": [
+    "awsAccountID",
+    "id",
+    "name"
+  ],
+  "title": "AWS Quicksight Analysis",
+  "type": "object"
+}

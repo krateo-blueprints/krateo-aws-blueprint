@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS Dynamodb Backup via the ACK dynamodb controller. Fields mirror the dynamodb.services.k8s.aws/v1alpha1 Backup spec.",
+  "properties": {
+    "backupName": {
+      "description": "Specified name for the backup.\n\nRegex Pattern: `^[a-zA-Z0-9_.-]+$`",
+      "type": "string"
+    },
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    },
+    "tableName": {
+      "description": "The name of the table. You can also provide the Amazon Resource Name (ARN)\nof the table in this parameter.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "backupName",
+    "tableName"
+  ],
+  "title": "AWS Dynamodb Backup",
+  "type": "object"
+}

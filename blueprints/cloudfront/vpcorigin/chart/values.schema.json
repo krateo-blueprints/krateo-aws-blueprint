@@ -1,0 +1,70 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS Cloudfront VPCOrigin via the ACK cloudfront controller. Fields mirror the cloudfront.services.k8s.aws/v1alpha1 VPCOrigin spec.",
+  "properties": {
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    },
+    "tags": {
+      "description": "A complex type that contains Tag elements.",
+      "items": {
+        "description": "A complex type that contains Tag key and Tag value.",
+        "properties": {
+          "key": {
+            "description": "A string that contains Tag key.\n\nThe string length should be between 1 and 128 characters. Valid characters\ninclude a-z, A-Z, 0-9, space, and the special characters _ - . : / = + @.",
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "vpcOriginEndpointConfig": {
+      "description": "The VPC origin endpoint configuration.",
+      "properties": {
+        "arn": {
+          "type": "string"
+        },
+        "httpPort": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "httpsPort": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "originProtocolPolicy": {
+          "type": "string"
+        },
+        "originSSLProtocols": {
+          "description": "A complex type that contains information about the SSL/TLS protocols that\nCloudFront can use when establishing an HTTPS connection with your origin.",
+          "properties": {
+            "items": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "required": [
+    "vpcOriginEndpointConfig"
+  ],
+  "title": "AWS Cloudfront VPCOrigin",
+  "type": "object"
+}

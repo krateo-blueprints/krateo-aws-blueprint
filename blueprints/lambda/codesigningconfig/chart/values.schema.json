@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS Lambda CodeSigningConfig via the ACK lambda controller. Fields mirror the lambda.services.k8s.aws/v1alpha1 CodeSigningConfig spec.",
+  "properties": {
+    "allowedPublishers": {
+      "description": "Signing profiles for this code signing configuration.",
+      "properties": {
+        "signingProfileVersionARNs": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "codeSigningPolicies": {
+      "description": "The code signing policies define the actions to take if the validation checks\nfail.",
+      "properties": {
+        "untrustedArtifactOnDeployment": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "description": {
+      "description": "Descriptive name for this code signing configuration.",
+      "type": "string"
+    },
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    }
+  },
+  "required": [
+    "allowedPublishers"
+  ],
+  "title": "AWS Lambda CodeSigningConfig",
+  "type": "object"
+}

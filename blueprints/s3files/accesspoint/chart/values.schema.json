@@ -1,0 +1,100 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS S3files AccessPoint via the ACK s3files controller. Fields mirror the s3files.services.k8s.aws/v1alpha1 AccessPoint spec.",
+  "properties": {
+    "fileSystemID": {
+      "description": "The ID or Amazon Resource Name (ARN) of the S3 File System.\n\nRegex Pattern: `^(arn:aws[-a-z]*:s3files:[0-9a-z-:]+:file-system/fs-[0-9a-f]{17,40}|fs-[0-9a-f]{17,40})$`",
+      "type": "string"
+    },
+    "fileSystemRef": {
+      "description": "AWSResourceReferenceWrapper provides a wrapper around *AWSResourceReference\ntype to provide more user friendly syntax for references using 'from' field\nEx:\nAPIIDRef:\n\n\tfrom:\n\t  name: my-api",
+      "properties": {
+        "from": {
+          "description": "AWSResourceReference provides all the values necessary to reference another\nk8s resource for finding the identifier(Id/ARN/Name)",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "namespace": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "posixUser": {
+      "description": "The POSIX identity with uid, gid, and secondary group IDs for user enforcement\nwhen accessing the file system through this access point.",
+      "properties": {
+        "gid": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "secondaryGIDs": {
+          "items": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "type": "array"
+        },
+        "uid": {
+          "format": "int64",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    },
+    "rootDirectory": {
+      "description": "The root directory path for the access point, with optional creation permissions\nfor newly created directories.",
+      "properties": {
+        "creationPermissions": {
+          "description": "Specifies the permissions to set on newly created directories within the\nfile system.",
+          "properties": {
+            "ownerGID": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "ownerUID": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "permissions": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "path": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "tags": {
+      "description": "An array of key-value pairs to apply to the access point for resource tagging.",
+      "items": {
+        "description": "A key-value pair for resource tagging.",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "title": "AWS S3files AccessPoint",
+  "type": "object"
+}

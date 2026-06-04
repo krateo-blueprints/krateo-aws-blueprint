@@ -1,0 +1,70 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS Apigatewayv2 APIMapping via the ACK apigatewayv2 controller. Fields mirror the apigatewayv2.services.k8s.aws/v1alpha1 APIMapping spec.",
+  "properties": {
+    "apiID": {
+      "description": "The API identifier.",
+      "type": "string"
+    },
+    "apiMappingKey": {
+      "description": "The API mapping key.",
+      "type": "string"
+    },
+    "apiRef": {
+      "description": "AWSResourceReferenceWrapper provides a wrapper around *AWSResourceReference\ntype to provide more user friendly syntax for references using 'from' field\nEx:\nAPIIDRef:\n\n\tfrom:\n\t  name: my-api",
+      "properties": {
+        "from": {
+          "description": "AWSResourceReference provides all the values necessary to reference another\nk8s resource for finding the identifier(Id/ARN/Name)",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "namespace": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "domainName": {
+      "description": "The domain name.",
+      "type": "string"
+    },
+    "domainRef": {
+      "description": "AWSResourceReferenceWrapper provides a wrapper around *AWSResourceReference\ntype to provide more user friendly syntax for references using 'from' field\nEx:\nAPIIDRef:\n\n\tfrom:\n\t  name: my-api",
+      "properties": {
+        "from": {
+          "description": "AWSResourceReference provides all the values necessary to reference another\nk8s resource for finding the identifier(Id/ARN/Name)",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "namespace": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    },
+    "stage": {
+      "description": "The API stage.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "stage"
+  ],
+  "title": "AWS Apigatewayv2 APIMapping",
+  "type": "object"
+}

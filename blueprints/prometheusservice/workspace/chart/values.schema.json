@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS Prometheusservice Workspace via the ACK prometheusservice controller. Fields mirror the prometheusservice.services.k8s.aws/v1alpha1 Workspace spec.",
+  "properties": {
+    "alias": {
+      "description": "An alias that you assign to this workspace to help you identify it. It does\nnot need to be unique.\n\nBlank spaces at the beginning or end of the alias that you specify will be\ntrimmed from the value used.",
+      "type": "string"
+    },
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    },
+    "tags": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "The list of tag keys and values to associate with the workspace.",
+      "type": "object"
+    }
+  },
+  "title": "AWS Prometheusservice Workspace",
+  "type": "object"
+}

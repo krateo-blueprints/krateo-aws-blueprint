@@ -1,0 +1,84 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS Eventbridge Endpoint via the ACK eventbridge controller. Fields mirror the eventbridge.services.k8s.aws/v1alpha1 Endpoint spec.",
+  "properties": {
+    "description": {
+      "description": "A description of the global endpoint.\n\nRegex Pattern: `.*`",
+      "type": "string"
+    },
+    "eventBuses": {
+      "description": "Define the event buses used.\n\nThe names of the event buses must be identical in each Region.",
+      "items": {
+        "description": "The event buses the endpoint is associated with.",
+        "properties": {
+          "eventBusARN": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "name": {
+      "description": "The name of the global endpoint. For example, \"Name\":\"us-east-2-custom_bus_A-endpoint\".\n\nRegex Pattern: `^[\\.\\-_A-Za-z0-9]+$`",
+      "type": "string"
+    },
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    },
+    "replicationConfig": {
+      "description": "Enable or disable event replication. The default state is ENABLED which means\nyou must supply a RoleArn. If you don't have a RoleArn or you don't want\nevent replication enabled, set the state to DISABLED.",
+      "properties": {
+        "state": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "roleARN": {
+      "description": "The ARN of the role used for replication.\n\nRegex Pattern: `^arn:aws[a-z-]*:iam::\\d{12}:role\\/[\\w+=,.@/-]+$`",
+      "type": "string"
+    },
+    "routingConfig": {
+      "description": "Configure the routing policy, including the health check and secondary Region..",
+      "properties": {
+        "failoverConfig": {
+          "description": "The failover configuration for an endpoint. This includes what triggers failover\nand what happens when it's triggered.",
+          "properties": {
+            "primary": {
+              "description": "The primary Region of the endpoint.",
+              "properties": {
+                "healthCheck": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "secondary": {
+              "description": "The secondary Region that processes events when failover is triggered or\nreplication is enabled.",
+              "properties": {
+                "route": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "required": [
+    "eventBuses",
+    "name",
+    "routingConfig"
+  ],
+  "title": "AWS Eventbridge Endpoint",
+  "type": "object"
+}

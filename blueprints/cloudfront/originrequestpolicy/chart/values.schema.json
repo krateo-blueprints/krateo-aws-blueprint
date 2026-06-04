@@ -1,0 +1,93 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS Cloudfront OriginRequestPolicy via the ACK cloudfront controller. Fields mirror the cloudfront.services.k8s.aws/v1alpha1 OriginRequestPolicy spec.",
+  "properties": {
+    "originRequestPolicyConfig": {
+      "description": "An origin request policy configuration.",
+      "properties": {
+        "comment": {
+          "type": "string"
+        },
+        "cookiesConfig": {
+          "description": "An object that determines whether any cookies in viewer requests (and if\nso, which cookies) are included in requests that CloudFront sends to the\norigin.",
+          "properties": {
+            "cookieBehavior": {
+              "type": "string"
+            },
+            "cookies": {
+              "description": "Contains a list of cookie names.",
+              "properties": {
+                "items": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "type": "object"
+        },
+        "headersConfig": {
+          "description": "An object that determines whether any HTTP headers (and if so, which headers)\nare included in requests that CloudFront sends to the origin.",
+          "properties": {
+            "headerBehavior": {
+              "type": "string"
+            },
+            "headers": {
+              "description": "Contains a list of HTTP header names.",
+              "properties": {
+                "items": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "type": "object"
+        },
+        "name": {
+          "type": "string"
+        },
+        "queryStringsConfig": {
+          "description": "An object that determines whether any URL query strings in viewer requests\n(and if so, which query strings) are included in requests that CloudFront\nsends to the origin.",
+          "properties": {
+            "queryStringBehavior": {
+              "type": "string"
+            },
+            "queryStrings": {
+              "description": "Contains a list of query string names.",
+              "properties": {
+                "items": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    }
+  },
+  "required": [
+    "originRequestPolicyConfig"
+  ],
+  "title": "AWS Cloudfront OriginRequestPolicy",
+  "type": "object"
+}

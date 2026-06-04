@@ -1,0 +1,85 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS Apigateway APIMethodResponse via the ACK apigateway controller. Fields mirror the apigateway.services.k8s.aws/v1alpha1 APIMethodResponse spec.",
+  "properties": {
+    "httpMethod": {
+      "description": "The HTTP verb of the Method resource.",
+      "type": "string"
+    },
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    },
+    "resourceID": {
+      "description": "The Resource identifier for the Method resource.",
+      "type": "string"
+    },
+    "resourceRef": {
+      "description": "AWSResourceReferenceWrapper provides a wrapper around *AWSResourceReference\ntype to provide more user friendly syntax for references using 'from' field\nEx:\nAPIIDRef:\n\n\tfrom:\n\t  name: my-api",
+      "properties": {
+        "from": {
+          "description": "AWSResourceReference provides all the values necessary to reference another\nk8s resource for finding the identifier(Id/ARN/Name)",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "namespace": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "responseModels": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "Specifies the Model resources used for the response's content type. Response\nmodels are represented as a key/value map, with a content type as the key\nand a Model name as the value.",
+      "type": "object"
+    },
+    "responseParameters": {
+      "additionalProperties": {
+        "type": "boolean"
+      },
+      "description": "A key-value map specifying required or optional response parameters that\nAPI Gateway can send back to the caller. A key defines a method response\nheader name and the associated value is a Boolean flag indicating whether\nthe method response parameter is required or not. The method response header\nnames must match the pattern of method.response.header.{name}, where name\nis a valid and unique header name. The response parameter names defined here\nare available in the integration response to be mapped from an integration\nresponse header expressed in integration.response.header.{name}, a static\nvalue enclosed within a pair of single quotes (e.g., 'application/json'),\nor a JSON expression from the back-end response payload in the form of integration.response.body.{JSON-expression},\nwhere JSON-expression is a valid JSON expression without the $ prefix.)",
+      "type": "object"
+    },
+    "restAPIID": {
+      "description": "The string identifier of the associated RestApi.",
+      "type": "string"
+    },
+    "restAPIRef": {
+      "description": "AWSResourceReferenceWrapper provides a wrapper around *AWSResourceReference\ntype to provide more user friendly syntax for references using 'from' field\nEx:\nAPIIDRef:\n\n\tfrom:\n\t  name: my-api",
+      "properties": {
+        "from": {
+          "description": "AWSResourceReference provides all the values necessary to reference another\nk8s resource for finding the identifier(Id/ARN/Name)",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "namespace": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "statusCode": {
+      "description": "The method response's status code.\n\nRegex Pattern: `^[1-5]\\d\\d$`",
+      "type": "string"
+    }
+  },
+  "required": [
+    "httpMethod",
+    "statusCode"
+  ],
+  "title": "AWS Apigateway APIMethodResponse",
+  "type": "object"
+}

@@ -1,0 +1,71 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS Elasticache CacheSubnetGroup via the ACK elasticache controller. Fields mirror the elasticache.services.k8s.aws/v1alpha1 CacheSubnetGroup spec.",
+  "properties": {
+    "cacheSubnetGroupDescription": {
+      "description": "A description for the cache subnet group.",
+      "type": "string"
+    },
+    "cacheSubnetGroupName": {
+      "description": "A name for the cache subnet group. This value is stored as a lowercase string.\n\nConstraints: Must contain no more than 255 alphanumeric characters or hyphens.\n\nExample: mysubnetgroup",
+      "type": "string"
+    },
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    },
+    "subnetIDs": {
+      "description": "A list of VPC subnet IDs for the cache subnet group.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "subnetRefs": {
+      "items": {
+        "description": "AWSResourceReferenceWrapper provides a wrapper around *AWSResourceReference\ntype to provide more user friendly syntax for references using 'from' field\nEx:\nAPIIDRef:\n\n\tfrom:\n\t  name: my-api",
+        "properties": {
+          "from": {
+            "description": "AWSResourceReference provides all the values necessary to reference another\nk8s resource for finding the identifier(Id/ARN/Name)",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "namespace": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "tags": {
+      "description": "A list of tags to be added to this resource. A tag is a key-value pair. A\ntag key must be accompanied by a tag value, although null is accepted.",
+      "items": {
+        "description": "A tag that can be added to an ElastiCache cluster or replication group. Tags\nare composed of a Key/Value pair. You can use tags to categorize and track\nall your ElastiCache resources, with the exception of global replication\ngroup. When you add or remove tags on replication groups, those actions will\nbe replicated to all nodes in the replication group. A tag with a null Value\nis permitted.",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "cacheSubnetGroupDescription",
+    "cacheSubnetGroupName"
+  ],
+  "title": "AWS Elasticache CacheSubnetGroup",
+  "type": "object"
+}

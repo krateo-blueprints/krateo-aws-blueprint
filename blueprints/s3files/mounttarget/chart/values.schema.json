@@ -1,0 +1,99 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS S3files MountTarget via the ACK s3files controller. Fields mirror the s3files.services.k8s.aws/v1alpha1 MountTarget spec.",
+  "properties": {
+    "fileSystemID": {
+      "description": "The ID or Amazon Resource Name (ARN) of the S3 File System to create the\nmount target for.\n\nRegex Pattern: `^(arn:aws[-a-z]*:s3files:[0-9a-z-:]+:file-system/fs-[0-9a-f]{17,40}|fs-[0-9a-f]{17,40})$`",
+      "type": "string"
+    },
+    "fileSystemRef": {
+      "description": "AWSResourceReferenceWrapper provides a wrapper around *AWSResourceReference\ntype to provide more user friendly syntax for references using 'from' field\nEx:\nAPIIDRef:\n\n\tfrom:\n\t  name: my-api",
+      "properties": {
+        "from": {
+          "description": "AWSResourceReference provides all the values necessary to reference another\nk8s resource for finding the identifier(Id/ARN/Name)",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "namespace": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "ipAddressType": {
+      "description": "The IP address type for the mount target. If not specified, IPV4_ONLY is\nused. The IP address type must match the IP configuration of the specified\nsubnet.",
+      "type": "string"
+    },
+    "ipv4Address": {
+      "description": "A specific IPv4 address to assign to the mount target. If not specified and\nthe IP address type supports IPv4, an address is automatically assigned from\nthe subnet's available IPv4 address range. The address must be within the\nsubnet's CIDR block and not already in use.\n\nRegex Pattern: `^[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}$`",
+      "type": "string"
+    },
+    "ipv6Address": {
+      "description": "A specific IPv6 address to assign to the mount target. If not specified and\nthe IP address type supports IPv6, an address is automatically assigned from\nthe subnet's available IPv6 address range. The address must be within the\nsubnet's IPv6 CIDR block and not already in use.",
+      "type": "string"
+    },
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    },
+    "securityGroupRefs": {
+      "items": {
+        "description": "AWSResourceReferenceWrapper provides a wrapper around *AWSResourceReference\ntype to provide more user friendly syntax for references using 'from' field\nEx:\nAPIIDRef:\n\n\tfrom:\n\t  name: my-api",
+        "properties": {
+          "from": {
+            "description": "AWSResourceReference provides all the values necessary to reference another\nk8s resource for finding the identifier(Id/ARN/Name)",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "namespace": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "securityGroups": {
+      "description": "An array of VPC security group IDs to associate with the mount target's network\ninterface. These security groups control network access to the mount target.\nIf not specified, the default security group for the subnet's VPC is used.\nAll security groups must belong to the same VPC as the subnet.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "subnetID": {
+      "description": "The ID of the subnet where the mount target will be created. The subnet must\nbe in the same Amazon Web Services Region as the file system. For file systems\nwith regional availability, you can create mount targets in any subnet within\nthe Region. The subnet determines the Availability Zone where the mount target\nwill be located.\n\nRegex Pattern: `^subnet-[0-9a-f]{8,40}$`",
+      "type": "string"
+    },
+    "subnetRef": {
+      "description": "AWSResourceReferenceWrapper provides a wrapper around *AWSResourceReference\ntype to provide more user friendly syntax for references using 'from' field\nEx:\nAPIIDRef:\n\n\tfrom:\n\t  name: my-api",
+      "properties": {
+        "from": {
+          "description": "AWSResourceReference provides all the values necessary to reference another\nk8s resource for finding the identifier(Id/ARN/Name)",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "namespace": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "title": "AWS S3files MountTarget",
+  "type": "object"
+}

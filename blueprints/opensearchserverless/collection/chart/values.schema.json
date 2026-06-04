@@ -1,0 +1,50 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS Opensearchserverless Collection via the ACK opensearchserverless controller. Fields mirror the opensearchserverless.services.k8s.aws/v1alpha1 Collection spec.",
+  "properties": {
+    "description": {
+      "description": "Description of the collection.",
+      "type": "string"
+    },
+    "name": {
+      "description": "Name of the collection.\n\nRegex Pattern: `^[a-z][a-z0-9-]+$`",
+      "type": "string"
+    },
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    },
+    "standbyReplicas": {
+      "description": "Indicates whether standby replicas should be used for a collection.",
+      "type": "string"
+    },
+    "tags": {
+      "description": "An arbitrary set of tags (key–value pairs) to associate with the OpenSearch\nServerless collection.",
+      "items": {
+        "description": "A map of key-value pairs associated to an OpenSearch Serverless resource.",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "type": {
+      "description": "The type of collection.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "title": "AWS Opensearchserverless Collection",
+  "type": "object"
+}

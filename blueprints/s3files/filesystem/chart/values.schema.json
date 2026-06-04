@@ -1,0 +1,143 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS S3files FileSystem via the ACK s3files controller. Fields mirror the s3files.services.k8s.aws/v1alpha1 FileSystem spec.",
+  "properties": {
+    "acceptBucketWarning": {
+      "description": "Set to true to acknowledge and accept any warnings about the bucket configuration.\nIf not specified, the operation may fail if there are bucket configuration\nwarnings.",
+      "type": "boolean"
+    },
+    "bucket": {
+      "description": "The Amazon Resource Name (ARN) of the S3 bucket that will be accessible through\nthe file system. The bucket must exist and be in the same Amazon Web Services\nRegion as the file system.\n\nRegex Pattern: `^(arn:aws[a-zA-Z0-9-]*:s3:::.+)$`",
+      "type": "string"
+    },
+    "bucketRef": {
+      "description": "AWSResourceReferenceWrapper provides a wrapper around *AWSResourceReference\ntype to provide more user friendly syntax for references using 'from' field\nEx:\nAPIIDRef:\n\n\tfrom:\n\t  name: my-api",
+      "properties": {
+        "from": {
+          "description": "AWSResourceReference provides all the values necessary to reference another\nk8s resource for finding the identifier(Id/ARN/Name)",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "namespace": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "expirationDataRules": {
+      "description": "An array of expiration data rules that control when cached data expires from\nthe file system.",
+      "items": {
+        "description": "Specifies a rule that controls when cached data expires from the file system\nbased on last access time.",
+        "properties": {
+          "daysAfterLastAccess": {
+            "format": "int64",
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "importDataRules": {
+      "description": "An array of import data rules that control how data is imported from S3 into\nthe file system.",
+      "items": {
+        "description": "Specifies a rule that controls how data is imported from S3 into the file\nsystem.",
+        "properties": {
+          "prefix": {
+            "type": "string"
+          },
+          "sizeLessThan": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "trigger": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "kmsKeyID": {
+      "description": "The ARN, key ID, or alias of the KMS key to use for encryption. If not specified,\nthe service uses a service-owned key for encryption. You can specify a KMS\nkey using the following formats: key ID, ARN, key alias, or key alias ARN.\nIf you use KmsKeyId, the file system will be encrypted.\n\nRegex Pattern: `^([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}|mrk-[0-9a-f]{32}|alias/[a-zA-Z0-9/_-]+|(arn:aws[-a-z]*:kms:[a-z0-9-]+:\\d{12}:((key/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})|(key/mrk-[0-9a-f]{32})|(alias/[a-zA-Z0-9/_-]+))))$`",
+      "type": "string"
+    },
+    "kmsKeyRef": {
+      "description": "AWSResourceReferenceWrapper provides a wrapper around *AWSResourceReference\ntype to provide more user friendly syntax for references using 'from' field\nEx:\nAPIIDRef:\n\n\tfrom:\n\t  name: my-api",
+      "properties": {
+        "from": {
+          "description": "AWSResourceReference provides all the values necessary to reference another\nk8s resource for finding the identifier(Id/ARN/Name)",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "namespace": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "policy": {
+      "description": "The JSON-formatted resource policy to apply to the file system. The policy\ndefines the permissions for accessing the file system. The policy must be\na valid JSON document that follows IAM policy syntax.",
+      "type": "string"
+    },
+    "prefix": {
+      "description": "An optional prefix within the S3 bucket to scope the file system access.\nIf specified, the file system provides access only to objects with keys that\nbegin with this prefix. If not specified, the file system provides access\nto the entire bucket.",
+      "type": "string"
+    },
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    },
+    "roleARN": {
+      "description": "The ARN of the IAM role that grants the S3 Files service permission to read\nand write data between the file system and the S3 bucket. This role must\nhave the necessary permissions to access the specified bucket and prefix.\n\nRegex Pattern: `^arn:(aws[a-zA-Z-]*)?:iam::\\d{12}:role/?[a-zA-Z_0-9+=,.@\\-_/]+$`",
+      "type": "string"
+    },
+    "roleRef": {
+      "description": "AWSResourceReferenceWrapper provides a wrapper around *AWSResourceReference\ntype to provide more user friendly syntax for references using 'from' field\nEx:\nAPIIDRef:\n\n\tfrom:\n\t  name: my-api",
+      "properties": {
+        "from": {
+          "description": "AWSResourceReference provides all the values necessary to reference another\nk8s resource for finding the identifier(Id/ARN/Name)",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "namespace": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "tags": {
+      "description": "An array of key-value pairs to apply as tags to the file system resource.\nEach tag is a user-defined key-value pair. You can use tags to categorize\nand manage your file systems. Each key must be unique for the resource.",
+      "items": {
+        "description": "A key-value pair for resource tagging.",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "title": "AWS S3files FileSystem",
+  "type": "object"
+}

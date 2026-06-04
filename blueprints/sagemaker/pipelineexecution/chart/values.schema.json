@@ -1,0 +1,82 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS Sagemaker PipelineExecution via the ACK sagemaker controller. Fields mirror the sagemaker.services.k8s.aws/v1alpha1 PipelineExecution spec.",
+  "properties": {
+    "parallelismConfiguration": {
+      "description": "This configuration, if specified, overrides the parallelism configuration\nof the parent pipeline for this specific run.",
+      "properties": {
+        "maxParallelExecutionSteps": {
+          "format": "int64",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "pipelineExecutionDescription": {
+      "description": "The description of the pipeline execution.\n\nRegex Pattern: `.*`",
+      "type": "string"
+    },
+    "pipelineExecutionDisplayName": {
+      "description": "The display name of the pipeline execution.\n\nRegex Pattern: `^[a-zA-Z0-9](-*[a-zA-Z0-9]){0,81}$`",
+      "type": "string"
+    },
+    "pipelineName": {
+      "description": "The name or Amazon Resource Name (ARN) of the pipeline.\n\nRegex Pattern: `^(arn:aws[a-z\\-]*:sagemaker:[a-z0-9\\-]*:[0-9]{12}:pipeline/.*)?([a-zA-Z0-9](-*[a-zA-Z0-9]){0,255})$`",
+      "type": "string"
+    },
+    "pipelineParameters": {
+      "description": "Contains a list of pipeline parameters. This list can be empty.",
+      "items": {
+        "description": "Assigns a value to a named Pipeline parameter.",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "pipelineVersionID": {
+      "description": "The ID of the pipeline version to start execution from.",
+      "format": "int64",
+      "type": "integer"
+    },
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    },
+    "selectiveExecutionConfig": {
+      "description": "The selective execution configuration applied to the pipeline run.",
+      "properties": {
+        "selectedSteps": {
+          "items": {
+            "description": "A step selected to run in selective execution mode.",
+            "properties": {
+              "stepName": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "sourcePipelineExecutionARN": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "required": [
+    "pipelineName"
+  ],
+  "title": "AWS Sagemaker PipelineExecution",
+  "type": "object"
+}

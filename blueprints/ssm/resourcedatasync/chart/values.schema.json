@@ -1,0 +1,98 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS Ssm ResourceDataSync via the ACK ssm controller. Fields mirror the ssm.services.k8s.aws/v1alpha1 ResourceDataSync spec.",
+  "properties": {
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    },
+    "s3Destination": {
+      "description": "Amazon S3 configuration details for the sync. This parameter is required\nif the SyncType value is SyncToDestination.",
+      "properties": {
+        "awsKMSKeyARN": {
+          "type": "string"
+        },
+        "bucketName": {
+          "type": "string"
+        },
+        "destinationDataSharing": {
+          "description": "Synchronize Amazon Web Services Systems Manager Inventory data from multiple\nAmazon Web Services accounts defined in Organizations to a centralized Amazon\nS3 bucket. Data is synchronized to individual key prefixes in the central\nbucket. Each key prefix represents a different Amazon Web Services account\nID.",
+          "properties": {
+            "destinationDataSharingType": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "prefix": {
+          "type": "string"
+        },
+        "region": {
+          "type": "string"
+        },
+        "syncFormat": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "syncName": {
+      "description": "A name for the configuration.",
+      "type": "string"
+    },
+    "syncSource": {
+      "description": "Specify information about the data sources to synchronize. This parameter\nis required if the SyncType value is SyncFromSource.",
+      "properties": {
+        "awsOrganizationsSource": {
+          "description": "Information about the AwsOrganizationsSource resource data sync source. A\nsync source of this type can synchronize data from Organizations or, if an\nAmazon Web Services organization isn't present, from multiple Amazon Web\nServices Regions.",
+          "properties": {
+            "organizationSourceType": {
+              "type": "string"
+            },
+            "organizationalUnits": {
+              "items": {
+                "description": "The Organizations organizational unit data source for the sync.",
+                "properties": {
+                  "organizationalUnitID": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "type": "array"
+            }
+          },
+          "type": "object"
+        },
+        "enableAllOpsDataSources": {
+          "type": "boolean"
+        },
+        "includeFutureRegions": {
+          "type": "boolean"
+        },
+        "sourceRegions": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "sourceType": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "syncType": {
+      "description": "Specify SyncToDestination to create a resource data sync that synchronizes\ndata to an S3 bucket for Inventory. If you specify SyncToDestination, you\nmust provide a value for S3Destination. Specify SyncFromSource to synchronize\ndata from a single account and multiple Regions, or multiple Amazon Web Services\naccounts and Amazon Web Services Regions, as listed in Organizations for\nExplorer. If you specify SyncFromSource, you must provide a value for SyncSource.\nThe default value is SyncToDestination.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "syncName"
+  ],
+  "title": "AWS Ssm ResourceDataSync",
+  "type": "object"
+}

@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS Kinesis Stream via the ACK kinesis controller. Fields mirror the kinesis.services.k8s.aws/v1alpha1 Stream spec.",
+  "properties": {
+    "name": {
+      "description": "A name to identify the stream. The stream name is scoped to the Amazon Web\nServices account used by the application that creates the stream. It is also\nscoped by Amazon Web Services Region. That is, two streams in two different\nAmazon Web Services accounts can have the same name. Two streams in the same\nAmazon Web Services account but in two different Regions can also have the\nsame name.\n\nRegex Pattern: `^[a-zA-Z0-9_.-]+$`",
+      "type": "string"
+    },
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    },
+    "shardCount": {
+      "description": "The number of shards that the stream will use. The throughput of the stream\nis a function of the number of shards; more shards are required for greater\nprovisioned throughput.",
+      "format": "int64",
+      "type": "integer"
+    },
+    "streamModeDetails": {
+      "description": "Indicates the capacity mode of the data stream. Currently, in Kinesis Data\nStreams, you can choose between an on-demand capacity mode and a provisioned\ncapacity mode for your data streams.",
+      "properties": {
+        "streamMode": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "tags": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "A set of up to 10 key-value pairs to use to create the tags.",
+      "type": "object"
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "title": "AWS Kinesis Stream",
+  "type": "object"
+}

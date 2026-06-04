@@ -1,0 +1,93 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS Apigateway APIIntegrationResponse via the ACK apigateway controller. Fields mirror the apigateway.services.k8s.aws/v1alpha1 APIIntegrationResponse spec.",
+  "properties": {
+    "contentHandling": {
+      "description": "Specifies how to handle response payload content type conversions. Supported\nvalues are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the following behaviors:\n\nIf this property is not defined, the response payload will be passed through\nfrom the integration response to the method response without modification.",
+      "type": "string"
+    },
+    "httpMethod": {
+      "description": "Specifies a put integration response request's HTTP method.",
+      "type": "string"
+    },
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    },
+    "resourceID": {
+      "description": "Specifies a put integration response request's resource identifier.",
+      "type": "string"
+    },
+    "resourceRef": {
+      "description": "AWSResourceReferenceWrapper provides a wrapper around *AWSResourceReference\ntype to provide more user friendly syntax for references using 'from' field\nEx:\nAPIIDRef:\n\n\tfrom:\n\t  name: my-api",
+      "properties": {
+        "from": {
+          "description": "AWSResourceReference provides all the values necessary to reference another\nk8s resource for finding the identifier(Id/ARN/Name)",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "namespace": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "responseParameters": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "A key-value map specifying response parameters that are passed to the method\nresponse from the back end. The key is a method response header parameter\nname and the mapped value is an integration response header value, a static\nvalue enclosed within a pair of single quotes, or a JSON expression from\nthe integration response body. The mapping key must match the pattern of\nmethod.response.header.{name}, where name is a valid and unique header name.\nThe mapped non-static value must match the pattern of integration.response.header.{name}\nor integration.response.body.{JSON-expression}, where name must be a valid\nand unique response header name and JSON-expression a valid JSON expression\nwithout the $ prefix.",
+      "type": "object"
+    },
+    "responseTemplates": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "Specifies a put integration response's templates.",
+      "type": "object"
+    },
+    "restAPIID": {
+      "description": "The string identifier of the associated RestApi.",
+      "type": "string"
+    },
+    "restAPIRef": {
+      "description": "AWSResourceReferenceWrapper provides a wrapper around *AWSResourceReference\ntype to provide more user friendly syntax for references using 'from' field\nEx:\nAPIIDRef:\n\n\tfrom:\n\t  name: my-api",
+      "properties": {
+        "from": {
+          "description": "AWSResourceReference provides all the values necessary to reference another\nk8s resource for finding the identifier(Id/ARN/Name)",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "namespace": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "selectionPattern": {
+      "description": "Specifies the selection pattern of a put integration response.",
+      "type": "string"
+    },
+    "statusCode": {
+      "description": "Specifies the status code that is used to map the integration response to\nan existing MethodResponse.\n\nRegex Pattern: `^[1-5]\\d\\d$`",
+      "type": "string"
+    }
+  },
+  "required": [
+    "httpMethod",
+    "statusCode"
+  ],
+  "title": "AWS Apigateway APIIntegrationResponse",
+  "type": "object"
+}

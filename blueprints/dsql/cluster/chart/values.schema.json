@@ -1,0 +1,69 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS Dsql Cluster via the ACK dsql controller. Fields mirror the dsql.services.k8s.aws/v1alpha1 Cluster spec.",
+  "properties": {
+    "deletionProtectionEnabled": {
+      "description": "If enabled, you can't delete your cluster. You must first disable this property\nbefore you can delete your cluster.",
+      "type": "boolean"
+    },
+    "kmsEncryptionKey": {
+      "description": "The KMS key that encrypts and protects the data on your cluster. You can\nspecify the ARN, ID, or alias of an existing key or have Amazon Web Services\ncreate a default key for you.\n\nRegex Pattern: `^[a-zA-Z0-9:/_-]+$`",
+      "type": "string"
+    },
+    "kmsEncryptionKeyRef": {
+      "description": "AWSResourceReferenceWrapper provides a wrapper around *AWSResourceReference\ntype to provide more user friendly syntax for references using 'from' field\nEx:\nAPIIDRef:\n\n\tfrom:\n\t  name: my-api",
+      "properties": {
+        "from": {
+          "description": "AWSResourceReference provides all the values necessary to reference another\nk8s resource for finding the identifier(Id/ARN/Name)",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "namespace": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "multiRegionProperties": {
+      "description": "The configuration settings when creating a multi-Region cluster, including\nthe witness region and linked cluster properties.",
+      "properties": {
+        "clusters": {
+          "description": "A list of the Amazon Resource Names of the cluster.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "witnessRegion": {
+          "description": "Region name.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "policy": {
+      "description": "An optional resource-based policy document in JSON format that defines access\npermissions for the cluster.",
+      "type": "string"
+    },
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    },
+    "tags": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "A map of key and value pairs to use to tag your cluster.",
+      "type": "object"
+    }
+  },
+  "title": "AWS Dsql Cluster",
+  "type": "object"
+}

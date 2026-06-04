@@ -1,0 +1,104 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS Apigateway Stage via the ACK apigateway controller. Fields mirror the apigateway.services.k8s.aws/v1alpha1 Stage spec.",
+  "properties": {
+    "cacheClusterEnabled": {
+      "description": "Whether cache clustering is enabled for the stage.",
+      "type": "boolean"
+    },
+    "cacheClusterSize": {
+      "description": "The stage's cache capacity in GB. For more information about choosing a cache\nsize, see Enabling API caching to enhance responsiveness (https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-caching.html).",
+      "type": "string"
+    },
+    "canarySettings": {
+      "description": "The canary deployment settings of this stage.",
+      "properties": {
+        "deploymentID": {
+          "type": "string"
+        },
+        "percentTraffic": {
+          "type": "number"
+        },
+        "stageVariableOverrides": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        },
+        "useStageCache": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "deploymentID": {
+      "description": "The identifier of the Deployment resource for the Stage resource.",
+      "type": "string"
+    },
+    "description": {
+      "description": "The description of the Stage resource.",
+      "type": "string"
+    },
+    "documentationVersion": {
+      "description": "The version of the associated API documentation.",
+      "type": "string"
+    },
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    },
+    "restAPIID": {
+      "description": "The string identifier of the associated RestApi.",
+      "type": "string"
+    },
+    "restAPIRef": {
+      "description": "AWSResourceReferenceWrapper provides a wrapper around *AWSResourceReference\ntype to provide more user friendly syntax for references using 'from' field\nEx:\nAPIIDRef:\n\n\tfrom:\n\t  name: my-api",
+      "properties": {
+        "from": {
+          "description": "AWSResourceReference provides all the values necessary to reference another\nk8s resource for finding the identifier(Id/ARN/Name)",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "namespace": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "stageName": {
+      "description": "The name for the Stage resource. Stage names can only contain alphanumeric\ncharacters, hyphens, and underscores. Maximum length is 128 characters.",
+      "type": "string"
+    },
+    "tags": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "The key-value map of strings. The valid character set is [a-zA-Z+-=._:/].\nThe tag key can be up to 128 characters and must not start with aws:. The\ntag value can be up to 256 characters.",
+      "type": "object"
+    },
+    "tracingEnabled": {
+      "description": "Specifies whether active tracing with X-ray is enabled for the Stage.",
+      "type": "boolean"
+    },
+    "variables": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "A map that defines the stage variables for the new Stage resource. Variable\nnames can have alphanumeric and underscore characters, and the values must\nmatch [A-Za-z0-9-._~:/?#\u0026=,]+.",
+      "type": "object"
+    }
+  },
+  "required": [
+    "deploymentID",
+    "stageName"
+  ],
+  "title": "AWS Apigateway Stage",
+  "type": "object"
+}

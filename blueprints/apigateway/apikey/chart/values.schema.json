@@ -1,0 +1,82 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS Apigateway APIKey via the ACK apigateway controller. Fields mirror the apigateway.services.k8s.aws/v1alpha1 APIKey spec.",
+  "properties": {
+    "customerID": {
+      "description": "An Amazon Web Services Marketplace customer identifier, when integrating\nwith the Amazon Web Services SaaS Marketplace.",
+      "type": "string"
+    },
+    "description": {
+      "description": "The description of the ApiKey.",
+      "type": "string"
+    },
+    "enabled": {
+      "description": "Specifies whether the ApiKey can be used by callers.",
+      "type": "boolean"
+    },
+    "generateDistinctID": {
+      "description": "Specifies whether (true) or not (false) the key identifier is distinct from\nthe created API key value. This parameter is deprecated and should not be\nused.",
+      "type": "boolean"
+    },
+    "name": {
+      "description": "The name of the ApiKey.",
+      "type": "string"
+    },
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    },
+    "stageKeys": {
+      "description": "DEPRECATED FOR USAGE PLANS - Specifies stages associated with the API key.",
+      "items": {
+        "description": "A reference to a unique stage identified in the format {restApiId}/{stage}.",
+        "properties": {
+          "restAPIID": {
+            "type": "string"
+          },
+          "stageName": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "tags": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "The key-value map of strings. The valid character set is [a-zA-Z+-=._:/].\nThe tag key can be up to 128 characters and must not start with aws:. The\ntag value can be up to 256 characters.",
+      "type": "object"
+    },
+    "value": {
+      "description": "Specifies a value of the API key.",
+      "properties": {
+        "key": {
+          "description": "Key is the key within the secret",
+          "type": "string"
+        },
+        "name": {
+          "description": "name is unique within a namespace to reference a secret resource.",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "namespace defines the space within which the secret name must be unique.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "key"
+      ],
+      "type": "object"
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "title": "AWS Apigateway APIKey",
+  "type": "object"
+}

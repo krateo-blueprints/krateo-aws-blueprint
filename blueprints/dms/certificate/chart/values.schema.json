@@ -1,0 +1,102 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS Dms Certificate via the ACK dms controller. Fields mirror the dms.services.k8s.aws/v1alpha1 Certificate spec.",
+  "properties": {
+    "certificatePem": {
+      "description": "The contents of a .pem file, which contains an X.509 certificate.",
+      "properties": {
+        "key": {
+          "description": "Key is the key within the secret",
+          "type": "string"
+        },
+        "name": {
+          "description": "name is unique within a namespace to reference a secret resource.",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "namespace defines the space within which the secret name must be unique.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "key"
+      ],
+      "type": "object"
+    },
+    "certificateWallet": {
+      "description": "A Base64 encoded Oracle Wallet certificate (cwallet.sso) for use with SSL.",
+      "properties": {
+        "key": {
+          "description": "Key is the key within the secret",
+          "type": "string"
+        },
+        "name": {
+          "description": "name is unique within a namespace to reference a secret resource.",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "namespace defines the space within which the secret name must be unique.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "key"
+      ],
+      "type": "object"
+    },
+    "kmsKeyID": {
+      "description": "An KMS key identifier that is used to encrypt the certificate.\n\nIf you don't specify a value for the KmsKeyId parameter, then DMS uses your\ndefault encryption key.\n\nKMS creates the default encryption key for your Amazon Web Services account.\nYour Amazon Web Services account has a different default encryption key for\neach Amazon Web Services Region.",
+      "type": "string"
+    },
+    "kmsKeyRef": {
+      "description": "AWSResourceReferenceWrapper provides a wrapper around *AWSResourceReference\ntype to provide more user friendly syntax for references using 'from' field\nEx:\nAPIIDRef:\n\n\tfrom:\n\t  name: my-api",
+      "properties": {
+        "from": {
+          "description": "AWSResourceReference provides all the values necessary to reference another\nk8s resource for finding the identifier(Id/ARN/Name)",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "namespace": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "name": {
+      "description": "A customer-assigned name for the certificate. Identifiers must begin with\na letter and must contain only ASCII letters, digits, and hyphens. They can't\nend with a hyphen or contain two consecutive hyphens.",
+      "type": "string"
+    },
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    },
+    "tags": {
+      "description": "The tags associated with the certificate.",
+      "items": {
+        "description": "A user-defined key-value pair that describes metadata added to an DMS resource\nand that is used by operations such as the following:\n\n   * AddTagsToResource\n\n   * ListTagsForResource\n\n   * RemoveTagsFromResource",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "title": "AWS Dms Certificate",
+  "type": "object"
+}

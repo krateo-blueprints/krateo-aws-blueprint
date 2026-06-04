@@ -1,0 +1,90 @@
+apiVersion: v1
+data:
+  drawer: "true"
+  form: "true"
+  showFormStructure: "true"
+  drawerSize: large
+kind: ConfigMap
+metadata:
+  name: template-aws-emrserverless-application-card
+  namespace: aws-emrserverless-system
+---
+apiVersion: templates.krateo.io/v1alpha1
+kind: Widget
+metadata:
+  name: template-aws-emrserverless-application-card
+  namespace: aws-emrserverless-system
+spec:
+  actions:
+  - template:
+      apiVersion: templates.krateo.io/v1alpha1
+      name: template-aws-emrserverless-application-customform
+      namespace: aws-emrserverless-system
+      resource: customforms
+      verb: GET
+  - template:
+      apiVersion: core.krateo.io/v1alpha1
+      name: aws-emrserverless-application
+      namespace: aws-emrserverless-system
+      resource: compositiondefinitions
+      verb: DELETE
+  app:
+    template:
+      color: ${ .getCompositionDefinition.status.conditions[] | select(.type == "Ready") | if .status == "False" then "orange" elif .status == "True" then "green" else "grey" end }
+      content: Provision an AWS Emrserverless Application via the ACK emrserverless controller.
+      icon: fa-brands fa-aws
+      tags: aws-emrserverless-system,0.1.0
+      title: aws-emrserverless-application
+      status: ${ .getCompositionDefinition.status.conditions[] | select(.type == "Ready") | "Ready:" + .status }
+      date: ${ .getCompositionDefinition.metadata.creationTimestamp }
+  propsRef:
+    name: template-aws-emrserverless-application-card
+    namespace: aws-emrserverless-system
+  type: card
+  api:
+  - name: getCompositionDefinition
+    path: "/apis/core.krateo.io/v1alpha1/namespaces/aws-emrserverless-system/compositiondefinitions/aws-emrserverless-application"
+    verb: GET
+    headers:
+    - 'Accept: application/json'
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: template-aws-emrserverless-application-customform
+  namespace: aws-emrserverless-system
+data:
+  onSubmitId: submit
+  onSubmitVerb: POST
+  payloadFormKey: spec
+  redirectRoute: /compositions/${metadata.namespace}/${metadata.name}
+  redirectTimeout: "50"
+---
+apiVersion: templates.krateo.io/v1alpha1
+kind: CustomForm
+metadata:
+  name: template-aws-emrserverless-application-customform
+  namespace: aws-emrserverless-system
+spec:
+  type: customform
+  propsRef:
+    name: template-aws-emrserverless-application-customform
+    namespace: aws-emrserverless-system
+  actions:
+    - template:
+        id: submit
+        apiVersion: composition.krateo.io/v0-1-0
+        verb: POST
+        resource: awsemrserverlessapplications
+        payloadToOverride:
+        - name: metadata.namespace
+          value: ${ "aws-emrserverless-system" }
+  app:
+    template:
+      schema: ${ .getCRD | .spec.versions[] | select(.name == "v0-1-0") | .schema.openAPIV3Schema.properties.spec }
+  api:
+  - name: getCRD
+    path: "/apis/apiextensions.k8s.io/v1/customresourcedefinitions/awsemrserverlessapplications.composition.krateo.io"
+    verb: GET
+    headers:
+    - 'Accept: application/json'

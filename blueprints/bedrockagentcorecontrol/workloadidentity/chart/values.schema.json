@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS Bedrockagentcorecontrol WorkloadIdentity via the ACK bedrockagentcorecontrol controller. Fields mirror the bedrockagentcorecontrol.services.k8s.aws/v1alpha1 WorkloadIdentity spec.",
+  "properties": {
+    "allowedResourceOauth2ReturnURLs": {
+      "description": "The list of allowed OAuth2 return URLs for resources associated with this\nworkload identity.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "name": {
+      "description": "The name of the workload identity. The name must be unique within your account.\n\nRegex Pattern: `^[A-Za-z0-9_.-]+$`",
+      "type": "string"
+    },
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    },
+    "tags": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "A map of tag keys and values to assign to the workload identity. Tags enable\nyou to categorize your resources in different ways, for example, by purpose,\nowner, or environment.",
+      "type": "object"
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "title": "AWS Bedrockagentcorecontrol WorkloadIdentity",
+  "type": "object"
+}

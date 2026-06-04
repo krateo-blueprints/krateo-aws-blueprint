@@ -1,0 +1,63 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS S3control AccessPoint via the ACK s3control controller. Fields mirror the s3control.services.k8s.aws/v1alpha1 AccessPoint spec.",
+  "properties": {
+    "accountID": {
+      "description": "The Amazon Web Services account ID for the account that owns the specified\naccess point.\n\nRegex Pattern: `^\\d{12}$`",
+      "type": "string"
+    },
+    "bucket": {
+      "description": "The name of the bucket that you want to associate this access point with.\n\nFor using this parameter with Amazon S3 on Outposts with the REST API, you\nmust specify the name and the x-amz-outpost-id as well.\n\nFor using this parameter with S3 on Outposts with the Amazon Web Services\nSDK and CLI, you must specify the ARN of the bucket accessed in the format\narn:aws:s3-outposts:::outpost//bucket/. For example, to access the bucket\nreports through Outpost my-outpost owned by account 123456789012 in Region\nus-west-2, use the URL encoding of arn:aws:s3-outposts:us-west-2:123456789012:outpost/my-outpost/bucket/reports.\nThe value must be URL encoded.",
+      "type": "string"
+    },
+    "bucketAccountID": {
+      "description": "The Amazon Web Services account ID associated with the S3 bucket associated\nwith this access point.\n\nFor same account access point when your bucket and access point belong to\nthe same account owner, the BucketAccountId is not required. For cross-account\naccess point when your bucket and access point are not in the same account,\nthe BucketAccountId is required.\n\nRegex Pattern: `^\\d{12}$`",
+      "type": "string"
+    },
+    "name": {
+      "description": "The name you want to assign to this access point.",
+      "type": "string"
+    },
+    "publicAccessBlockConfiguration": {
+      "description": "The PublicAccessBlock configuration that you want to apply to the access\npoint.",
+      "properties": {
+        "blockPublicACLs": {
+          "type": "boolean"
+        },
+        "blockPublicPolicy": {
+          "type": "boolean"
+        },
+        "ignorePublicACLs": {
+          "type": "boolean"
+        },
+        "restrictPublicBuckets": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    },
+    "vpcConfiguration": {
+      "description": "If you include this field, Amazon S3 restricts access to this access point\nto requests from the specified virtual private cloud (VPC).\n\nThis is required for creating an access point for Amazon S3 on Outposts buckets.",
+      "properties": {
+        "vpcID": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "required": [
+    "accountID",
+    "bucket",
+    "name"
+  ],
+  "title": "AWS S3control AccessPoint",
+  "type": "object"
+}

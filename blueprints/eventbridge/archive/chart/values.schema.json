@@ -1,0 +1,57 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS Eventbridge Archive via the ACK eventbridge controller. Fields mirror the eventbridge.services.k8s.aws/v1alpha1 Archive spec.",
+  "properties": {
+    "description": {
+      "description": "A description for the archive.\n\nRegex Pattern: `.*`",
+      "type": "string"
+    },
+    "eventPattern": {
+      "description": "An event pattern to use to filter events sent to the archive.",
+      "type": "string"
+    },
+    "eventSourceARN": {
+      "description": "The ARN of the event bus that sends events to the archive.",
+      "type": "string"
+    },
+    "eventSourceRef": {
+      "description": "AWSResourceReferenceWrapper provides a wrapper around *AWSResourceReference\ntype to provide more user friendly syntax for references using 'from' field\nEx:\nAPIIDRef:\n\n\tfrom:\n\t  name: my-api",
+      "properties": {
+        "from": {
+          "description": "AWSResourceReference provides all the values necessary to reference another\nk8s resource for finding the identifier(Id/ARN/Name)",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "namespace": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "name": {
+      "description": "The name for the archive to create.\n\nRegex Pattern: `^[\\.\\-_A-Za-z0-9]+$`",
+      "type": "string"
+    },
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    },
+    "retentionDays": {
+      "description": "The number of days to retain events for. Default value is 0. If set to 0,\nevents are retained indefinitely",
+      "format": "int64",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "title": "AWS Eventbridge Archive",
+  "type": "object"
+}

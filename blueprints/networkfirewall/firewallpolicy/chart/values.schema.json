@@ -1,0 +1,192 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS Networkfirewall FirewallPolicy via the ACK networkfirewall controller. Fields mirror the networkfirewall.services.k8s.aws/v1alpha1 FirewallPolicy spec.",
+  "properties": {
+    "description": {
+      "description": "A description of the firewall policy.\n\nRegex Pattern: `^.*$`",
+      "type": "string"
+    },
+    "encryptionConfiguration": {
+      "description": "A complex type that contains settings for encryption of your firewall policy\nresources.",
+      "properties": {
+        "keyID": {
+          "type": "string"
+        },
+        "type_": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "firewallPolicy": {
+      "description": "The rule groups and policy actions to use in the firewall policy.",
+      "properties": {
+        "policyVariables": {
+          "description": "Contains variables that you can use to override default Suricata settings\nin your firewall policy.",
+          "properties": {
+            "ruleVariables": {
+              "additionalProperties": {
+                "description": "A list of IP addresses and address ranges, in CIDR notation. This is part\nof a RuleVariables.",
+                "properties": {
+                  "definition": {
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array"
+                  }
+                },
+                "type": "object"
+              },
+              "type": "object"
+            }
+          },
+          "type": "object"
+        },
+        "statefulDefaultActions": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "statefulEngineOptions": {
+          "description": "Configuration settings for the handling of the stateful rule groups in a\nfirewall policy.",
+          "properties": {
+            "ruleOrder": {
+              "type": "string"
+            },
+            "streamExceptionPolicy": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "statefulRuleGroupReferences": {
+          "items": {
+            "description": "Identifier for a single stateful rule group, used in a firewall policy to\nrefer to a rule group.",
+            "properties": {
+              "override": {
+                "description": "The setting that allows the policy owner to change the behavior of the rule\ngroup within a policy.",
+                "properties": {
+                  "action": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "priority": {
+                "format": "int64",
+                "type": "integer"
+              },
+              "resourceARN": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "statelessCustomActions": {
+          "items": {
+            "description": "An optional, non-standard action to use for stateless packet handling. You\ncan define this in addition to the standard action that you must specify.\n\nYou define and name the custom actions that you want to be able to use, and\nthen you reference them by name in your actions settings.\n\nYou can use custom actions in the following places:\n\n   * In a rule group's StatelessRulesAndCustomActions specification. The\n   custom actions are available for use by name inside the StatelessRulesAndCustomActions\n   where you define them. You can use them for your stateless rule actions\n   to specify what to do with a packet that matches the rule's match attributes.\n\n   * In a FirewallPolicy specification, in StatelessCustomActions. The custom\n   actions are available for use inside the policy where you define them.\n   You can use them for the policy's default stateless actions settings to\n   specify what to do with packets that don't match any of the policy's stateless\n   rules.",
+            "properties": {
+              "actionDefinition": {
+                "description": "A custom action to use in stateless rule actions settings. This is used in\nCustomAction.",
+                "properties": {
+                  "publishMetricAction": {
+                    "description": "Stateless inspection criteria that publishes the specified metrics to Amazon\nCloudWatch for the matching packet. This setting defines a CloudWatch dimension\nvalue to be published.",
+                    "properties": {
+                      "dimensions": {
+                        "items": {
+                          "description": "The value to use in an Amazon CloudWatch custom metric dimension. This is\nused in the PublishMetrics CustomAction. A CloudWatch custom metric dimension\nis a name/value pair that's part of the identity of a metric.\n\nNetwork Firewall sets the dimension name to CustomAction and you provide\nthe dimension value.\n\nFor more information about CloudWatch custom metric dimensions, see Publishing\nCustom Metrics (https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/publishingMetrics.html#usingDimensions)\nin the Amazon CloudWatch User Guide (https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/WhatIsCloudWatch.html).",
+                          "properties": {
+                            "value": {
+                              "type": "string"
+                            }
+                          },
+                          "type": "object"
+                        },
+                        "type": "array"
+                      }
+                    },
+                    "type": "object"
+                  }
+                },
+                "type": "object"
+              },
+              "actionName": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "statelessDefaultActions": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "statelessFragmentDefaultActions": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "statelessRuleGroupReferences": {
+          "items": {
+            "description": "Identifier for a single stateless rule group, used in a firewall policy to\nrefer to the rule group.",
+            "properties": {
+              "priority": {
+                "format": "int64",
+                "type": "integer"
+              },
+              "resourceARN": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "tlsInspectionConfigurationARN": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "firewallPolicyName": {
+      "description": "The descriptive name of the firewall policy. You can't change the name of\na firewall policy after you create it.\n\nRegex Pattern: `^[a-zA-Z0-9-]+$`",
+      "type": "string"
+    },
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    },
+    "tags": {
+      "description": "The key:value pairs to associate with the resource.",
+      "items": {
+        "description": "A key:value pair associated with an Amazon Web Services resource. The key:value\npair can be anything you define. Typically, the tag key represents a category\n(such as \"environment\") and the tag value represents a specific value within\nthat category (such as \"test,\" \"development,\" or \"production\"). You can add\nup to 50 tags to each Amazon Web Services resource.",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "firewallPolicy",
+    "firewallPolicyName"
+  ],
+  "title": "AWS Networkfirewall FirewallPolicy",
+  "type": "object"
+}

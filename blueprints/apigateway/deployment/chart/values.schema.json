@@ -1,0 +1,86 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS Apigateway Deployment via the ACK apigateway controller. Fields mirror the apigateway.services.k8s.aws/v1alpha1 Deployment spec.",
+  "properties": {
+    "cacheClusterEnabled": {
+      "description": "Enables a cache cluster for the Stage resource specified in the input.",
+      "type": "boolean"
+    },
+    "cacheClusterSize": {
+      "description": "The stage's cache capacity in GB. For more information about choosing a cache\nsize, see Enabling API caching to enhance responsiveness (https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-caching.html).",
+      "type": "string"
+    },
+    "canarySettings": {
+      "description": "The input configuration for the canary deployment when the deployment is\na canary release deployment.",
+      "properties": {
+        "percentTraffic": {
+          "type": "number"
+        },
+        "stageVariableOverrides": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        },
+        "useStageCache": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "description": {
+      "description": "The description for the Deployment resource to create.",
+      "type": "string"
+    },
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    },
+    "restAPIID": {
+      "description": "The string identifier of the associated RestApi.",
+      "type": "string"
+    },
+    "restAPIRef": {
+      "description": "AWSResourceReferenceWrapper provides a wrapper around *AWSResourceReference\ntype to provide more user friendly syntax for references using 'from' field\nEx:\nAPIIDRef:\n\n\tfrom:\n\t  name: my-api",
+      "properties": {
+        "from": {
+          "description": "AWSResourceReference provides all the values necessary to reference another\nk8s resource for finding the identifier(Id/ARN/Name)",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "namespace": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "stageDescription": {
+      "description": "The description of the Stage resource for the Deployment resource to create.",
+      "type": "string"
+    },
+    "stageName": {
+      "description": "The name of the Stage resource for the Deployment resource to create.",
+      "type": "string"
+    },
+    "tracingEnabled": {
+      "description": "Specifies whether active tracing with X-ray is enabled for the Stage.",
+      "type": "boolean"
+    },
+    "variables": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "A map that defines the stage variables for the Stage resource that is associated\nwith the new deployment. Variable names can have alphanumeric and underscore\ncharacters, and the values must match [A-Za-z0-9-._~:/?#\u0026=,]+.",
+      "type": "object"
+    }
+  },
+  "title": "AWS Apigateway Deployment",
+  "type": "object"
+}

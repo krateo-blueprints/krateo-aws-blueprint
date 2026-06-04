@@ -1,0 +1,90 @@
+apiVersion: v1
+data:
+  drawer: "true"
+  form: "true"
+  showFormStructure: "true"
+  drawerSize: large
+kind: ConfigMap
+metadata:
+  name: template-aws-pipes-pipe-card
+  namespace: aws-pipes-system
+---
+apiVersion: templates.krateo.io/v1alpha1
+kind: Widget
+metadata:
+  name: template-aws-pipes-pipe-card
+  namespace: aws-pipes-system
+spec:
+  actions:
+  - template:
+      apiVersion: templates.krateo.io/v1alpha1
+      name: template-aws-pipes-pipe-customform
+      namespace: aws-pipes-system
+      resource: customforms
+      verb: GET
+  - template:
+      apiVersion: core.krateo.io/v1alpha1
+      name: aws-pipes-pipe
+      namespace: aws-pipes-system
+      resource: compositiondefinitions
+      verb: DELETE
+  app:
+    template:
+      color: ${ .getCompositionDefinition.status.conditions[] | select(.type == "Ready") | if .status == "False" then "orange" elif .status == "True" then "green" else "grey" end }
+      content: Provision an AWS Pipes Pipe via the ACK pipes controller.
+      icon: fa-brands fa-aws
+      tags: aws-pipes-system,0.1.0
+      title: aws-pipes-pipe
+      status: ${ .getCompositionDefinition.status.conditions[] | select(.type == "Ready") | "Ready:" + .status }
+      date: ${ .getCompositionDefinition.metadata.creationTimestamp }
+  propsRef:
+    name: template-aws-pipes-pipe-card
+    namespace: aws-pipes-system
+  type: card
+  api:
+  - name: getCompositionDefinition
+    path: "/apis/core.krateo.io/v1alpha1/namespaces/aws-pipes-system/compositiondefinitions/aws-pipes-pipe"
+    verb: GET
+    headers:
+    - 'Accept: application/json'
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: template-aws-pipes-pipe-customform
+  namespace: aws-pipes-system
+data:
+  onSubmitId: submit
+  onSubmitVerb: POST
+  payloadFormKey: spec
+  redirectRoute: /compositions/${metadata.namespace}/${metadata.name}
+  redirectTimeout: "50"
+---
+apiVersion: templates.krateo.io/v1alpha1
+kind: CustomForm
+metadata:
+  name: template-aws-pipes-pipe-customform
+  namespace: aws-pipes-system
+spec:
+  type: customform
+  propsRef:
+    name: template-aws-pipes-pipe-customform
+    namespace: aws-pipes-system
+  actions:
+    - template:
+        id: submit
+        apiVersion: composition.krateo.io/v0-1-0
+        verb: POST
+        resource: awspipespipes
+        payloadToOverride:
+        - name: metadata.namespace
+          value: ${ "aws-pipes-system" }
+  app:
+    template:
+      schema: ${ .getCRD | .spec.versions[] | select(.name == "v0-1-0") | .schema.openAPIV3Schema.properties.spec }
+  api:
+  - name: getCRD
+    path: "/apis/apiextensions.k8s.io/v1/customresourcedefinitions/awspipespipes.composition.krateo.io"
+    verb: GET
+    headers:
+    - 'Accept: application/json'

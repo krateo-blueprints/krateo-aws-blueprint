@@ -1,0 +1,170 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS Bedrockagentcorecontrol CodeInterpreter via the ACK bedrockagentcorecontrol controller. Fields mirror the bedrockagentcorecontrol.services.k8s.aws/v1alpha1 CodeInterpreter spec.",
+  "properties": {
+    "certificates": {
+      "description": "A list of certificates to install in the code interpreter.",
+      "items": {
+        "description": "A certificate to install in the browser or code interpreter.",
+        "properties": {
+          "location": {
+            "description": "The location from which to retrieve a certificate.",
+            "properties": {
+              "secretsManager": {
+                "description": "The Amazon Web Services Secrets Manager location configuration.",
+                "properties": {
+                  "secretARN": {
+                    "type": "string"
+                  },
+                  "secretRef": {
+                    "description": "Reference field for SecretARN",
+                    "properties": {
+                      "from": {
+                        "description": "AWSResourceReference provides all the values necessary to reference another\nk8s resource for finding the identifier(Id/ARN/Name)",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "namespace": {
+                            "type": "string"
+                          }
+                        },
+                        "type": "object"
+                      }
+                    },
+                    "type": "object"
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "description": {
+      "description": "The description of the code interpreter.",
+      "type": "string"
+    },
+    "executionRoleARN": {
+      "description": "The Amazon Resource Name (ARN) of the IAM role that provides permissions\nfor the code interpreter to access Amazon Web Services services.\n\nRegex Pattern: `^arn:aws(-[^:]+)?:iam::([0-9]{12})?:role/.+$`",
+      "type": "string"
+    },
+    "executionRoleRef": {
+      "description": "AWSResourceReferenceWrapper provides a wrapper around *AWSResourceReference\ntype to provide more user friendly syntax for references using 'from' field\nEx:\nAPIIDRef:\n\n\tfrom:\n\t  name: my-api",
+      "properties": {
+        "from": {
+          "description": "AWSResourceReference provides all the values necessary to reference another\nk8s resource for finding the identifier(Id/ARN/Name)",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "namespace": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "name": {
+      "description": "The name of the code interpreter. The name must be unique within your account.\n\nRegex Pattern: `^[a-zA-Z][a-zA-Z0-9_]{0,47}$`",
+      "type": "string"
+    },
+    "networkConfiguration": {
+      "description": "The network configuration for the code interpreter. This configuration specifies\nthe network mode for the code interpreter.",
+      "properties": {
+        "networkMode": {
+          "type": "string"
+        },
+        "vpcConfig": {
+          "description": "VpcConfig for the Agent.",
+          "properties": {
+            "securityGroupRefs": {
+              "description": "Reference field for SecurityGroups",
+              "items": {
+                "description": "AWSResourceReferenceWrapper provides a wrapper around *AWSResourceReference\ntype to provide more user friendly syntax for references using 'from' field\nEx:\nAPIIDRef:\n\n\tfrom:\n\t  name: my-api",
+                "properties": {
+                  "from": {
+                    "description": "AWSResourceReference provides all the values necessary to reference another\nk8s resource for finding the identifier(Id/ARN/Name)",
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      },
+                      "namespace": {
+                        "type": "string"
+                      }
+                    },
+                    "type": "object"
+                  }
+                },
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "securityGroups": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "subnetRefs": {
+              "description": "Reference field for Subnets",
+              "items": {
+                "description": "AWSResourceReferenceWrapper provides a wrapper around *AWSResourceReference\ntype to provide more user friendly syntax for references using 'from' field\nEx:\nAPIIDRef:\n\n\tfrom:\n\t  name: my-api",
+                "properties": {
+                  "from": {
+                    "description": "AWSResourceReference provides all the values necessary to reference another\nk8s resource for finding the identifier(Id/ARN/Name)",
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      },
+                      "namespace": {
+                        "type": "string"
+                      }
+                    },
+                    "type": "object"
+                  }
+                },
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "subnets": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    },
+    "tags": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "A map of tag keys and values to assign to the code interpreter. Tags enable\nyou to categorize your resources in different ways, for example, by purpose,\nowner, or environment.",
+      "type": "object"
+    }
+  },
+  "required": [
+    "name",
+    "networkConfiguration"
+  ],
+  "title": "AWS Bedrockagentcorecontrol CodeInterpreter",
+  "type": "object"
+}

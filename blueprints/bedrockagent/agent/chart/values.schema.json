@@ -1,0 +1,195 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS Bedrockagent Agent via the ACK bedrockagent controller. Fields mirror the bedrockagent.services.k8s.aws/v1alpha1 Agent spec.",
+  "properties": {
+    "agentCollaboration": {
+      "description": "The agent's collaboration role.",
+      "type": "string"
+    },
+    "agentName": {
+      "description": "A name for the agent that you create.\n\nRegex Pattern: `^([0-9a-zA-Z][_-]?){1,100}$`",
+      "type": "string"
+    },
+    "agentResourceRoleARN": {
+      "description": "The Amazon Resource Name (ARN) of the IAM role with permissions to invoke\nAPI operations on the agent.\n\nRegex Pattern: `^arn:aws(-[^:]+)?:iam::([0-9]{12})?:role/.+$`",
+      "type": "string"
+    },
+    "agentResourceRoleRef": {
+      "description": "AWSResourceReferenceWrapper provides a wrapper around *AWSResourceReference\ntype to provide more user friendly syntax for references using 'from' field\nEx:\nAPIIDRef:\n\n\tfrom:\n\t  name: my-api",
+      "properties": {
+        "from": {
+          "description": "AWSResourceReference provides all the values necessary to reference another\nk8s resource for finding the identifier(Id/ARN/Name)",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "namespace": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "customOrchestration": {
+      "description": "Contains details of the custom orchestration configured for the agent.",
+      "properties": {
+        "executor": {
+          "description": "Contains details about the Lambda function containing the orchestration logic\ncarried out upon invoking the custom orchestration.",
+          "properties": {
+            "lambda": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "customerEncryptionKeyARN": {
+      "description": "The Amazon Resource Name (ARN) of the KMS key with which to encrypt the agent.\n\nRegex Pattern: `^arn:aws(|-cn|-us-gov):kms:[a-zA-Z0-9-]*:[0-9]{12}:key/[a-zA-Z0-9-]{36}$`",
+      "type": "string"
+    },
+    "description": {
+      "description": "A description of the agent.",
+      "type": "string"
+    },
+    "foundationModel": {
+      "description": "The identifier for the model that you want to be used for orchestration by\nthe agent you create.\n\nThe modelId to provide depends on the type of model or throughput that you\nuse:\n\n   * If you use a base model, specify the model ID or its ARN. For a list\n   of model IDs for base models, see Amazon Bedrock base model IDs (on-demand\n   throughput) (https://docs.aws.amazon.com/bedrock/latest/userguide/model-ids.html#model-ids-arns)\n   in the Amazon Bedrock User Guide.\n\n   * If you use an inference profile, specify the inference profile ID or\n   its ARN. For a list of inference profile IDs, see Supported Regions and\n   models for cross-region inference (https://docs.aws.amazon.com/bedrock/latest/userguide/cross-region-inference-support.html)\n   in the Amazon Bedrock User Guide.\n\n   * If you use a provisioned model, specify the ARN of the Provisioned Throughput.\n   For more information, see Run inference using a Provisioned Throughput\n   (https://docs.aws.amazon.com/bedrock/latest/userguide/prov-thru-use.html)\n   in the Amazon Bedrock User Guide.\n\n   * If you use a custom model, first purchase Provisioned Throughput for\n   it. Then specify the ARN of the resulting provisioned model. For more\n   information, see Use a custom model in Amazon Bedrock (https://docs.aws.amazon.com/bedrock/latest/userguide/model-customization-use.html)\n   in the Amazon Bedrock User Guide.\n\n   * If you use an imported model (https://docs.aws.amazon.com/bedrock/latest/userguide/model-customization-import-model.html),\n   specify the ARN of the imported model. You can get the model ARN from\n   a successful call to CreateModelImportJob (https://docs.aws.amazon.com/bedrock/latest/APIReference/API_CreateModelImportJob.html)\n   or from the Imported models page in the Amazon Bedrock console.\n\nRegex Pattern: `^(arn:aws(-[^:]{1,12})?:(bedrock|sagemaker):[a-z0-9-]{1,20}:([0-9]{12})?:([a-z-]+/)?)?([a-zA-Z0-9.-]{1,63}){0,2}(([:][a-z0-9-]{1,63}){0,2})?(/[a-z0-9]{1,12})?$`",
+      "type": "string"
+    },
+    "guardrailConfiguration": {
+      "description": "The unique Guardrail configuration assigned to the agent when it is created.",
+      "properties": {
+        "guardrailIdentifier": {
+          "type": "string"
+        },
+        "guardrailVersion": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "idleSessionTTLInSeconds": {
+      "description": "The number of seconds for which Amazon Bedrock keeps information about a\nuser's conversation with the agent.\n\nA user interaction remains active for the amount of time specified. If no\nconversation occurs during this time, the session expires and Amazon Bedrock\ndeletes any data provided before the timeout.",
+      "format": "int64",
+      "type": "integer"
+    },
+    "instruction": {
+      "description": "Instructions that tell the agent what it should do and how it should interact\nwith users.",
+      "type": "string"
+    },
+    "memoryConfiguration": {
+      "description": "Contains the details of the memory configured for the agent.",
+      "properties": {
+        "enabledMemoryTypes": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "sessionSummaryConfiguration": {
+          "description": "Configuration for SESSION_SUMMARY memory type enabled for the agent.",
+          "properties": {
+            "maxRecentSessions": {
+              "format": "int64",
+              "type": "integer"
+            }
+          },
+          "type": "object"
+        },
+        "storageDays": {
+          "format": "int64",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "orchestrationType": {
+      "description": "Specifies the type of orchestration strategy for the agent. This is set to\nDEFAULT orchestration type, by default.",
+      "type": "string"
+    },
+    "promptOverrideConfiguration": {
+      "description": "Contains configurations to override prompts in different parts of an agent\nsequence. For more information, see Advanced prompts (https://docs.aws.amazon.com/bedrock/latest/userguide/advanced-prompts.html).",
+      "properties": {
+        "overrideLambda": {
+          "type": "string"
+        },
+        "promptConfigurations": {
+          "items": {
+            "description": "Contains configurations to override a prompt template in one part of an agent\nsequence. For more information, see Advanced prompts (https://docs.aws.amazon.com/bedrock/latest/userguide/advanced-prompts.html).",
+            "properties": {
+              "basePromptTemplate": {
+                "type": "string"
+              },
+              "foundationModel": {
+                "type": "string"
+              },
+              "inferenceConfiguration": {
+                "description": "Contains inference parameters to use when the agent invokes a foundation\nmodel in the part of the agent sequence defined by the promptType. For more\ninformation, see Inference parameters for foundation models (https://docs.aws.amazon.com/bedrock/latest/userguide/model-parameters.html).",
+                "properties": {
+                  "maximumLength": {
+                    "format": "int64",
+                    "type": "integer"
+                  },
+                  "stopSequences": {
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array"
+                  },
+                  "temperature": {
+                    "type": "number"
+                  },
+                  "topK": {
+                    "format": "int64",
+                    "type": "integer"
+                  },
+                  "topP": {
+                    "type": "number"
+                  }
+                },
+                "type": "object"
+              },
+              "parserMode": {
+                "type": "string"
+              },
+              "promptCreationMode": {
+                "type": "string"
+              },
+              "promptState": {
+                "type": "string"
+              },
+              "promptType": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    },
+    "tags": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "An object containing key-value pairs that define the tags to attach to the\nresource.",
+      "type": "object"
+    }
+  },
+  "required": [
+    "agentName"
+  ],
+  "title": "AWS Bedrockagent Agent",
+  "type": "object"
+}

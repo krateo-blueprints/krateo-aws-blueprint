@@ -1,0 +1,167 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS Elbv2 LoadBalancer via the ACK elbv2 controller. Fields mirror the elbv2.services.k8s.aws/v1alpha1 LoadBalancer spec.",
+  "properties": {
+    "attributes": {
+      "description": "The load balancer attributes.",
+      "items": {
+        "description": "Information about a load balancer attribute.",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "customerOwnedIPv4Pool": {
+      "description": "[Application Load Balancers on Outposts] The ID of the customer-owned address\npool (CoIP pool).\n\nRegex Pattern: `^(ipv4pool-coip-)[a-zA-Z0-9]+$`",
+      "type": "string"
+    },
+    "enablePrefixForIPv6SourceNAT": {
+      "description": "[Network Load Balancers with UDP listeners] Indicates whether to use an IPv6\nprefix from each subnet for source NAT. The IP address type must be dualstack.\nThe default value is off.",
+      "type": "string"
+    },
+    "ipAddressType": {
+      "description": "The IP address type. Internal load balancers must use ipv4.\n\n[Application Load Balancers] The possible values are ipv4 (IPv4 addresses),\ndualstack (IPv4 and IPv6 addresses), and dualstack-without-public-ipv4 (public\nIPv6 addresses and private IPv4 and IPv6 addresses).\n\n[Network Load Balancers and Gateway Load Balancers] The possible values are\nipv4 (IPv4 addresses) and dualstack (IPv4 and IPv6 addresses).",
+      "type": "string"
+    },
+    "name": {
+      "description": "The name of the load balancer.\n\nThis name must be unique per region per account, can have a maximum of 32\ncharacters, must contain only alphanumeric characters or hyphens, must not\nbegin or end with a hyphen, and must not begin with \"internal-\".",
+      "type": "string"
+    },
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    },
+    "scheme": {
+      "description": "The nodes of an Internet-facing load balancer have public IP addresses. The\nDNS name of an Internet-facing load balancer is publicly resolvable to the\npublic IP addresses of the nodes. Therefore, Internet-facing load balancers\ncan route requests from clients over the internet.\n\nThe nodes of an internal load balancer have only private IP addresses. The\nDNS name of an internal load balancer is publicly resolvable to the private\nIP addresses of the nodes. Therefore, internal load balancers can route requests\nonly from clients with access to the VPC for the load balancer.\n\nThe default is an Internet-facing load balancer.\n\nYou can't specify a scheme for a Gateway Load Balancer.",
+      "type": "string"
+    },
+    "securityGroupRefs": {
+      "items": {
+        "description": "AWSResourceReferenceWrapper provides a wrapper around *AWSResourceReference\ntype to provide more user friendly syntax for references using 'from' field\nEx:\nAPIIDRef:\n\n\tfrom:\n\t  name: my-api",
+        "properties": {
+          "from": {
+            "description": "AWSResourceReference provides all the values necessary to reference another\nk8s resource for finding the identifier(Id/ARN/Name)",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "namespace": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "securityGroups": {
+      "description": "[Application Load Balancers and Network Load Balancers] The IDs of the security\ngroups for the load balancer.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "subnetMappings": {
+      "description": "The IDs of the subnets. You can specify only one subnet per Availability\nZone. You must specify either subnets or subnet mappings, but not both.\n\n[Application Load Balancers] You must specify subnets from at least two Availability\nZones. You can't specify Elastic IP addresses for your subnets.\n\n[Application Load Balancers on Outposts] You must specify one Outpost subnet.\n\n[Application Load Balancers on Local Zones] You can specify subnets from\none or more Local Zones.\n\n[Network Load Balancers] You can specify subnets from one or more Availability\nZones. You can specify one Elastic IP address per subnet if you need static\nIP addresses for your internet-facing load balancer. For internal load balancers,\nyou can specify one private IP address per subnet from the IPv4 range of\nthe subnet. For internet-facing load balancer, you can specify one IPv6 address\nper subnet.\n\n[Gateway Load Balancers] You can specify subnets from one or more Availability\nZones. You can't specify Elastic IP addresses for your subnets.",
+      "items": {
+        "description": "Information about a subnet mapping.",
+        "properties": {
+          "allocationID": {
+            "type": "string"
+          },
+          "ipv6Address": {
+            "type": "string"
+          },
+          "privateIPv4Address": {
+            "type": "string"
+          },
+          "subnetID": {
+            "type": "string"
+          },
+          "subnetRef": {
+            "description": "Reference field for SubnetID",
+            "properties": {
+              "from": {
+                "description": "AWSResourceReference provides all the values necessary to reference another\nk8s resource for finding the identifier(Id/ARN/Name)",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "namespace": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "subnetRefs": {
+      "items": {
+        "description": "AWSResourceReferenceWrapper provides a wrapper around *AWSResourceReference\ntype to provide more user friendly syntax for references using 'from' field\nEx:\nAPIIDRef:\n\n\tfrom:\n\t  name: my-api",
+        "properties": {
+          "from": {
+            "description": "AWSResourceReference provides all the values necessary to reference another\nk8s resource for finding the identifier(Id/ARN/Name)",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "namespace": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "subnets": {
+      "description": "The IDs of the subnets. You can specify only one subnet per Availability\nZone. You must specify either subnets or subnet mappings, but not both. To\nspecify an Elastic IP address, specify subnet mappings instead of subnets.\n\n[Application Load Balancers] You must specify subnets from at least two Availability\nZones.\n\n[Application Load Balancers on Outposts] You must specify one Outpost subnet.\n\n[Application Load Balancers on Local Zones] You can specify subnets from\none or more Local Zones.\n\n[Network Load Balancers and Gateway Load Balancers] You can specify subnets\nfrom one or more Availability Zones.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "tags": {
+      "description": "The tags to assign to the load balancer.",
+      "items": {
+        "description": "Information about a tag.",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "type": {
+      "description": "The type of load balancer. The default is application.",
+      "type": "string"
+    }
+  },
+  "title": "AWS Elbv2 LoadBalancer",
+  "type": "object"
+}

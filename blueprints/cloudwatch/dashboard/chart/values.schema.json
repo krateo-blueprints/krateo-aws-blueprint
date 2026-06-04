@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS Cloudwatch Dashboard via the ACK cloudwatch controller. Fields mirror the cloudwatch.services.k8s.aws/v1alpha1 Dashboard spec.",
+  "properties": {
+    "dashboardBody": {
+      "description": "The detailed information about the dashboard in JSON format, including the\nwidgets to include and their location on the dashboard. This parameter is\nrequired.\n\nFor more information about the syntax, see Dashboard Body Structure and Syntax\n(https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/CloudWatch-Dashboard-Body-Structure.html).",
+      "type": "string"
+    },
+    "dashboardName": {
+      "description": "The name of the dashboard. If a dashboard with this name already exists,\nthis call modifies that dashboard, replacing its current contents. Otherwise,\na new dashboard is created. The maximum length is 255, and valid characters\nare A-Z, a-z, 0-9, \"-\", and \"_\". This parameter is required.",
+      "type": "string"
+    },
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    }
+  },
+  "required": [
+    "dashboardBody",
+    "dashboardName"
+  ],
+  "title": "AWS Cloudwatch Dashboard",
+  "type": "object"
+}

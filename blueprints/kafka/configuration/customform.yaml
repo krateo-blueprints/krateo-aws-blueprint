@@ -1,0 +1,90 @@
+apiVersion: v1
+data:
+  drawer: "true"
+  form: "true"
+  showFormStructure: "true"
+  drawerSize: large
+kind: ConfigMap
+metadata:
+  name: template-aws-kafka-configuration-card
+  namespace: aws-kafka-system
+---
+apiVersion: templates.krateo.io/v1alpha1
+kind: Widget
+metadata:
+  name: template-aws-kafka-configuration-card
+  namespace: aws-kafka-system
+spec:
+  actions:
+  - template:
+      apiVersion: templates.krateo.io/v1alpha1
+      name: template-aws-kafka-configuration-customform
+      namespace: aws-kafka-system
+      resource: customforms
+      verb: GET
+  - template:
+      apiVersion: core.krateo.io/v1alpha1
+      name: aws-kafka-configuration
+      namespace: aws-kafka-system
+      resource: compositiondefinitions
+      verb: DELETE
+  app:
+    template:
+      color: ${ .getCompositionDefinition.status.conditions[] | select(.type == "Ready") | if .status == "False" then "orange" elif .status == "True" then "green" else "grey" end }
+      content: Provision an AWS Kafka Configuration via the ACK kafka controller.
+      icon: fa-brands fa-aws
+      tags: aws-kafka-system,0.1.0
+      title: aws-kafka-configuration
+      status: ${ .getCompositionDefinition.status.conditions[] | select(.type == "Ready") | "Ready:" + .status }
+      date: ${ .getCompositionDefinition.metadata.creationTimestamp }
+  propsRef:
+    name: template-aws-kafka-configuration-card
+    namespace: aws-kafka-system
+  type: card
+  api:
+  - name: getCompositionDefinition
+    path: "/apis/core.krateo.io/v1alpha1/namespaces/aws-kafka-system/compositiondefinitions/aws-kafka-configuration"
+    verb: GET
+    headers:
+    - 'Accept: application/json'
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: template-aws-kafka-configuration-customform
+  namespace: aws-kafka-system
+data:
+  onSubmitId: submit
+  onSubmitVerb: POST
+  payloadFormKey: spec
+  redirectRoute: /compositions/${metadata.namespace}/${metadata.name}
+  redirectTimeout: "50"
+---
+apiVersion: templates.krateo.io/v1alpha1
+kind: CustomForm
+metadata:
+  name: template-aws-kafka-configuration-customform
+  namespace: aws-kafka-system
+spec:
+  type: customform
+  propsRef:
+    name: template-aws-kafka-configuration-customform
+    namespace: aws-kafka-system
+  actions:
+    - template:
+        id: submit
+        apiVersion: composition.krateo.io/v0-1-0
+        verb: POST
+        resource: awskafkaconfigurations
+        payloadToOverride:
+        - name: metadata.namespace
+          value: ${ "aws-kafka-system" }
+  app:
+    template:
+      schema: ${ .getCRD | .spec.versions[] | select(.name == "v0-1-0") | .schema.openAPIV3Schema.properties.spec }
+  api:
+  - name: getCRD
+    path: "/apis/apiextensions.k8s.io/v1/customresourcedefinitions/awskafkaconfigurations.composition.krateo.io"
+    verb: GET
+    headers:
+    - 'Accept: application/json'

@@ -1,0 +1,226 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS Backup BackupPlan via the ACK backup controller. Fields mirror the backup.services.k8s.aws/v1alpha1 BackupPlan spec.",
+  "properties": {
+    "advancedBackupSettings": {
+      "description": "Specifies a list of BackupOptions for each resource type. These settings\nare only available for Windows Volume Shadow Copy Service (VSS) backup jobs.",
+      "items": {
+        "description": "The backup options for each resource type.",
+        "properties": {
+          "backupOptions": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object"
+          },
+          "resourceType": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "name": {
+      "description": "The display name of a backup plan. Must contain 1 to 50 alphanumeric or '-_.'\ncharacters.",
+      "type": "string"
+    },
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    },
+    "rules": {
+      "description": "An array of BackupRule objects, each of which specifies a scheduled task\nthat is used to back up a selection of resources.",
+      "items": {
+        "description": "Specifies a scheduled task used to back up a selection of resources.",
+        "properties": {
+          "completionWindowMinutes": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "copyActions": {
+            "items": {
+              "description": "The details of the copy operation.",
+              "properties": {
+                "destinationBackupVaultARN": {
+                  "type": "string"
+                },
+                "destinationBackupVaultRef": {
+                  "description": "Reference field for DestinationBackupVaultARN",
+                  "properties": {
+                    "from": {
+                      "description": "AWSResourceReference provides all the values necessary to reference another\nk8s resource for finding the identifier(Id/ARN/Name)",
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        },
+                        "namespace": {
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  },
+                  "type": "object"
+                },
+                "lifecycle": {
+                  "description": "Specifies the time period, in days, before a recovery point transitions to\ncold storage or is deleted.\n\nBackups transitioned to cold storage must be stored in cold storage for a\nminimum of 90 days. Therefore, on the console, the retention setting must\nbe 90 days greater than the transition to cold after days setting. The transition\nto cold after days setting can't be changed after a backup has been transitioned\nto cold.\n\nResource types that can transition to cold storage are listed in the Feature\navailability by resource (https://docs.aws.amazon.com/aws-backup/latest/devguide/backup-feature-availability.html#features-by-resource)\ntable. Backup ignores this expression for other resource types.\n\nTo remove the existing lifecycle and retention periods and keep your recovery\npoints indefinitely, specify -1 for MoveToColdStorageAfterDays and DeleteAfterDays.",
+                  "properties": {
+                    "deleteAfterDays": {
+                      "format": "int64",
+                      "type": "integer"
+                    },
+                    "deleteAfterEvent": {
+                      "type": "string"
+                    },
+                    "moveToColdStorageAfterDays": {
+                      "format": "int64",
+                      "type": "integer"
+                    },
+                    "optInToArchiveForSupportedResources": {
+                      "type": "boolean"
+                    }
+                  },
+                  "type": "object"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "enableContinuousBackup": {
+            "type": "boolean"
+          },
+          "indexActions": {
+            "items": {
+              "description": "This is an optional array within a BackupRule.\n\nIndexAction consists of one ResourceTypes.",
+              "properties": {
+                "resourceTypes": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "lifecycle": {
+            "description": "Specifies the time period, in days, before a recovery point transitions to\ncold storage or is deleted.\n\nBackups transitioned to cold storage must be stored in cold storage for a\nminimum of 90 days. Therefore, on the console, the retention setting must\nbe 90 days greater than the transition to cold after days setting. The transition\nto cold after days setting can't be changed after a backup has been transitioned\nto cold.\n\nResource types that can transition to cold storage are listed in the Feature\navailability by resource (https://docs.aws.amazon.com/aws-backup/latest/devguide/backup-feature-availability.html#features-by-resource)\ntable. Backup ignores this expression for other resource types.\n\nTo remove the existing lifecycle and retention periods and keep your recovery\npoints indefinitely, specify -1 for MoveToColdStorageAfterDays and DeleteAfterDays.",
+            "properties": {
+              "deleteAfterDays": {
+                "format": "int64",
+                "type": "integer"
+              },
+              "deleteAfterEvent": {
+                "type": "string"
+              },
+              "moveToColdStorageAfterDays": {
+                "format": "int64",
+                "type": "integer"
+              },
+              "optInToArchiveForSupportedResources": {
+                "type": "boolean"
+              }
+            },
+            "type": "object"
+          },
+          "recoveryPointTags": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object"
+          },
+          "ruleName": {
+            "type": "string"
+          },
+          "scanActions": {
+            "items": {
+              "description": "Defines a scanning action that specifies the malware scanner and scan mode\nto use.",
+              "properties": {
+                "malwareScanner": {
+                  "type": "string"
+                },
+                "scanMode": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "scheduleExpression": {
+            "type": "string"
+          },
+          "scheduleExpressionTimezone": {
+            "type": "string"
+          },
+          "startWindowMinutes": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "targetBackupVaultName": {
+            "type": "string"
+          },
+          "targetBackupVaultRef": {
+            "description": "Reference field for TargetBackupVaultName",
+            "properties": {
+              "from": {
+                "description": "AWSResourceReference provides all the values necessary to reference another\nk8s resource for finding the identifier(Id/ARN/Name)",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "namespace": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "targetLogicallyAirGappedBackupVaultARN": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "scanSettings": {
+      "description": "Contains your scanning configuration for the backup rule and includes the\nmalware scanner, and scan mode of either full or incremental.",
+      "items": {
+        "description": "Contains configuration settings for malware scanning, including the scanner\ntype, target resource types, and scanner role.",
+        "properties": {
+          "malwareScanner": {
+            "type": "string"
+          },
+          "resourceTypes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "scannerRoleARN": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "tags": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "type": "object"
+    }
+  },
+  "title": "AWS Backup BackupPlan",
+  "type": "object"
+}

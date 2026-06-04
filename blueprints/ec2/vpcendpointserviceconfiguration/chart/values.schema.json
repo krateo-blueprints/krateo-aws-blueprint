@@ -1,0 +1,67 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS Ec2 VPCEndpointServiceConfiguration via the ACK ec2 controller. Fields mirror the ec2.services.k8s.aws/v1alpha1 VPCEndpointServiceConfiguration spec.",
+  "properties": {
+    "acceptanceRequired": {
+      "description": "Indicates whether requests from service consumers to create an endpoint to\nyour service must be accepted manually.",
+      "type": "boolean"
+    },
+    "allowedPrincipals": {
+      "description": "The Amazon Resource Names (ARN) of the principals. Permissions are granted\nto the principals in this list. To grant permissions to all principals, specify\nan asterisk (*).",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "gatewayLoadBalancerARNs": {
+      "description": "The Amazon Resource Names (ARNs) of the Gateway Load Balancers.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "networkLoadBalancerARNs": {
+      "description": "The Amazon Resource Names (ARNs) of the Network Load Balancers.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "privateDNSName": {
+      "description": "(Interface endpoint configuration) The private DNS name to assign to the\nVPC endpoint service.",
+      "type": "string"
+    },
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    },
+    "supportedIPAddressTypes": {
+      "description": "The supported IP address types. The possible values are ipv4 and ipv6.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "tags": {
+      "description": "The tags. The value parameter is required, but if you don't want the tag\nto have a value, specify the parameter with no value, and we set the value\nto an empty string.",
+      "items": {
+        "description": "Describes a tag.",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "title": "AWS Ec2 VPCEndpointServiceConfiguration",
+  "type": "object"
+}

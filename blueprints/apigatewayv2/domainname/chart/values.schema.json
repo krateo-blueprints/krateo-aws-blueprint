@@ -1,0 +1,73 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS Apigatewayv2 DomainName via the ACK apigatewayv2 controller. Fields mirror the apigatewayv2.services.k8s.aws/v1alpha1 DomainName spec.",
+  "properties": {
+    "domainName": {
+      "description": "The domain name.",
+      "type": "string"
+    },
+    "domainNameConfigurations": {
+      "description": "The domain name configurations.",
+      "items": {
+        "description": "The domain name configuration.",
+        "properties": {
+          "certificateARN": {
+            "description": "Represents an Amazon Resource Name (ARN).",
+            "type": "string"
+          },
+          "certificateName": {
+            "description": "A string with a length between [1-128].",
+            "type": "string"
+          },
+          "endpointType": {
+            "description": "Represents an endpoint type.",
+            "type": "string"
+          },
+          "ownershipVerificationCertificateARN": {
+            "description": "Represents an Amazon Resource Name (ARN).",
+            "type": "string"
+          },
+          "securityPolicy": {
+            "description": "The Transport Layer Security (TLS) version of the security policy for this\ndomain name. The valid values are TLS_1_0 and TLS_1_2.",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "mutualTLSAuthentication": {
+      "description": "The mutual TLS authentication configuration for a custom domain name.",
+      "properties": {
+        "truststoreURI": {
+          "description": "A string representation of a URI with a length between [1-2048].",
+          "type": "string"
+        },
+        "truststoreVersion": {
+          "description": "A string with a length between [1-64].",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    },
+    "tags": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "The collection of tags associated with a domain name.",
+      "type": "object"
+    }
+  },
+  "required": [
+    "domainName"
+  ],
+  "title": "AWS Apigatewayv2 DomainName",
+  "type": "object"
+}

@@ -1,0 +1,105 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS Apigateway RestAPI via the ACK apigateway controller. Fields mirror the apigateway.services.k8s.aws/v1alpha1 RestAPI spec.",
+  "properties": {
+    "apiKeySource": {
+      "description": "The source of the API key for metering requests according to a usage plan.\nValid values are: HEADER to read the API key from the X-API-Key header of\na request. AUTHORIZER to read the API key from the UsageIdentifierKey from\na custom authorizer.",
+      "type": "string"
+    },
+    "binaryMediaTypes": {
+      "description": "The list of binary media types supported by the RestApi. By default, the\nRestApi supports only UTF-8-encoded text payloads.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "cloneFrom": {
+      "description": "The ID of the RestApi that you want to clone from.",
+      "type": "string"
+    },
+    "description": {
+      "description": "The description of the RestApi.",
+      "type": "string"
+    },
+    "disableExecuteAPIEndpoint": {
+      "description": "Specifies whether clients can invoke your API by using the default execute-api\nendpoint. By default, clients can invoke your API with the default https://{api_id}.execute-api.{region}.amazonaws.com\nendpoint. To require that clients use a custom domain name to invoke your\nAPI, disable the default endpoint",
+      "type": "boolean"
+    },
+    "endpointConfiguration": {
+      "description": "The endpoint configuration of this RestApi showing the endpoint types of\nthe API.",
+      "properties": {
+        "types": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "vpcEndpointIDs": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "vpcEndpointRefs": {
+          "description": "Reference field for VPCEndpointIDs",
+          "items": {
+            "description": "AWSResourceReferenceWrapper provides a wrapper around *AWSResourceReference\ntype to provide more user friendly syntax for references using 'from' field\nEx:\nAPIIDRef:\n\n\tfrom:\n\t  name: my-api",
+            "properties": {
+              "from": {
+                "description": "AWSResourceReference provides all the values necessary to reference another\nk8s resource for finding the identifier(Id/ARN/Name)",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "namespace": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "minimumCompressionSize": {
+      "description": "A nullable integer that is used to enable compression (with non-negative\nbetween 0 and 10485760 (10M) bytes, inclusive) or disable compression (with\na null value) on an API. When compression is enabled, compression or decompression\nis not applied on the payload if the payload size is smaller than this value.\nSetting it to zero allows compression for any payload size.",
+      "format": "int64",
+      "type": "integer"
+    },
+    "name": {
+      "description": "The name of the RestApi.",
+      "type": "string"
+    },
+    "policy": {
+      "description": "A stringified JSON policy document that applies to this RestApi regardless\nof the caller and Method configuration.",
+      "type": "string"
+    },
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    },
+    "tags": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "The key-value map of strings. The valid character set is [a-zA-Z+-=._:/].\nThe tag key can be up to 128 characters and must not start with aws:. The\ntag value can be up to 256 characters.",
+      "type": "object"
+    },
+    "version": {
+      "description": "A version identifier for the API.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "title": "AWS Apigateway RestAPI",
+  "type": "object"
+}

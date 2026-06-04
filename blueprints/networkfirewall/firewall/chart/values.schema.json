@@ -1,0 +1,120 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS Networkfirewall Firewall via the ACK networkfirewall controller. Fields mirror the networkfirewall.services.k8s.aws/v1alpha1 Firewall spec.",
+  "properties": {
+    "deleteProtection": {
+      "description": "A flag indicating whether it is possible to delete the firewall. A setting\nof TRUE indicates that the firewall is protected against deletion. Use this\nsetting to protect against accidentally deleting a firewall that is in use.\nWhen you create a firewall, the operation initializes this flag to TRUE.",
+      "type": "boolean"
+    },
+    "description": {
+      "description": "A description of the firewall.\n\nRegex Pattern: `^.*$`",
+      "type": "string"
+    },
+    "encryptionConfiguration": {
+      "description": "A complex type that contains settings for encryption of your firewall resources.",
+      "properties": {
+        "keyID": {
+          "type": "string"
+        },
+        "type_": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "firewallName": {
+      "description": "The descriptive name of the firewall. You can't change the name of a firewall\nafter you create it.\n\nRegex Pattern: `^[a-zA-Z0-9-]+$`",
+      "type": "string"
+    },
+    "firewallPolicyARN": {
+      "description": "The Amazon Resource Name (ARN) of the FirewallPolicy that you want to use\nfor the firewall.\n\nRegex Pattern: `^arn:aws`",
+      "type": "string"
+    },
+    "firewallPolicyChangeProtection": {
+      "description": "A setting indicating whether the firewall is protected against a change to\nthe firewall policy association. Use this setting to protect against accidentally\nmodifying the firewall policy for a firewall that is in use. When you create\na firewall, the operation initializes this setting to TRUE.",
+      "type": "boolean"
+    },
+    "loggingConfiguration": {
+      "description": "Defines how Network Firewall performs logging for a firewall. If you omit\nthis setting, Network Firewall disables logging for the firewall.",
+      "properties": {
+        "logDestinationConfigs": {
+          "items": {
+            "description": "Defines where Network Firewall sends logs for the firewall for one log type.\nThis is used in LoggingConfiguration. You can send each type of log to an\nAmazon S3 bucket, a CloudWatch log group, or a Firehose delivery stream.\n\nNetwork Firewall generates logs for stateful rule groups. You can save alert,\nflow, and TLS log types.",
+            "properties": {
+              "logDestination": {
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "type": "object"
+              },
+              "logDestinationType": {
+                "type": "string"
+              },
+              "logType": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    },
+    "subnetChangeProtection": {
+      "description": "A setting indicating whether the firewall is protected against changes to\nthe subnet associations. Use this setting to protect against accidentally\nmodifying the subnet associations for a firewall that is in use. When you\ncreate a firewall, the operation initializes this setting to TRUE.",
+      "type": "boolean"
+    },
+    "subnetMappings": {
+      "description": "The public subnets to use for your Network Firewall firewalls. Each subnet\nmust belong to a different Availability Zone in the VPC. Network Firewall\ncreates a firewall endpoint in each subnet.",
+      "items": {
+        "description": "The ID for a subnet that you want to associate with the firewall. This is\nused with CreateFirewall and AssociateSubnets. Network Firewall creates an\ninstance of the associated firewall in each subnet that you specify, to filter\ntraffic in the subnet's Availability Zone.",
+        "properties": {
+          "ipAddressType": {
+            "type": "string"
+          },
+          "subnetID": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "tags": {
+      "description": "The key:value pairs to associate with the resource.",
+      "items": {
+        "description": "A key:value pair associated with an Amazon Web Services resource. The key:value\npair can be anything you define. Typically, the tag key represents a category\n(such as \"environment\") and the tag value represents a specific value within\nthat category (such as \"test,\" \"development,\" or \"production\"). You can add\nup to 50 tags to each Amazon Web Services resource.",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "vpcID": {
+      "description": "The unique identifier of the VPC where Network Firewall should create the\nfirewall.\n\nYou can't change this setting after you create the firewall.\n\nRegex Pattern: `^vpc-[0-9a-f]+$`",
+      "type": "string"
+    }
+  },
+  "required": [
+    "firewallName",
+    "firewallPolicyARN",
+    "subnetMappings",
+    "vpcID"
+  ],
+  "title": "AWS Networkfirewall Firewall",
+  "type": "object"
+}

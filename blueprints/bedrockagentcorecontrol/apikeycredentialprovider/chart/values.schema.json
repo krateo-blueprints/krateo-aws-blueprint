@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS Bedrockagentcorecontrol APIKeyCredentialProvider via the ACK bedrockagentcorecontrol controller. Fields mirror the bedrockagentcorecontrol.services.k8s.aws/v1alpha1 APIKeyCredentialProvider spec.",
+  "properties": {
+    "apiKey": {
+      "description": "The API key to use for authentication. This value is encrypted and stored\nsecurely.",
+      "properties": {
+        "key": {
+          "description": "Key is the key within the secret",
+          "type": "string"
+        },
+        "name": {
+          "description": "name is unique within a namespace to reference a secret resource.",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "namespace defines the space within which the secret name must be unique.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "key"
+      ],
+      "type": "object"
+    },
+    "name": {
+      "description": "The name of the API key credential provider. The name must be unique within\nyour account.\n\nRegex Pattern: `^[a-zA-Z0-9\\-_]+$`",
+      "type": "string"
+    },
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    },
+    "tags": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "A map of tag keys and values to assign to the API key credential provider.\nTags enable you to categorize your resources in different ways, for example,\nby purpose, owner, or environment.",
+      "type": "object"
+    }
+  },
+  "required": [
+    "apiKey",
+    "name"
+  ],
+  "title": "AWS Bedrockagentcorecontrol APIKeyCredentialProvider",
+  "type": "object"
+}

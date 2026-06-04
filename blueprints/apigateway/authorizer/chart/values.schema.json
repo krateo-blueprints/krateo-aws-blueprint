@@ -1,0 +1,81 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS Apigateway Authorizer via the ACK apigateway controller. Fields mirror the apigateway.services.k8s.aws/v1alpha1 Authorizer spec.",
+  "properties": {
+    "authType": {
+      "description": "Optional customer-defined field, used in OpenAPI imports and exports without\nfunctional impact.",
+      "type": "string"
+    },
+    "authorizerCredentials": {
+      "description": "Specifies the required credentials as an IAM role for API Gateway to invoke\nthe authorizer. To specify an IAM role for API Gateway to assume, use the\nrole's Amazon Resource Name (ARN). To use resource-based permissions on the\nLambda function, specify null.",
+      "type": "string"
+    },
+    "authorizerResultTTLInSeconds": {
+      "description": "The TTL in seconds of cached authorizer results. If it equals 0, authorization\ncaching is disabled. If it is greater than 0, API Gateway will cache authorizer\nresponses. If this field is not set, the default value is 300. The maximum\nvalue is 3600, or 1 hour.",
+      "format": "int64",
+      "type": "integer"
+    },
+    "authorizerURI": {
+      "description": "Specifies the authorizer's Uniform Resource Identifier (URI). For TOKEN or\nREQUEST authorizers, this must be a well-formed Lambda function URI, for\nexample, arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:{account_id}:function:{lambda_function_name}/invocations.\nIn general, the URI has this form arn:aws:apigateway:{region}:lambda:path/{service_api},\nwhere {region} is the same as the region hosting the Lambda function, path\nindicates that the remaining substring in the URI should be treated as the\npath to the resource, including the initial /. For Lambda functions, this\nis usually of the form /2015-03-31/functions/[FunctionARN]/invocations.",
+      "type": "string"
+    },
+    "identitySource": {
+      "description": "The identity source for which authorization is requested. For a TOKEN or\nCOGNITO_USER_POOLS authorizer, this is required and specifies the request\nheader mapping expression for the custom header holding the authorization\ntoken submitted by the client. For example, if the token header name is Auth,\nthe header mapping expression is method.request.header.Auth. For the REQUEST\nauthorizer, this is required when authorization caching is enabled. The value\nis a comma-separated string of one or more mapping expressions of the specified\nrequest parameters. For example, if an Auth header, a Name query string parameter\nare defined as identity sources, this value is method.request.header.Auth,\nmethod.request.querystring.Name. These parameters will be used to derive\nthe authorization caching key and to perform runtime validation of the REQUEST\nauthorizer by verifying all of the identity-related request parameters are\npresent, not null and non-empty. Only when this is true does the authorizer\ninvoke the authorizer Lambda function, otherwise, it returns a 401 Unauthorized\nresponse without calling the Lambda function. The valid value is a string\nof comma-separated mapping expressions of the specified request parameters.\nWhen the authorization caching is not enabled, this property is optional.",
+      "type": "string"
+    },
+    "identityValidationExpression": {
+      "description": "A validation expression for the incoming identity token. For TOKEN authorizers,\nthis value is a regular expression. For COGNITO_USER_POOLS authorizers, API\nGateway will match the aud field of the incoming token from the client against\nthe specified regular expression. It will invoke the authorizer's Lambda\nfunction when there is a match. Otherwise, it will return a 401 Unauthorized\nresponse without calling the Lambda function. The validation expression does\nnot apply to the REQUEST authorizer.",
+      "type": "string"
+    },
+    "name": {
+      "description": "The name of the authorizer.",
+      "type": "string"
+    },
+    "providerARNs": {
+      "description": "A list of the Amazon Cognito user pool ARNs for the COGNITO_USER_POOLS authorizer.\nEach element is of this format: arn:aws:cognito-idp:{region}:{account_id}:userpool/{user_pool_id}.\nFor a TOKEN or REQUEST authorizer, this is not defined.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    },
+    "restAPIID": {
+      "description": "The string identifier of the associated RestApi.",
+      "type": "string"
+    },
+    "restAPIRef": {
+      "description": "AWSResourceReferenceWrapper provides a wrapper around *AWSResourceReference\ntype to provide more user friendly syntax for references using 'from' field\nEx:\nAPIIDRef:\n\n\tfrom:\n\t  name: my-api",
+      "properties": {
+        "from": {
+          "description": "AWSResourceReference provides all the values necessary to reference another\nk8s resource for finding the identifier(Id/ARN/Name)",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "namespace": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "type": {
+      "description": "The authorizer type. Valid values are TOKEN for a Lambda function using a\nsingle authorization token submitted in a custom header, REQUEST for a Lambda\nfunction using incoming request parameters, and COGNITO_USER_POOLS for using\nan Amazon Cognito user pool.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "name",
+    "type"
+  ],
+  "title": "AWS Apigateway Authorizer",
+  "type": "object"
+}

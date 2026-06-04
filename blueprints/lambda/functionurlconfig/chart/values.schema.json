@@ -1,0 +1,85 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS Lambda FunctionURLConfig via the ACK lambda controller. Fields mirror the lambda.services.k8s.aws/v1alpha1 FunctionURLConfig spec.",
+  "properties": {
+    "authType": {
+      "description": "The type of authentication that your function URL uses. Set to AWS_IAM if\nyou want to restrict access to authenticated users only. Set to NONE if you\nwant to bypass IAM authentication to create a public endpoint. For more information,\nsee Control access to Lambda function URLs (https://docs.aws.amazon.com/lambda/latest/dg/urls-auth.html).",
+      "type": "string"
+    },
+    "cors": {
+      "description": "The cross-origin resource sharing (CORS) (https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)\nsettings for your function URL.",
+      "properties": {
+        "allowCredentials": {
+          "type": "boolean"
+        },
+        "allowHeaders": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "allowMethods": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "allowOrigins": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "exposeHeaders": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "maxAge": {
+          "format": "int64",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "functionName": {
+      "description": "The name or ARN of the Lambda function.\n\nName formats\n\n   * Function name – my-function.\n\n   * Function ARN – arn:aws:lambda:us-west-2:123456789012:function:my-function.\n\n   * Partial ARN – 123456789012:function:my-function.\n\nThe length constraint applies only to the full ARN. If you specify only the\nfunction name, it is limited to 64 characters in length.\n\nRegex Pattern: `^(arn:(aws[a-zA-Z-]*)?:lambda:)?([a-z]{2}((-gov)|(-iso([a-z]?)))?-[a-z]+-\\d{1}:)?(\\d{12}:)?(function:)?([a-zA-Z0-9-_]+)(:(\\$LATEST|[a-zA-Z0-9-_]+))?$`",
+      "type": "string"
+    },
+    "functionRef": {
+      "description": "AWSResourceReferenceWrapper provides a wrapper around *AWSResourceReference\ntype to provide more user friendly syntax for references using 'from' field\nEx:\nAPIIDRef:\n\n\tfrom:\n\t  name: my-api",
+      "properties": {
+        "from": {
+          "description": "AWSResourceReference provides all the values necessary to reference another\nk8s resource for finding the identifier(Id/ARN/Name)",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "namespace": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "qualifier": {
+      "description": "The alias name.\n\nRegex Pattern: `^((?!^\\d+$)^[0-9a-zA-Z-_]+$)$`",
+      "type": "string"
+    },
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    }
+  },
+  "required": [
+    "authType"
+  ],
+  "title": "AWS Lambda FunctionURLConfig",
+  "type": "object"
+}

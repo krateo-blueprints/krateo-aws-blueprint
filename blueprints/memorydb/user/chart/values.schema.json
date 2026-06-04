@@ -1,0 +1,77 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS Memorydb User via the ACK memorydb controller. Fields mirror the memorydb.services.k8s.aws/v1alpha1 User spec.",
+  "properties": {
+    "accessString": {
+      "description": "Access permissions string used for this user.\n\nRegex Pattern: `\\S`",
+      "type": "string"
+    },
+    "authenticationMode": {
+      "description": "Denotes the user's authentication properties, such as whether it requires\na password to authenticate.",
+      "properties": {
+        "passwords": {
+          "items": {
+            "description": "SecretKeyReference combines a k8s corev1.SecretReference with a\nspecific key within the referred-to Secret",
+            "properties": {
+              "key": {
+                "description": "Key is the key within the secret",
+                "type": "string"
+              },
+              "name": {
+                "description": "name is unique within a namespace to reference a secret resource.",
+                "type": "string"
+              },
+              "namespace": {
+                "description": "namespace defines the space within which the secret name must be unique.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "key"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "type_": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "name": {
+      "description": "The name of the user. This value must be unique as it also serves as the\nuser identifier.\n\nRegex Pattern: `^[a-zA-Z][a-zA-Z0-9\\-]*$`",
+      "type": "string"
+    },
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    },
+    "tags": {
+      "description": "A list of tags to be added to this resource. A tag is a key-value pair. A\ntag key must be accompanied by a tag value, although null is accepted.",
+      "items": {
+        "description": "A tag that can be added to an MemoryDB resource. Tags are composed of a Key/Value\npair. You can use tags to categorize and track all your MemoryDB resources.\nWhen you add or remove tags on clusters, those actions will be replicated\nto all nodes in the cluster. A tag with a null Value is permitted. For more\ninformation, see Tagging your MemoryDB resources (https://docs.aws.amazon.com/MemoryDB/latest/devguide/tagging-resources.html)",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "accessString",
+    "authenticationMode",
+    "name"
+  ],
+  "title": "AWS Memorydb User",
+  "type": "object"
+}

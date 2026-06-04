@@ -31,8 +31,8 @@ spec:
   app:
     template:
       color: ${ .getCompositionDefinition.status.conditions[] | select(.type == "Ready") | if .status == "False" then "orange" elif .status == "True" then "green" else "grey" end }
-      content: Provision an Amazon S3 bucket via the ACK S3 controller.
-      icon: fa-solid fa-bucket
+      content: Provision an AWS S3 Bucket via the ACK s3 controller.
+      icon: fa-brands fa-aws
       tags: aws-s3-system,0.1.0
       title: aws-s3-bucket
       status: ${ .getCompositionDefinition.status.conditions[] | select(.type == "Ready") | "Ready:" + .status }

@@ -1,0 +1,53 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS Keyspaces Keyspace via the ACK keyspaces controller. Fields mirror the keyspaces.services.k8s.aws/v1alpha1 Keyspace spec.",
+  "properties": {
+    "keyspaceName": {
+      "description": "The name of the keyspace to be created.\n\nRegex Pattern: `^[a-zA-Z0-9][a-zA-Z0-9_]{0,47}$`",
+      "type": "string"
+    },
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    },
+    "replicationSpecification": {
+      "description": "The replication specification of the keyspace includes:\n\n   * replicationStrategy - the required value is SINGLE_REGION or MULTI_REGION.\n\n   * regionList - if the replicationStrategy is MULTI_REGION, the regionList\n   requires the current Region and at least one additional Amazon Web Services\n   Region where the keyspace is going to be replicated in. The maximum number\n   of supported replication Regions including the current Region is six.",
+      "properties": {
+        "regionList": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "replicationStrategy": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "tags": {
+      "description": "A list of key-value pair tags to be attached to the keyspace.\n\nFor more information, see Adding tags and labels to Amazon Keyspaces resources\n(https://docs.aws.amazon.com/keyspaces/latest/devguide/tagging-keyspaces.html)\nin the Amazon Keyspaces Developer Guide.",
+      "items": {
+        "description": "Describes a tag. A tag is a key-value pair. You can add up to 50 tags to\na single Amazon Keyspaces resource.\n\nAmazon Web Services-assigned tag names and values are automatically assigned\nthe aws: prefix, which the user cannot assign. Amazon Web Services-assigned\ntag names do not count towards the tag limit of 50. User-assigned tag names\nhave the prefix user: in the Cost Allocation Report. You cannot backdate\nthe application of a tag.\n\nFor more information, see Adding tags and labels to Amazon Keyspaces resources\n(https://docs.aws.amazon.com/keyspaces/latest/devguide/tagging-keyspaces.html)\nin the Amazon Keyspaces Developer Guide.",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "keyspaceName"
+  ],
+  "title": "AWS Keyspaces Keyspace",
+  "type": "object"
+}

@@ -1,0 +1,17 @@
+apiVersion: core.krateo.io/v1alpha1
+kind: CompositionDefinition
+metadata:
+  name: aws-organizations-account
+  namespace: aws-organizations-system
+spec:
+  chart:
+    # OCI artifact published by .github/workflows/release-tag.yaml.
+    url: oci://ghcr.io/braghettos/charts/aws-organizations-account
+    version: "0.1.0"
+    # If the GHCR package is private, provide pull credentials:
+    # credentials:
+    #   username: braghettos
+    #   passwordRef:
+    #     key: token
+    #     name: ghcr-credentials
+    #     namespace: aws-organizations-system

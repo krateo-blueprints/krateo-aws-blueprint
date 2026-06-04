@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS Iam ServiceLinkedRole via the ACK iam controller. Fields mirror the iam.services.k8s.aws/v1alpha1 ServiceLinkedRole spec.",
+  "properties": {
+    "awsServiceName": {
+      "description": "The service principal for the Amazon Web Services service to which this role\nis attached. You use a string similar to a URL but without the http:// in\nfront. For example: elasticbeanstalk.amazonaws.com.\n\nService principals are unique and case-sensitive. To find the exact service\nprincipal for your service-linked role, see Amazon Web Services services\nthat work with IAM (https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_aws-services-that-work-with-iam.html)\nin the IAM User Guide. Look for the services that have Yes in the Service-Linked\nRole column. Choose the Yes link to view the service-linked role documentation\nfor that service.\n\nRegex Pattern: `^[\\w+=,.@-]+$`",
+      "type": "string"
+    },
+    "customSuffix": {
+      "description": "A string that you provide, which is combined with the service-provided prefix\nto form the complete role name. If you make multiple requests for the same\nservice, then you must supply a different CustomSuffix for each request.\nOtherwise the request fails with a duplicate role name error. For example,\nyou could add -1 or -debug to the suffix.\n\nSome services do not support the CustomSuffix parameter. If you provide an\noptional suffix and the operation fails, try the operation again without\nthe suffix.\n\nRegex Pattern: `^[\\w+=,.@-]+$`",
+      "type": "string"
+    },
+    "description": {
+      "description": "The description of the role.\n\nRegex Pattern: `^[\\u0009\\u000A\\u000D\\u0020-\\u007E\\u00A1-\\u00FF]*$`",
+      "type": "string"
+    },
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    }
+  },
+  "required": [
+    "awsServiceName"
+  ],
+  "title": "AWS Iam ServiceLinkedRole",
+  "type": "object"
+}

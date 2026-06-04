@@ -1,0 +1,17 @@
+apiVersion: core.krateo.io/v1alpha1
+kind: CompositionDefinition
+metadata:
+  name: aws-kinesis-stream
+  namespace: aws-kinesis-system
+spec:
+  chart:
+    # OCI artifact published by .github/workflows/release-tag.yaml.
+    url: oci://ghcr.io/braghettos/charts/aws-kinesis-stream
+    version: "0.1.0"
+    # If the GHCR package is private, provide pull credentials:
+    # credentials:
+    #   username: braghettos
+    #   passwordRef:
+    #     key: token
+    #     name: ghcr-credentials
+    #     namespace: aws-kinesis-system

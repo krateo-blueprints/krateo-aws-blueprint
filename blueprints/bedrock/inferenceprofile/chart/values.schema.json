@@ -1,0 +1,52 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS Bedrock InferenceProfile via the ACK bedrock controller. Fields mirror the bedrock.services.k8s.aws/v1alpha1 InferenceProfile spec.",
+  "properties": {
+    "description": {
+      "description": "A description for the inference profile.\n\nRegex Pattern: `^([0-9a-zA-Z:.][ _-]?)+$`",
+      "type": "string"
+    },
+    "inferenceProfileName": {
+      "description": "A name for the inference profile.\n\nRegex Pattern: `^([0-9a-zA-Z][ _-]?)+$`",
+      "type": "string"
+    },
+    "modelSource": {
+      "description": "The foundation model or system-defined inference profile that the inference\nprofile will track metrics and costs for.",
+      "properties": {
+        "copyFrom": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    },
+    "tags": {
+      "description": "An array of objects, each of which contains a tag and its value. For more\ninformation, see Tagging resources (https://docs.aws.amazon.com/bedrock/latest/userguide/what-is-service.html)\nin the Amazon Bedrock User Guide (https://docs.aws.amazon.com/bedrock/latest/userguide/what-is-service.html).",
+      "items": {
+        "description": "Definition of the key/value pair for a tag.",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "inferenceProfileName",
+    "modelSource"
+  ],
+  "title": "AWS Bedrock InferenceProfile",
+  "type": "object"
+}

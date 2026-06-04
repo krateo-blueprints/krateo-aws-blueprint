@@ -1,0 +1,418 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS Quicksight Dashboard via the ACK quicksight controller. Fields mirror the quicksight.services.k8s.aws/v1alpha1 Dashboard spec.",
+  "properties": {
+    "awsAccountID": {
+      "description": "The ID of the Amazon Web Services account where you want to create the dashboard.\n\nRegex Pattern: `^[0-9]{12}$`",
+      "type": "string"
+    },
+    "folderARNs": {
+      "description": "When you create the dashboard, Amazon Quick Sight adds the dashboard to these\nfolders.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "id": {
+      "description": "The ID for the dashboard, also added to the IAM policy.\n\nRegex Pattern: `^[\\w\\-]+$`",
+      "type": "string"
+    },
+    "linkEntities": {
+      "description": "A list of analysis Amazon Resource Names (ARNs) to be linked to the dashboard.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "linkEntityRefs": {
+      "items": {
+        "description": "AWSResourceReferenceWrapper provides a wrapper around *AWSResourceReference\ntype to provide more user friendly syntax for references using 'from' field\nEx:\nAPIIDRef:\n\n\tfrom:\n\t  name: my-api",
+        "properties": {
+          "from": {
+            "description": "AWSResourceReference provides all the values necessary to reference another\nk8s resource for finding the identifier(Id/ARN/Name)",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "namespace": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "linkSharingConfiguration": {
+      "description": "A structure that contains the permissions of a shareable link to the dashboard.",
+      "properties": {
+        "permissions": {
+          "items": {
+            "description": "Permission for the resource.",
+            "properties": {
+              "actions": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "principal": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "name": {
+      "description": "The display name of the dashboard.",
+      "type": "string"
+    },
+    "parameters": {
+      "description": "The parameters for the creation of the dashboard, which you want to use to\noverride the default settings. A dashboard can have any type of parameters,\nand some parameters might accept multiple values.",
+      "properties": {
+        "dateTimeParameters": {
+          "items": {
+            "description": "A date-time parameter.",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "values": {
+                "items": {
+                  "format": "date-time",
+                  "type": "string"
+                },
+                "type": "array"
+              }
+            },
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "decimalParameters": {
+          "items": {
+            "description": "A decimal parameter.",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "values": {
+                "items": {
+                  "type": "number"
+                },
+                "type": "array"
+              }
+            },
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "integerParameters": {
+          "items": {
+            "description": "An integer parameter.",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "values": {
+                "items": {
+                  "format": "int64",
+                  "type": "integer"
+                },
+                "type": "array"
+              }
+            },
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "stringParameters": {
+          "items": {
+            "description": "A string parameter.",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "values": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              }
+            },
+            "type": "object"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "permissions": {
+      "description": "A structure that contains the permissions of the dashboard. You can use this\nstructure for granting permissions by providing a list of IAM action information\nfor each principal ARN.\n\nTo specify no permissions, omit the permissions list.",
+      "items": {
+        "description": "Permission for the resource.",
+        "properties": {
+          "actions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "principal": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "publishOptions": {
+      "description": "Options for publishing the dashboard when you create it:\n\n   * AvailabilityStatus for AdHocFilteringOption - This status can be either\n   ENABLED or DISABLED. When this is set to DISABLED, Amazon Quick Sight\n   disables the left filter pane on the published dashboard, which can be\n   used for ad hoc (one-time) filtering. This option is ENABLED by default.\n\n   * AvailabilityStatus for ExportToCSVOption - This status can be either\n   ENABLED or DISABLED. The visual option to export data to .CSV format isn't\n   enabled when this is set to DISABLED. This option is ENABLED by default.\n\n   * VisibilityState for SheetControlsOption - This visibility state can\n   be either COLLAPSED or EXPANDED. This option is COLLAPSED by default.\n\n   * AvailabilityStatus for QuickSuiteActionsOption - This status can be\n   either ENABLED or DISABLED. Features related to Actions in Amazon Quick\n   Suite on dashboards are disabled when this is set to DISABLED. This option\n   is DISABLED by default.\n\n   * AvailabilityStatus for ExecutiveSummaryOption - This status can be either\n   ENABLED or DISABLED. The option to build an executive summary is disabled\n   when this is set to DISABLED. This option is ENABLED by default.\n\n   * AvailabilityStatus for DataStoriesSharingOption - This status can be\n   either ENABLED or DISABLED. The option to share a data story is disabled\n   when this is set to DISABLED. This option is ENABLED by default.",
+      "properties": {
+        "adHocFilteringOption": {
+          "description": "An ad hoc (one-time) filtering option.",
+          "properties": {
+            "availabilityStatus": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "dataPointDrillUpDownOption": {
+          "description": "The drill down options for data points in a dashbaord.",
+          "properties": {
+            "availabilityStatus": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "dataPointMenuLabelOption": {
+          "description": "The data point menu options of a dashboard.",
+          "properties": {
+            "availabilityStatus": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "dataPointTooltipOption": {
+          "description": "The data point tooltip options.",
+          "properties": {
+            "availabilityStatus": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "dataQAEnabledOption": {
+          "description": "Adds Q\u0026A capabilities to a dashboard. If no topic is linked, Dashboard Q\u0026A\nuses the data values that are rendered on the dashboard. End users can use\nDashboard Q\u0026A to ask for different slices of the data that they see on the\ndashboard. If a topic is linked, Topic Q\u0026A is enabled.",
+          "properties": {
+            "availabilityStatus": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "dataStoriesSharingOption": {
+          "description": "Executive summary option.",
+          "properties": {
+            "availabilityStatus": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "executiveSummaryOption": {
+          "description": "Data stories sharing option.",
+          "properties": {
+            "availabilityStatus": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "exportToCSVOption": {
+          "description": "Export to .csv option.",
+          "properties": {
+            "availabilityStatus": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "exportWithHiddenFieldsOption": {
+          "description": "Determines whether or not hidden fields are visible on exported dashbaords.",
+          "properties": {
+            "availabilityStatus": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "quickSuiteActionsOption": {
+          "description": "Determines if Actions in Amazon Quick Suite are enabled in a dashboard..",
+          "properties": {
+            "availabilityStatus": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "sheetControlsOption": {
+          "description": "Sheet controls option.",
+          "properties": {
+            "visibilityState": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "sheetLayoutElementMaximizationOption": {
+          "description": "The sheet layout maximization options of a dashbaord.",
+          "properties": {
+            "availabilityStatus": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "visualAxisSortOption": {
+          "description": "The axis sort options for a visual.",
+          "properties": {
+            "availabilityStatus": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "visualMenuOption": {
+          "description": "The menu options for a visual.",
+          "properties": {
+            "availabilityStatus": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "visualPublishOptions": {
+          "description": "The visual publish options of a visual in a dashboard",
+          "properties": {
+            "exportHiddenFieldsOption": {
+              "description": "Determines if hidden fields are included in an exported dashboard.",
+              "properties": {
+                "availabilityStatus": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    },
+    "sourceEntity": {
+      "description": "The entity that you are using as a source when you create the dashboard.\nIn SourceEntity, you specify the type of object you're using as source. You\ncan only create a dashboard from a template, so you use a SourceTemplate\nentity. If you need to create a dashboard from an analysis, first convert\nthe analysis to a template by using the CreateTemplate (https://docs.aws.amazon.com/quicksight/latest/APIReference/API_CreateTemplate.html)\nAPI operation. For SourceTemplate, specify the Amazon Resource Name (ARN)\nof the source template. The SourceTemplateARN can contain any Amazon Web\nServices account and any Amazon Quick Sight-supported Amazon Web Services\nRegion.\n\nUse the DataSetReferences entity within SourceTemplate to list the replacement\ndatasets for the placeholders listed in the original. The schema in each\ndataset must match its placeholder.\n\nEither a SourceEntity or a Definition must be provided in order for the request\nto be valid.",
+      "properties": {
+        "sourceTemplate": {
+          "description": "Dashboard source template.",
+          "properties": {
+            "arn": {
+              "type": "string"
+            },
+            "dataSetReferences": {
+              "items": {
+                "description": "Dataset reference.",
+                "properties": {
+                  "dataSetARN": {
+                    "type": "string"
+                  },
+                  "dataSetPlaceholder": {
+                    "type": "string"
+                  },
+                  "dataSetRef": {
+                    "description": "Reference field for DataSetARN",
+                    "properties": {
+                      "from": {
+                        "description": "AWSResourceReference provides all the values necessary to reference another\nk8s resource for finding the identifier(Id/ARN/Name)",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "namespace": {
+                            "type": "string"
+                          }
+                        },
+                        "type": "object"
+                      }
+                    },
+                    "type": "object"
+                  }
+                },
+                "type": "object"
+              },
+              "type": "array"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "tags": {
+      "description": "Contains a map of the key-value pairs for the resource tag or tags assigned\nto the dashboard.",
+      "items": {
+        "description": "The key or keys of the key-value pairs for the resource tag or tags assigned\nto the resource.",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "themeARN": {
+      "description": "The Amazon Resource Name (ARN) of the theme that is being used for this dashboard.\nIf you add a value for this field, it overrides the value that is used in\nthe source entity. The theme ARN must exist in the same Amazon Web Services\naccount where you create the dashboard.",
+      "type": "string"
+    },
+    "validationStrategy": {
+      "description": "The option to relax the validation needed to create a dashboard with definition\nobjects. This option skips the validation step for specific errors.",
+      "properties": {
+        "mode": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "versionDescription": {
+      "description": "A description for the first version of the dashboard being created.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "awsAccountID",
+    "id",
+    "name"
+  ],
+  "title": "AWS Quicksight Dashboard",
+  "type": "object"
+}

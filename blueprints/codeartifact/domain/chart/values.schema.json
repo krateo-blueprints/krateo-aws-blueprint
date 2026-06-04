@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS Codeartifact Domain via the ACK codeartifact controller. Fields mirror the codeartifact.services.k8s.aws/v1alpha1 Domain spec.",
+  "properties": {
+    "encryptionKey": {
+      "description": "The encryption key for the domain. This is used to encrypt content stored\nin a domain. An encryption key can be a key ID, a key Amazon Resource Name\n(ARN), a key alias, or a key alias ARN. To specify an encryptionKey, your\nIAM role must have kms:DescribeKey and kms:CreateGrant permissions on the\nencryption key that is used. For more information, see DescribeKey (https://docs.aws.amazon.com/kms/latest/APIReference/API_DescribeKey.html#API_DescribeKey_RequestSyntax)\nin the Key Management Service API Reference and Key Management Service API\nPermissions Reference (https://docs.aws.amazon.com/kms/latest/developerguide/kms-api-permissions-reference.html)\nin the Key Management Service Developer Guide.\n\nCodeArtifact supports only symmetric CMKs. Do not associate an asymmetric\nCMK with your domain. For more information, see Using symmetric and asymmetric\nkeys (https://docs.aws.amazon.com/kms/latest/developerguide/symmetric-asymmetric.html)\nin the Key Management Service Developer Guide.\n\nRegex Pattern: `^\\S+$`",
+      "type": "string"
+    },
+    "name": {
+      "description": "The name of the domain to create. All domain names in an Amazon Web Services\nRegion that are in the same Amazon Web Services account must be unique. The\ndomain name is used as the prefix in DNS hostnames. Do not use sensitive\ninformation in a domain name because it is publicly discoverable.\n\nRegex Pattern: `^[a-z][a-z0-9\\-]{0,48}[a-z0-9]$`",
+      "type": "string"
+    },
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    },
+    "tags": {
+      "description": "One or more tag key-value pairs for the domain.",
+      "items": {
+        "description": "A tag is a key-value pair that can be used to manage, search for, or filter\nresources in CodeArtifact.",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "title": "AWS Codeartifact Domain",
+  "type": "object"
+}

@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS Cloudfront Function via the ACK cloudfront controller. Fields mirror the cloudfront.services.k8s.aws/v1alpha1 Function spec.",
+  "properties": {
+    "functionCode": {
+      "description": "The function code. For more information about writing a CloudFront function,\nsee Writing function code for CloudFront Functions (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/writing-function-code.html)\nin the Amazon CloudFront Developer Guide.",
+      "format": "byte",
+      "type": "string"
+    },
+    "functionConfig": {
+      "description": "Configuration information about the function, including an optional comment\nand the function's runtime.",
+      "properties": {
+        "comment": {
+          "type": "string"
+        },
+        "runtime": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "name": {
+      "description": "A name to identify the function.\n\nRegex Pattern: `^[a-zA-Z0-9-_]{1,64}$`",
+      "type": "string"
+    },
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    }
+  },
+  "required": [
+    "functionCode",
+    "functionConfig",
+    "name"
+  ],
+  "title": "AWS Cloudfront Function",
+  "type": "object"
+}

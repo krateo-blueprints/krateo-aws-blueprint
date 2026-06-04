@@ -1,0 +1,105 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS Eks Addon via the ACK eks controller. Fields mirror the eks.services.k8s.aws/v1alpha1 Addon spec.",
+  "properties": {
+    "addonVersion": {
+      "description": "The version of the add-on. The version must match one of the versions returned\nby DescribeAddonVersions (https://docs.aws.amazon.com/eks/latest/APIReference/API_DescribeAddonVersions.html).",
+      "type": "string"
+    },
+    "clientRequestToken": {
+      "description": "A unique, case-sensitive identifier that you provide to ensurethe idempotency\nof the request.",
+      "type": "string"
+    },
+    "clusterName": {
+      "description": "The name of your cluster.\n\nRegex Pattern: `^[0-9A-Za-z][A-Za-z0-9\\-_]*$`",
+      "type": "string"
+    },
+    "clusterRef": {
+      "description": "AWSResourceReferenceWrapper provides a wrapper around *AWSResourceReference\ntype to provide more user friendly syntax for references using 'from' field\nEx:\nAPIIDRef:\n\n\tfrom:\n\t  name: my-api",
+      "properties": {
+        "from": {
+          "description": "AWSResourceReference provides all the values necessary to reference another\nk8s resource for finding the identifier(Id/ARN/Name)",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "namespace": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "configurationValues": {
+      "description": "The set of configuration values for the add-on that's created. The values\nthat you provide are validated against the schema returned by DescribeAddonConfiguration.",
+      "type": "string"
+    },
+    "name": {
+      "description": "The name of the add-on. The name must match one of the names returned by\nDescribeAddonVersions.",
+      "type": "string"
+    },
+    "podIdentityAssociations": {
+      "description": "An array of EKS Pod Identity associations to be created. Each association\nmaps a Kubernetes service account to an IAM role.\n\nFor more information, see Attach an IAM Role to an Amazon EKS add-on using\nEKS Pod Identity (https://docs.aws.amazon.com/eks/latest/userguide/add-ons-iam.html)\nin the Amazon EKS User Guide.",
+      "items": {
+        "description": "A type of EKS Pod Identity association owned by an Amazon EKS add-on.\n\nEach association maps a role to a service account in a namespace in the cluster.\n\nFor more information, see Attach an IAM Role to an Amazon EKS add-on using\nEKS Pod Identity (https://docs.aws.amazon.com/eks/latest/userguide/add-ons-iam.html)\nin the Amazon EKS User Guide.",
+        "properties": {
+          "roleARN": {
+            "type": "string"
+          },
+          "serviceAccount": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    },
+    "resolveConflicts": {
+      "description": "How to resolve field value conflicts for an Amazon EKS add-on. Conflicts\nare handled based on the value you choose:\n\n   * None – If the self-managed version of the add-on is installed on your\n   cluster, Amazon EKS doesn't change the value. Creation of the add-on might\n   fail.\n\n   * Overwrite – If the self-managed version of the add-on is installed\n   on your cluster and the Amazon EKS default value is different than the\n   existing value, Amazon EKS changes the value to the Amazon EKS default\n   value.\n\n   * Preserve – This is similar to the NONE option. If the self-managed\n   version of the add-on is installed on your cluster Amazon EKS doesn't\n   change the add-on resource properties. Creation of the add-on might fail\n   if conflicts are detected. This option works differently during the update\n   operation. For more information, see UpdateAddon (https://docs.aws.amazon.com/eks/latest/APIReference/API_UpdateAddon.html).\n\nIf you don't currently have the self-managed version of the add-on installed\non your cluster, the Amazon EKS add-on is installed. Amazon EKS sets all\nvalues to default values, regardless of the option that you specify.",
+      "type": "string"
+    },
+    "serviceAccountRoleARN": {
+      "description": "The Amazon Resource Name (ARN) of an existing IAM role to bind to the add-on's\nservice account. The role must be assigned the IAM permissions required by\nthe add-on. If you don't specify an existing IAM role, then the add-on uses\nthe permissions assigned to the node IAM role. For more information, see\nAmazon EKS node IAM role (https://docs.aws.amazon.com/eks/latest/userguide/create-node-role.html)\nin the Amazon EKS User Guide.\n\nTo specify an existing IAM role, you must have an IAM OpenID Connect (OIDC)\nprovider created for your cluster. For more information, see Enabling IAM\nroles for service accounts on your cluster (https://docs.aws.amazon.com/eks/latest/userguide/enable-iam-roles-for-service-accounts.html)\nin the Amazon EKS User Guide.",
+      "type": "string"
+    },
+    "serviceAccountRoleRef": {
+      "description": "AWSResourceReferenceWrapper provides a wrapper around *AWSResourceReference\ntype to provide more user friendly syntax for references using 'from' field\nEx:\nAPIIDRef:\n\n\tfrom:\n\t  name: my-api",
+      "properties": {
+        "from": {
+          "description": "AWSResourceReference provides all the values necessary to reference another\nk8s resource for finding the identifier(Id/ARN/Name)",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "namespace": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "tags": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "Metadata that assists with categorization and organization. Each tag consists\nof a key and an optional value. You define both. Tags don't propagate to\nany other cluster or Amazon Web Services resources.",
+      "type": "object"
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "title": "AWS Eks Addon",
+  "type": "object"
+}

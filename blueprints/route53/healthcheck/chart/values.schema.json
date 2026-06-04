@@ -1,0 +1,113 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS Route53 HealthCheck via the ACK route53 controller. Fields mirror the route53.services.k8s.aws/v1alpha1 HealthCheck spec.",
+  "properties": {
+    "healthCheckConfig": {
+      "description": "A complex type that contains settings for a new health check.",
+      "properties": {
+        "alarmIdentifier": {
+          "description": "A complex type that identifies the CloudWatch alarm that you want Amazon\nRoute 53 health checkers to use to determine whether the specified health\ncheck is healthy.",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "region": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "childHealthChecks": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "disabled": {
+          "type": "boolean"
+        },
+        "enableSNI": {
+          "type": "boolean"
+        },
+        "failureThreshold": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "fullyQualifiedDomainName": {
+          "type": "string"
+        },
+        "healthThreshold": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "insufficientDataHealthStatus": {
+          "type": "string"
+        },
+        "inverted": {
+          "type": "boolean"
+        },
+        "ipAddress": {
+          "type": "string"
+        },
+        "measureLatency": {
+          "type": "boolean"
+        },
+        "port": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "regions": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "requestInterval": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "resourcePath": {
+          "type": "string"
+        },
+        "routingControlARN": {
+          "type": "string"
+        },
+        "searchString": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    },
+    "tags": {
+      "description": "A complex type that contains a list of the tags that you want to add to the\nspecified health check or hosted zone and/or the tags that you want to edit\nValue for.\n\nYou can add a maximum of 10 tags to a health check or a hosted zone.",
+      "items": {
+        "description": "A complex type that contains information about a tag that you want to add\nor edit for the specified health check or hosted zone.",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "healthCheckConfig"
+  ],
+  "title": "AWS Route53 HealthCheck",
+  "type": "object"
+}

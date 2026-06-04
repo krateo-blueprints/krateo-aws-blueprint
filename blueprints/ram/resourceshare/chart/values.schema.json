@@ -1,0 +1,91 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS Ram ResourceShare via the ACK ram controller. Fields mirror the ram.services.k8s.aws/v1alpha1 ResourceShare spec.",
+  "properties": {
+    "allowExternalPrincipals": {
+      "description": "Specifies whether principals outside your organization in Organizations can\nbe associated with a resource share. A value of true lets you share with\nindividual Amazon Web Services accounts that are not in your organization.\nA value of false only has meaning if your account is a member of an Amazon\nWeb Services Organization. The default value is true.",
+      "type": "boolean"
+    },
+    "name": {
+      "description": "Specifies the name of the resource share.",
+      "type": "string"
+    },
+    "permissionARNs": {
+      "description": "Specifies the Amazon Resource Names (ARNs) (https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html)\nof the RAM permission to associate with the resource share. If you do not\nspecify an ARN for the permission, RAM automatically attaches the default\nversion of the permission for each resource type. You can associate only\none permission with each resource type included in the resource share.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "permissionRefs": {
+      "items": {
+        "description": "AWSResourceReferenceWrapper provides a wrapper around *AWSResourceReference\ntype to provide more user friendly syntax for references using 'from' field\nEx:\nAPIIDRef:\n\n\tfrom:\n\t  name: my-api",
+        "properties": {
+          "from": {
+            "description": "AWSResourceReference provides all the values necessary to reference another\nk8s resource for finding the identifier(Id/ARN/Name)",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "namespace": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "principals": {
+      "description": "Specifies a list of one or more principals to associate with the resource\nshare.\n\nYou can include the following values:\n\n   * An Amazon Web Services account ID, for example: 123456789012\n\n   * An Amazon Resource Name (ARN) (https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html)\n   of an organization in Organizations, for example: organizations::123456789012:organization/o-exampleorgid\n\n   * An ARN of an organizational unit (OU) in Organizations, for example:\n   organizations::123456789012:ou/o-exampleorgid/ou-examplerootid-exampleouid123\n\n   * An ARN of an IAM role, for example: iam::123456789012:role/rolename\n\n   * An ARN of an IAM user, for example: iam::123456789012user/username\n\nNot all resource types can be shared with IAM roles and users. For more information,\nsee Sharing with IAM roles and users (https://docs.aws.amazon.com/ram/latest/userguide/permissions.html#permissions-rbp-supported-resource-types)\nin the Resource Access Manager User Guide.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    },
+    "resourceARNs": {
+      "description": "Specifies a list of one or more ARNs of the resources to associate with the\nresource share.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "sources": {
+      "description": "Specifies from which source accounts the service principal has access to\nthe resources in this resource share.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "tags": {
+      "description": "A list of one or more tag key and value pairs. The tag key must be present\nand not be an empty string. The tag value must be present but can be an empty\nstring.",
+      "items": {
+        "description": "A structure containing a tag. A tag is metadata that you can attach to your\nresources to help organize and categorize them. You can also use them to\nhelp you secure your resources. For more information, see Controlling access\nto Amazon Web Services resources using tags (https://docs.aws.amazon.com/IAM/latest/UserGuide/access_tags.html).\n\nFor more information about tags, see Tagging Amazon Web Services resources\n(https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html) in the Amazon\nWeb Services General Reference Guide.",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "title": "AWS Ram ResourceShare",
+  "type": "object"
+}

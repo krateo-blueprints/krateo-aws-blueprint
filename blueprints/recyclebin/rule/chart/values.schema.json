@@ -1,0 +1,91 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS Recyclebin Rule via the ACK recyclebin controller. Fields mirror the recyclebin.services.k8s.aws/v1alpha1 Rule spec.",
+  "properties": {
+    "description": {
+      "description": "The retention rule description.\n\nRegex Pattern: `^[\\S ]{0,255}$`",
+      "type": "string"
+    },
+    "lockConfiguration": {
+      "description": "Information about the retention rule lock configuration.",
+      "properties": {
+        "unlockDelay": {
+          "description": "Information about the retention rule unlock delay. The unlock delay is the\nperiod after which a retention rule can be modified or edited after it has\nbeen unlocked by a user with the required permissions. The retention rule\ncan't be modified or deleted during the unlock delay.",
+          "properties": {
+            "unlockDelayUnit": {
+              "type": "string"
+            },
+            "unlockDelayValue": {
+              "format": "int64",
+              "type": "integer"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    },
+    "resourceTags": {
+      "description": "[Tag-level retention rules only] Specifies the resource tags to use to identify\nresources that are to be retained by a tag-level retention rule. For tag-level\nretention rules, only deleted resources, of the specified resource type,\nthat have one or more of the specified tag key and value pairs are retained.\nIf a resource is deleted, but it does not have any of the specified tag key\nand value pairs, it is immediately deleted without being retained by the\nretention rule.\n\nYou can add the same tag key and value pair to a maximum or five retention\nrules.\n\nTo create a Region-level retention rule, omit this parameter. A Region-level\nretention rule does not have any resource tags specified. It retains all\ndeleted resources of the specified resource type in the Region in which the\nrule is created, even if the resources are not tagged.",
+      "items": {
+        "description": "[Tag-level retention rules only] Information about the resource tags used\nto identify resources that are retained by the retention rule.",
+        "properties": {
+          "resourceTagKey": {
+            "type": "string"
+          },
+          "resourceTagValue": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "resourceType": {
+      "description": "The resource type to be retained by the retention rule. Currently, only Amazon\nEBS snapshots and EBS-backed AMIs are supported. To retain snapshots, specify\nEBS_SNAPSHOT. To retain EBS-backed AMIs, specify EC2_IMAGE.",
+      "type": "string"
+    },
+    "retentionPeriod": {
+      "description": "Information about the retention period for which the retention rule is to\nretain resources.",
+      "properties": {
+        "retentionPeriodUnit": {
+          "type": "string"
+        },
+        "retentionPeriodValue": {
+          "format": "int64",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "tags": {
+      "description": "Information about the tags to assign to the retention rule.",
+      "items": {
+        "description": "Information about the tags to assign to the retention rule.",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "resourceType",
+    "retentionPeriod"
+  ],
+  "title": "AWS Recyclebin Rule",
+  "type": "object"
+}

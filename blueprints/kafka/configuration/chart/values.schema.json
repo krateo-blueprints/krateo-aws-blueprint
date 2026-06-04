@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS Kafka Configuration via the ACK kafka controller. Fields mirror the kafka.services.k8s.aws/v1alpha1 Configuration spec.",
+  "properties": {
+    "description": {
+      "description": "The description of the configuration.",
+      "type": "string"
+    },
+    "kafkaVersions": {
+      "description": "The versions of Apache Kafka with which you can use this MSK configuration.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "name": {
+      "description": "The name of the configuration.",
+      "type": "string"
+    },
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    },
+    "serverProperties": {
+      "description": "Contents of the server.properties file. When using the API, you must ensure\nthat the contents of the file are base64 encoded. When using the AWS Management\nConsole, the SDK, or the AWS CLI, the contents of server.properties can be\nin plaintext.",
+      "format": "byte",
+      "type": "string"
+    }
+  },
+  "required": [
+    "name",
+    "serverProperties"
+  ],
+  "title": "AWS Kafka Configuration",
+  "type": "object"
+}

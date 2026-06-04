@@ -1,0 +1,239 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS Bedrockagentcorecontrol Gateway via the ACK bedrockagentcorecontrol controller. Fields mirror the bedrockagentcorecontrol.services.k8s.aws/v1alpha1 Gateway spec.",
+  "properties": {
+    "authorizerConfiguration": {
+      "description": "The authorizer configuration for the gateway. Required if authorizerType\nis CUSTOM_JWT.",
+      "properties": {
+        "customJWTAuthorizer": {
+          "description": "Configuration for inbound JWT-based authorization, specifying how incoming\nrequests should be authenticated.",
+          "properties": {
+            "allowedAudience": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "allowedClients": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "allowedScopes": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "customClaims": {
+              "items": {
+                "description": "Defines the name of a custom claim field and rules for finding matches to\nauthenticate its value.",
+                "properties": {
+                  "authorizingClaimMatchValue": {
+                    "description": "Defines the value or values to match for and the relationship of the match.",
+                    "properties": {
+                      "claimMatchOperator": {
+                        "type": "string"
+                      },
+                      "claimMatchValue": {
+                        "description": "The value or values to match for.\n\n   * Include a matchValueString with the EQUALS operator to specify a string\n   that matches the claim field value.\n\n   * Include a matchValueArray to specify an array of string values. You\n   can use the following operators: Use CONTAINS to yield a match if the\n   claim field value is in the array. Use CONTAINS_ANY to yield a match if\n   the claim field value contains any of the strings in the array.",
+                        "properties": {
+                          "matchValueString": {
+                            "type": "string"
+                          },
+                          "matchValueStringList": {
+                            "items": {
+                              "type": "string"
+                            },
+                            "type": "array"
+                          }
+                        },
+                        "type": "object"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "inboundTokenClaimName": {
+                    "type": "string"
+                  },
+                  "inboundTokenClaimValueType": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "discoveryURL": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "authorizerType": {
+      "description": "The type of authorizer to use for the gateway.\n\n   * CUSTOM_JWT - Authorize with a bearer token.\n\n   * AWS_IAM - Authorize with your Amazon Web Services IAM credentials.\n\n   * NONE - No authorization",
+      "type": "string"
+    },
+    "description": {
+      "description": "The description of the gateway.",
+      "type": "string"
+    },
+    "exceptionLevel": {
+      "description": "The level of detail in error messages returned when invoking the gateway.\n\n   * If the value is DEBUG, granular exception messages are returned to help\n   a user debug the gateway.\n\n   * If the value is omitted, a generic error message is returned to the\n   end user.",
+      "type": "string"
+    },
+    "interceptorConfigurations": {
+      "description": "A list of configuration settings for a gateway interceptor. Gateway interceptors\nallow custom code to be invoked during gateway invocations.",
+      "items": {
+        "description": "The configuration for an interceptor on a gateway. This structure defines\nsettings for an interceptor that will be invoked during the invocation of\nthe gateway.",
+        "properties": {
+          "inputConfiguration": {
+            "description": "The input configuration of the interceptor.",
+            "properties": {
+              "passRequestHeaders": {
+                "type": "boolean"
+              }
+            },
+            "type": "object"
+          },
+          "interceptionPoints": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "interceptor": {
+            "description": "The interceptor configuration.",
+            "properties": {
+              "lambda": {
+                "description": "The lambda configuration for the interceptor",
+                "properties": {
+                  "arn": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "kmsKeyARN": {
+      "description": "The Amazon Resource Name (ARN) of the KMS key used to encrypt data associated\nwith the gateway.\n\nRegex Pattern: `^arn:aws(|-cn|-us-gov):kms:[a-zA-Z0-9-]*:[0-9]{12}:key/[a-zA-Z0-9-]{36}$`",
+      "type": "string"
+    },
+    "kmsKeyRef": {
+      "description": "AWSResourceReferenceWrapper provides a wrapper around *AWSResourceReference\ntype to provide more user friendly syntax for references using 'from' field\nEx:\nAPIIDRef:\n\n\tfrom:\n\t  name: my-api",
+      "properties": {
+        "from": {
+          "description": "AWSResourceReference provides all the values necessary to reference another\nk8s resource for finding the identifier(Id/ARN/Name)",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "namespace": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "name": {
+      "description": "The name of the gateway. The name must be unique within your account.\n\nRegex Pattern: `^([0-9a-zA-Z][-]?){1,100}$`",
+      "type": "string"
+    },
+    "policyEngineConfiguration": {
+      "description": "The policy engine configuration for the gateway. A policy engine is a collection\nof policies that evaluates and authorizes agent tool calls. When associated\nwith a gateway, the policy engine intercepts all agent requests and determines\nwhether to allow or deny each action based on the defined policies.",
+      "properties": {
+        "arn": {
+          "type": "string"
+        },
+        "mode": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "protocolConfiguration": {
+      "description": "The configuration settings for the protocol specified in the protocolType\nparameter.",
+      "properties": {
+        "mcp": {
+          "description": "The configuration for a Model Context Protocol (MCP) gateway. This structure\ndefines how the gateway implements the MCP protocol.",
+          "properties": {
+            "instructions": {
+              "type": "string"
+            },
+            "searchType": {
+              "type": "string"
+            },
+            "supportedVersions": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "protocolType": {
+      "description": "The protocol type for the gateway.",
+      "type": "string"
+    },
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    },
+    "roleARN": {
+      "description": "The Amazon Resource Name (ARN) of the IAM role that provides permissions\nfor the gateway to access Amazon Web Services services.\n\nRegex Pattern: `^arn:aws(-[^:]+)?:iam::([0-9]{12})?:role/.+$`",
+      "type": "string"
+    },
+    "roleRef": {
+      "description": "AWSResourceReferenceWrapper provides a wrapper around *AWSResourceReference\ntype to provide more user friendly syntax for references using 'from' field\nEx:\nAPIIDRef:\n\n\tfrom:\n\t  name: my-api",
+      "properties": {
+        "from": {
+          "description": "AWSResourceReference provides all the values necessary to reference another\nk8s resource for finding the identifier(Id/ARN/Name)",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "namespace": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "tags": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "A map of key-value pairs to associate with the gateway as metadata tags.",
+      "type": "object"
+    }
+  },
+  "required": [
+    "authorizerType",
+    "name",
+    "protocolType"
+  ],
+  "title": "AWS Bedrockagentcorecontrol Gateway",
+  "type": "object"
+}

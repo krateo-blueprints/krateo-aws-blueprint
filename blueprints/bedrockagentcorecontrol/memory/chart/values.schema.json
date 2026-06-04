@@ -1,0 +1,487 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "additionalProperties": false,
+  "description": "Provision an AWS Bedrockagentcorecontrol Memory via the ACK bedrockagentcorecontrol controller. Fields mirror the bedrockagentcorecontrol.services.k8s.aws/v1alpha1 Memory spec.",
+  "properties": {
+    "description": {
+      "description": "The description of the memory.",
+      "type": "string"
+    },
+    "encryptionKeyARN": {
+      "description": "The Amazon Resource Name (ARN) of the KMS key used to encrypt the memory\ndata.\n\nRegex Pattern: `^arn:[a-z0-9-\\.]{1,63}:[a-z0-9-\\.]{0,63}:[a-z0-9-\\.]{0,63}:[a-z0-9-\\.]{0,63}:[^/].{0,1023}$`",
+      "type": "string"
+    },
+    "encryptionKeyRef": {
+      "description": "AWSResourceReferenceWrapper provides a wrapper around *AWSResourceReference\ntype to provide more user friendly syntax for references using 'from' field\nEx:\nAPIIDRef:\n\n\tfrom:\n\t  name: my-api",
+      "properties": {
+        "from": {
+          "description": "AWSResourceReference provides all the values necessary to reference another\nk8s resource for finding the identifier(Id/ARN/Name)",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "namespace": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "eventExpiryDuration": {
+      "description": "The duration after which memory events expire. Specified as an ISO 8601 duration.",
+      "format": "int64",
+      "type": "integer"
+    },
+    "memoryExecutionRoleARN": {
+      "description": "The Amazon Resource Name (ARN) of the IAM role that provides permissions\nfor the memory to access Amazon Web Services services.\n\nRegex Pattern: `^arn:[a-z0-9-\\.]{1,63}:[a-z0-9-\\.]{0,63}:[a-z0-9-\\.]{0,63}:[a-z0-9-\\.]{0,63}:[^/].{0,1023}$`",
+      "type": "string"
+    },
+    "memoryExecutionRoleRef": {
+      "description": "AWSResourceReferenceWrapper provides a wrapper around *AWSResourceReference\ntype to provide more user friendly syntax for references using 'from' field\nEx:\nAPIIDRef:\n\n\tfrom:\n\t  name: my-api",
+      "properties": {
+        "from": {
+          "description": "AWSResourceReference provides all the values necessary to reference another\nk8s resource for finding the identifier(Id/ARN/Name)",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "namespace": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "memoryStrategies": {
+      "description": "The memory strategies to use for this memory. Strategies define how information\nis extracted, processed, and consolidated.",
+      "items": {
+        "description": "Contains input information for creating a memory strategy.",
+        "properties": {
+          "customMemoryStrategy": {
+            "description": "Input for creating a custom memory strategy.",
+            "properties": {
+              "configuration": {
+                "description": "Input for custom configuration of a memory strategy.",
+                "properties": {
+                  "episodicOverride": {
+                    "description": "Input for the configuration to override the episodic memory strategy.",
+                    "properties": {
+                      "consolidation": {
+                        "description": "Configurations for overriding the consolidation step of the episodic memory\nstrategy.",
+                        "properties": {
+                          "appendToPrompt": {
+                            "type": "string"
+                          },
+                          "modelID": {
+                            "type": "string"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "extraction": {
+                        "description": "Configurations for overriding the extraction step of the episodic memory\nstrategy.",
+                        "properties": {
+                          "appendToPrompt": {
+                            "type": "string"
+                          },
+                          "modelID": {
+                            "type": "string"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "reflection": {
+                        "description": "Configurations for overriding the reflection step of the episodic memory\nstrategy.",
+                        "properties": {
+                          "appendToPrompt": {
+                            "type": "string"
+                          },
+                          "modelID": {
+                            "type": "string"
+                          },
+                          "namespaceTemplates": {
+                            "items": {
+                              "type": "string"
+                            },
+                            "type": "array"
+                          },
+                          "namespaces": {
+                            "items": {
+                              "type": "string"
+                            },
+                            "type": "array"
+                          }
+                        },
+                        "type": "object"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "selfManagedConfiguration": {
+                    "description": "Input configuration for a self-managed memory strategy.",
+                    "properties": {
+                      "historicalContextWindowSize": {
+                        "format": "int64",
+                        "type": "integer"
+                      },
+                      "invocationConfiguration": {
+                        "description": "The configuration to invoke a self-managed memory processing pipeline with.",
+                        "properties": {
+                          "payloadDeliveryBucketName": {
+                            "type": "string"
+                          },
+                          "topicARN": {
+                            "type": "string"
+                          },
+                          "topicRef": {
+                            "description": "Reference field for TopicARN",
+                            "properties": {
+                              "from": {
+                                "description": "AWSResourceReference provides all the values necessary to reference another\nk8s resource for finding the identifier(Id/ARN/Name)",
+                                "properties": {
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "namespace": {
+                                    "type": "string"
+                                  }
+                                },
+                                "type": "object"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "triggerConditions": {
+                        "items": {
+                          "description": "Condition that triggers memory processing.",
+                          "properties": {
+                            "messageBasedTrigger": {
+                              "description": "The trigger configuration based on a message.",
+                              "properties": {
+                                "messageCount": {
+                                  "format": "int64",
+                                  "type": "integer"
+                                }
+                              },
+                              "type": "object"
+                            },
+                            "timeBasedTrigger": {
+                              "description": "Trigger configuration based on time.",
+                              "properties": {
+                                "idleSessionTimeout": {
+                                  "format": "int64",
+                                  "type": "integer"
+                                }
+                              },
+                              "type": "object"
+                            },
+                            "tokenBasedTrigger": {
+                              "description": "Trigger configuration based on tokens.",
+                              "properties": {
+                                "tokenCount": {
+                                  "format": "int64",
+                                  "type": "integer"
+                                }
+                              },
+                              "type": "object"
+                            }
+                          },
+                          "type": "object"
+                        },
+                        "type": "array"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "semanticOverride": {
+                    "description": "Input for semantic override configuration in a memory strategy.",
+                    "properties": {
+                      "consolidation": {
+                        "description": "Input for semantic override consolidation configuration in a memory strategy.",
+                        "properties": {
+                          "appendToPrompt": {
+                            "type": "string"
+                          },
+                          "modelID": {
+                            "type": "string"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "extraction": {
+                        "description": "Input for semantic override extraction configuration in a memory strategy.",
+                        "properties": {
+                          "appendToPrompt": {
+                            "type": "string"
+                          },
+                          "modelID": {
+                            "type": "string"
+                          }
+                        },
+                        "type": "object"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "summaryOverride": {
+                    "description": "Input for summary override configuration in a memory strategy.",
+                    "properties": {
+                      "consolidation": {
+                        "description": "Input for summary override consolidation configuration in a memory strategy.",
+                        "properties": {
+                          "appendToPrompt": {
+                            "type": "string"
+                          },
+                          "modelID": {
+                            "type": "string"
+                          }
+                        },
+                        "type": "object"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "userPreferenceOverride": {
+                    "description": "Input for user preference override configuration in a memory strategy.",
+                    "properties": {
+                      "consolidation": {
+                        "description": "Input for user preference override consolidation configuration in a memory\nstrategy.",
+                        "properties": {
+                          "appendToPrompt": {
+                            "type": "string"
+                          },
+                          "modelID": {
+                            "type": "string"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "extraction": {
+                        "description": "Input for user preference override extraction configuration in a memory strategy.",
+                        "properties": {
+                          "appendToPrompt": {
+                            "type": "string"
+                          },
+                          "modelID": {
+                            "type": "string"
+                          }
+                        },
+                        "type": "object"
+                      }
+                    },
+                    "type": "object"
+                  }
+                },
+                "type": "object"
+              },
+              "description": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "namespaceTemplates": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "namespaces": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              }
+            },
+            "type": "object"
+          },
+          "episodicMemoryStrategy": {
+            "description": "Input for creating an episodic memory strategy.",
+            "properties": {
+              "description": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "namespaceTemplates": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "namespaces": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "reflectionConfiguration": {
+                "description": "An episodic reflection configuration input.",
+                "properties": {
+                  "namespaceTemplates": {
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array"
+                  },
+                  "namespaces": {
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array"
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "semanticMemoryStrategy": {
+            "description": "Input for creating a semantic memory strategy.",
+            "properties": {
+              "description": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "namespaceTemplates": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "namespaces": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              }
+            },
+            "type": "object"
+          },
+          "summaryMemoryStrategy": {
+            "description": "Input for creating a summary memory strategy.",
+            "properties": {
+              "description": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "namespaceTemplates": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "namespaces": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              }
+            },
+            "type": "object"
+          },
+          "userPreferenceMemoryStrategy": {
+            "description": "Input for creating a user preference memory strategy.",
+            "properties": {
+              "description": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "namespaceTemplates": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "namespaces": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "name": {
+      "description": "The name of the memory. The name must be unique within your account.\n\nRegex Pattern: `^[a-zA-Z][a-zA-Z0-9_]{0,47}$`",
+      "type": "string"
+    },
+    "region": {
+      "default": "",
+      "description": "AWS region for this resource (e.g. eu-west-1). Rendered as the services.k8s.aws/region annotation. Empty inherits the ACK controller's default region.",
+      "title": "AWS region",
+      "type": "string"
+    },
+    "streamDeliveryResources": {
+      "description": "Configuration for streaming memory record data to external resources.",
+      "properties": {
+        "resources": {
+          "items": {
+            "description": "Supported stream delivery resource types.",
+            "properties": {
+              "kinesis": {
+                "description": "Configuration for Kinesis Data Stream delivery.",
+                "properties": {
+                  "contentConfigurations": {
+                    "items": {
+                      "description": "Defines what content to stream and at what level of detail.",
+                      "properties": {
+                        "level": {
+                          "type": "string"
+                        },
+                        "type_": {
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "type": "array"
+                  },
+                  "dataStreamARN": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "tags": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "A map of tag keys and values to assign to an AgentCore Memory. Tags enable\nyou to categorize your resources in different ways, for example, by purpose,\nowner, or environment.",
+      "type": "object"
+    }
+  },
+  "required": [
+    "eventExpiryDuration",
+    "name"
+  ],
+  "title": "AWS Bedrockagentcorecontrol Memory",
+  "type": "object"
+}
