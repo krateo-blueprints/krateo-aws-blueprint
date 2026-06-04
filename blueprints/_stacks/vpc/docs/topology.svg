@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 660" width="920" height="660">
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#64748b"/></marker></defs>
+<rect x="0" y="0" width="920" height="660" rx="0" fill="#ffffff" fill-opacity="1" stroke="#ffffff" stroke-width="0"/>
+<text x="460.0" y="34" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="20" font-weight="600" fill="#0f172a" text-anchor="middle">aws-vpc-stack — provisioned topology</text>
+<text x="460.0" y="54" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="12" font-weight="500" fill="#64748b" text-anchor="middle">default example: 2 AZs · public + private subnets · single NAT gateway</text>
+<rect x="390.0" y="71.0" width="140" height="42" rx="8" fill="#f1f5f9" fill-opacity="1" stroke="#94a3b8" stroke-width="2"/>
+<text x="460.0" y="90" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600" fill="#1f2937" text-anchor="middle">Internet</text>
+<text x="460.0" y="106" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="500" fill="#6b7280" text-anchor="middle">0.0.0.0/0</text>
+<rect x="375.0" y="146.0" width="170" height="44" rx="8" fill="#FFF7ED" fill-opacity="1" stroke="#FF9900" stroke-width="2"/>
+<text x="460.0" y="166" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600" fill="#1f2937" text-anchor="middle">Internet Gateway</text>
+<text x="460.0" y="182" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="500" fill="#6b7280" text-anchor="middle">igw</text>
+<path d="M 460.0 113 L 460.0 146" fill="none" stroke="#64748b" stroke-width="2.5"/>
+<path d="M 452.0 113 L 452.0 146 M 468.0 146 L 468.0 113" fill="none" stroke="#64748b" stroke-width="2.5" marker-end="url(#a)"/>
+<rect x="60" y="205" width="800" height="420" rx="14" fill="#FAF5FF" fill-opacity="1" stroke="#7C3AED" stroke-width="2.5"/>
+<text x="78" y="231" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="14" font-weight="700" fill="#7C3AED" text-anchor="start">VPC</text>
+<text x="122" y="231" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="12" font-weight="600" fill="#7C3AED" text-anchor="start">10.0.0.0/16</text>
+<path d="M 460.0 190 L 460.0 205" fill="none" stroke="#FF9900" stroke-width="2.5"/>
+<rect x="90" y="255" width="350.0" height="340" rx="10" fill="#ffffff" fill-opacity="1" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="6 5"/>
+<text x="265.0" y="275" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="11.5" font-weight="600" fill="#475569" text-anchor="middle">Availability Zone · eu-central-1a</text>
+<rect x="114" y="300" width="302.0" height="80" rx="8" fill="#ECFDF5" fill-opacity="1" stroke="#16A34A" stroke-width="2"/>
+<text x="265.0" y="322" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="12" font-weight="600" fill="#166534" text-anchor="middle">Public subnet</text>
+<text x="265.0" y="339" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="500" fill="#16A34A" text-anchor="middle">10.0.0.0/24</text>
+<text x="265.0" y="358" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="9.5" font-weight="500" fill="#16A34A" text-anchor="middle">public RT → IGW</text>
+<rect x="114" y="455" width="302.0" height="80" rx="8" fill="#EFF6FF" fill-opacity="1" stroke="#2563EB" stroke-width="2"/>
+<text x="265.0" y="477" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="12" font-weight="600" fill="#1e3a8a" text-anchor="middle">Private subnet</text>
+<text x="265.0" y="494" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="500" fill="#2563EB" text-anchor="middle">10.0.10.0/24</text>
+<text x="265.0" y="513" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="9.5" font-weight="500" fill="#2563EB" text-anchor="middle">private RT → NAT</text>
+<rect x="213.0" y="366" width="104" height="30" rx="6" fill="#FFF7ED" fill-opacity="1" stroke="#FF9900" stroke-width="2"/>
+<text x="265.0" y="386" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="10" font-weight="600" fill="#b45309" text-anchor="middle">NAT gateway (+EIP)</text>
+<rect x="470.0" y="255" width="350.0" height="340" rx="10" fill="#ffffff" fill-opacity="1" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="6 5"/>
+<text x="645.0" y="275" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="11.5" font-weight="600" fill="#475569" text-anchor="middle">Availability Zone · eu-central-1b</text>
+<rect x="494.0" y="300" width="302.0" height="80" rx="8" fill="#ECFDF5" fill-opacity="1" stroke="#16A34A" stroke-width="2"/>
+<text x="645.0" y="322" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="12" font-weight="600" fill="#166534" text-anchor="middle">Public subnet</text>
+<text x="645.0" y="339" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="500" fill="#16A34A" text-anchor="middle">10.0.1.0/24</text>
+<text x="645.0" y="358" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="9.5" font-weight="500" fill="#16A34A" text-anchor="middle">public RT → IGW</text>
+<rect x="494.0" y="455" width="302.0" height="80" rx="8" fill="#EFF6FF" fill-opacity="1" stroke="#2563EB" stroke-width="2"/>
+<text x="645.0" y="477" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="12" font-weight="600" fill="#1e3a8a" text-anchor="middle">Private subnet</text>
+<text x="645.0" y="494" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="500" fill="#2563EB" text-anchor="middle">10.0.11.0/24</text>
+<text x="645.0" y="513" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="9.5" font-weight="500" fill="#2563EB" text-anchor="middle">private RT → NAT</text>
+<path d="M 460.0 190 L 265.0 300" fill="none" stroke="#16A34A" stroke-width="2" stroke-dasharray="1 0" marker-end="url(#a)"/>
+<path d="M 460.0 190 L 645.0 300" fill="none" stroke="#16A34A" stroke-width="2" stroke-dasharray="1 0" marker-end="url(#a)"/>
+<path d="M 265.0 455 L 265.0 396" fill="none" stroke="#2563EB" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<path d="M 645.0 455 L 265.0 396" fill="none" stroke="#2563EB" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<text x="60" y="638" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="11" font-weight="600" fill="#16A34A" text-anchor="start">→ public subnets route 0.0.0.0/0 to the Internet Gateway</text>
+<text x="500" y="638" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="11" font-weight="600" fill="#2563EB" text-anchor="start">→ private subnets egress via the NAT gateway</text>
+</svg>
