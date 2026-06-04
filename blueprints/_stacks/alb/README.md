@@ -5,6 +5,9 @@ Composition, replicating the
 [`terraform-aws-modules/alb/aws`](https://registry.terraform.io/modules/terraform-aws-modules/alb/aws)
 module on top of the [ACK](https://aws-controllers-k8s.github.io/community/) **elbv2** controller.
 
+> **Try it end-to-end:** see [quickstart.md](quickstart.md) — provision a real ALB on a local
+> kind cluster, from controller install to cleanup.
+
 ## How it works
 
 One `AwsAlbStack` Composition is rendered by Krateo's composition-dynamic-controller into native

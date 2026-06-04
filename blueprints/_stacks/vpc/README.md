@@ -4,6 +4,9 @@ A **composite** Krateo blueprint that provisions a full AWS VPC as one Compositi
 the [`terraform-aws-modules/vpc/aws`](https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws)
 module on top of the [ACK](https://aws-controllers-k8s.github.io/community/) **ec2** controller.
 
+> **Try it end-to-end:** see [quickstart.md](quickstart.md) — install on kind and provision a real
+> AWS VPC in 8 steps.
+
 ## Topology
 
 With the default inputs (2 AZs, single NAT) the stack provisions this network:

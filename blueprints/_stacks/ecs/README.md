@@ -4,6 +4,9 @@ A **composite** Krateo blueprint that provisions an AWS ECS workload as one Comp
 replicating the [`terraform-aws-modules/ecs/aws`](https://registry.terraform.io/modules/terraform-aws-modules/ecs/aws)
 module on top of the [ACK](https://aws-controllers-k8s.github.io/community/) **ecs** controller.
 
+> **Try it end-to-end:** see [quickstart.md](quickstart.md) — install on kind and provision a real
+> AWS ECS cluster, task definition and service.
+
 ## How it works
 
 One `AwsEcsStack` Composition is rendered by Krateo's composition-dynamic-controller into three

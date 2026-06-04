@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 620" width="980" height="620" font-family="sans-serif">
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#64748b"/></marker><marker id="aho" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#FF9900"/></marker><marker id="aht" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0EA5A4"/></marker></defs>
+<rect x="0" y="0" width="980" height="620" fill="#ffffff"/>
+<text x="490.0" y="38" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="22" font-weight="600" fill="#0f172a" text-anchor="middle">aws-autoscaling-stack — composed resources</text>
+<text x="490.0" y="62" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="13" font-weight="500" fill="#475569" text-anchor="middle">one AwsAutoscalingStack Composition → ec2 LaunchTemplate + autoscaling AutoScalingGroup</text>
+<rect x="40" y="96" width="200" height="60" rx="8" fill="#ECFEFF" stroke="#0EA5A4" stroke-width="2"/>
+<text x="140" y="122" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="14" font-weight="600" fill="#1f2937" text-anchor="middle">AwsAutoscalingStack</text>
+<text x="140" y="141" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="600" fill="#6b7280" text-anchor="middle">Composition · composition.krateo.io/v0-3-0</text>
+<path d="M 240 126 L 300 126" fill="none" stroke="#0EA5A4" stroke-width="2" marker-end="url(#aht)"/>
+<text x="330" y="118" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="11" font-weight="500" fill="#475569" text-anchor="middle">Krateo renders</text>
+<text x="330" y="133" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="500" fill="#6b7280" text-anchor="middle">(Helm chart)</text>
+<rect x="415" y="108" width="215" height="132" rx="10" fill="#EFF6FF" stroke="#2563EB" stroke-width="2"/>
+<text x="522.5" y="134" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="15" font-weight="600" fill="#1f2937" text-anchor="middle">LaunchTemplate</text>
+<text x="522.5" y="152" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="600" fill="#6b7280" text-anchor="middle">ec2.services.k8s.aws/v1alpha1</text>
+<text x="522.5" y="184" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="11" font-weight="500" fill="#475569" text-anchor="middle">image_id · instance_type</text>
+<text x="522.5" y="202" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="11" font-weight="500" fill="#475569" text-anchor="middle">key_name · user_data · ebs_optimized</text>
+<text x="522.5" y="220" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="11" font-weight="500" fill="#475569" text-anchor="middle">security groups · IAM instance profile</text>
+<rect x="745" y="108" width="215" height="132" rx="10" fill="#EFF6FF" stroke="#2563EB" stroke-width="2"/>
+<text x="852.5" y="134" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="15" font-weight="600" fill="#1f2937" text-anchor="middle">AutoScalingGroup</text>
+<text x="852.5" y="152" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="600" fill="#6b7280" text-anchor="middle">autoscaling.services.k8s.aws/v1alpha1</text>
+<text x="852.5" y="184" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="11" font-weight="500" fill="#475569" text-anchor="middle">min/max/desired size · subnets</text>
+<text x="852.5" y="202" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="11" font-weight="500" fill="#475569" text-anchor="middle">health check · cooldown</text>
+<text x="852.5" y="220" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="11" font-weight="500" fill="#475569" text-anchor="middle">target group ARNs</text>
+<path d="M 745 174.0 L 630 174.0" fill="none" stroke="#2563EB" stroke-width="2" marker-end="url(#ah)"/>
+<text x="687.5" y="166.0" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="11" font-weight="600" fill="#2563EB" text-anchor="middle">launch</text>
+<text x="687.5" y="179.0" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="11" font-weight="600" fill="#2563EB" text-anchor="middle">Template</text>
+<text x="687.5" y="192.0" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="11" font-weight="600" fill="#2563EB" text-anchor="middle">Name</text>
+<text x="687.5" y="262" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="11" font-weight="500" fill="#475569" text-anchor="middle">AutoScalingGroup references the LaunchTemplate by its AWS launch-template name</text>
+<text x="687.5" y="277" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="11" font-weight="500" fill="#475569" text-anchor="middle">(the ACK AutoScalingGroup has no k8s *Ref field) — both set the same deterministic name</text>
+<rect x="430" y="320" width="520" height="64" rx="8" fill="#FFF7ED" stroke="#FF9900" stroke-width="2"/>
+<text x="690" y="347" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="15" font-weight="600" fill="#1f2937" text-anchor="middle">AWS — EC2 Auto Scaling group</text>
+<text x="690" y="367" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="11" font-weight="500" fill="#475569" text-anchor="middle">ASG launches EC2 instances from the launch template across the given subnets</text>
+<path d="M 522.5 298 L 522.5 320" fill="none" stroke="#FF9900" stroke-width="2" marker-end="url(#aho)"/>
+<path d="M 852.5 298 L 852.5 320" fill="none" stroke="#FF9900" stroke-width="2" marker-end="url(#aho)"/>
+<text x="40" y="422" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="15" font-weight="700" fill="#0EA5A4" text-anchor="start">Pre-existing AWS resources you must supply as inputs (this stack does NOT create them)</text>
+<rect x="40" y="434" width="178" height="70" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+<text x="129.0" y="460" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="12" font-weight="600" fill="#1f2937" text-anchor="middle">security_groups</text>
+<text x="129.0" y="481" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="500" fill="#6b7280" text-anchor="middle">sg-xxxx (IDs)</text>
+<text x="129.0" y="496" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="10" font-weight="600" fill="#2563EB" text-anchor="middle">→ LaunchTemplate</text>
+<rect x="226" y="434" width="178" height="70" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+<text x="315.0" y="460" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="12" font-weight="600" fill="#1f2937" text-anchor="middle">iam_instance_profile_arn</text>
+<text x="315.0" y="481" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="500" fill="#6b7280" text-anchor="middle">arn:aws:iam:… (ARN)</text>
+<text x="315.0" y="496" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="10" font-weight="600" fill="#2563EB" text-anchor="middle">→ LaunchTemplate</text>
+<rect x="412" y="434" width="178" height="70" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+<text x="501.0" y="460" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="12" font-weight="600" fill="#1f2937" text-anchor="middle">key_name</text>
+<text x="501.0" y="481" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="500" fill="#6b7280" text-anchor="middle">my-keypair (name)</text>
+<text x="501.0" y="496" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="10" font-weight="600" fill="#2563EB" text-anchor="middle">→ LaunchTemplate</text>
+<rect x="598" y="434" width="178" height="70" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+<text x="687.0" y="460" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="12" font-weight="600" fill="#1f2937" text-anchor="middle">vpc_zone_identifier</text>
+<text x="687.0" y="481" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="500" fill="#6b7280" text-anchor="middle">subnet-xxxx (IDs)</text>
+<text x="687.0" y="496" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="10" font-weight="600" fill="#2563EB" text-anchor="middle">→ AutoScalingGroup</text>
+<rect x="784" y="434" width="178" height="70" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+<text x="873.0" y="460" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="12" font-weight="600" fill="#1f2937" text-anchor="middle">target_group_arns</text>
+<text x="873.0" y="481" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="500" fill="#6b7280" text-anchor="middle">arn:aws:…:targetgroup/… (ARNs)</text>
+<text x="873.0" y="496" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="10" font-weight="600" fill="#2563EB" text-anchor="middle">→ AutoScalingGroup</text>
+<rect x="40" y="560" width="22" height="14" rx="3" fill="#0EA5A4" opacity="0.85"/>
+<text x="70" y="572" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="12" font-weight="500" fill="#475569" text-anchor="start">Krateo Composition</text>
+<rect x="220" y="560" width="22" height="14" rx="3" fill="#2563EB" opacity="0.85"/>
+<text x="250" y="572" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="12" font-weight="500" fill="#475569" text-anchor="start">ACK custom resource</text>
+<rect x="420" y="560" width="22" height="14" rx="3" fill="#FF9900" opacity="0.85"/>
+<text x="450" y="572" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="12" font-weight="500" fill="#475569" text-anchor="start">Real AWS resource</text>
+<rect x="620" y="560" width="22" height="14" rx="3" fill="#cbd5e1" opacity="0.85"/>
+<text x="650" y="572" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="12" font-weight="500" fill="#475569" text-anchor="start">User-supplied external input</text>
+</svg>

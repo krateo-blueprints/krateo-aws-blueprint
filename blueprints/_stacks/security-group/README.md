@@ -5,6 +5,9 @@ egress rules as one Composition, replicating the
 [`terraform-aws-modules/security-group/aws`](https://registry.terraform.io/modules/terraform-aws-modules/security-group/aws)
 module on top of the [ACK](https://aws-controllers-k8s.github.io/community/) **ec2** controller.
 
+> **Try it end-to-end:** see [quickstart.md](quickstart.md) — install on a local kind cluster and
+> provision a real AWS Security Group through Krateo, with an architecture diagram.
+
 ## How it works
 
 One `AwsSecurityGroupStack` Composition is rendered by Krateo's composition-dynamic-controller

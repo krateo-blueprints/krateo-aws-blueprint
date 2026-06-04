@@ -5,6 +5,9 @@ replicating the [`terraform-aws-modules/autoscaling/aws`](https://registry.terra
 module on top of the [ACK](https://aws-controllers-k8s.github.io/community/) **ec2** and
 **autoscaling** controllers.
 
+> **Try it end-to-end:** see [quickstart.md](quickstart.md) — install on kind and provision a real
+> AWS EC2 Auto Scaling group in 7 steps.
+
 ## How it works
 
 One `AwsAutoscalingStack` Composition is rendered by Krateo's composition-dynamic-controller into

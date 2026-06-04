@@ -5,6 +5,9 @@ as one Composition, replicating the
 [`terraform-aws-modules/eks/aws`](https://registry.terraform.io/modules/terraform-aws-modules/eks/aws)
 module on top of the [ACK](https://aws-controllers-k8s.github.io/community/) **eks** controller.
 
+> **Try it end-to-end:** see [quickstart.md](quickstart.md) — install on kind and provision a
+> real EKS cluster + managed node group step by step.
+
 ## How it works
 
 One `AwsEksStack` Composition is rendered by Krateo's composition-dynamic-controller into two

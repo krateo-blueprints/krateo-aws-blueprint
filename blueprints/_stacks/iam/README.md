@@ -5,6 +5,10 @@ the [`terraform-aws-modules/iam/aws`](https://registry.terraform.io/modules/terr
 module (its `iam-role` / `iam-assumable-role` submodules) on top of the
 [ACK](https://aws-controllers-k8s.github.io/community/) **iam** controller.
 
+> **Try it end-to-end:** see [quickstart.md](quickstart.md) — install on kind and provision a real
+> IAM role through Krateo, with an [architecture diagram](docs/architecture.svg) of the composed
+> resources.
+
 ## How it works
 
 One `AwsIamStack` Composition is rendered by Krateo's composition-dynamic-controller into native

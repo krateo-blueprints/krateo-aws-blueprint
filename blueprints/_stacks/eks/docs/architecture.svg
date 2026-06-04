@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 620" width="980" height="620" font-family="sans-serif">
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2563EB"/></marker><marker id="aho" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#FF9900"/></marker><marker id="ahs" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#475569"/></marker></defs>
+<rect x="0" y="0" width="980" height="620" fill="#ffffff" stroke="#ffffff"/>
+<text x="490.0" y="38" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="22" font-weight="600" fill="#0f172a" text-anchor="middle">aws-eks-stack — composed resources</text>
+<text x="490.0" y="62" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="13" font-weight="500" fill="#6b7280" text-anchor="middle">One AwsEksStack Composition renders two wired ACK eks resources (eks.services.k8s.aws/v1alpha1)</text>
+<rect x="40" y="96" width="200" height="64" rx="12" fill="#ECFEFF" stroke="#0EA5A4" stroke-width="2"/>
+<text x="140" y="124" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="15" font-weight="600" fill="#1f2937" text-anchor="middle">AwsEksStack</text>
+<text x="140" y="144" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="500" fill="#6b7280" text-anchor="middle">composition.krateo.io/v0-3-0</text>
+<path d="M 240 128 L 300 128" fill="none" stroke="#0EA5A4" stroke-width="2" marker-end="url(#ah)"/>
+<text x="270" y="118" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="10" font-weight="500" fill="#475569" text-anchor="middle">renders</text>
+<text x="40" y="200" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="14" font-weight="700" fill="#2563EB" text-anchor="start">Composed ACK resources (one per Helm-rendered manifest)</text>
+<rect x="300" y="224" width="240" height="132" rx="12" fill="#EFF6FF" stroke="#2563EB" stroke-width="2"/>
+<text x="420.0" y="254" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="17" font-weight="700" fill="#1f2937" text-anchor="middle">Cluster</text>
+<text x="420.0" y="274" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="500" fill="#6b7280" text-anchor="middle">eks.services.k8s.aws/v1alpha1</text>
+<text x="420.0" y="300" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="12" font-weight="500" fill="#475569" text-anchor="middle">EKS control plane</text>
+<text x="420.0" y="319" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="500" fill="#475569" text-anchor="middle">roleARN ← cluster_iam_role_arn</text>
+<text x="420.0" y="336" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="500" fill="#475569" text-anchor="middle">subnetIDs ← control_plane_subnet_ids</text>
+<rect x="640" y="224" width="240" height="132" rx="12" fill="#EFF6FF" stroke="#2563EB" stroke-width="2"/>
+<text x="760.0" y="254" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="17" font-weight="700" fill="#1f2937" text-anchor="middle">Nodegroup</text>
+<text x="760.0" y="274" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="500" fill="#6b7280" text-anchor="middle">eks.services.k8s.aws/v1alpha1</text>
+<text x="760.0" y="300" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="12" font-weight="500" fill="#475569" text-anchor="middle">managed worker nodes</text>
+<text x="760.0" y="319" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="500" fill="#475569" text-anchor="middle">nodeRole ← node_iam_role_arn</text>
+<text x="760.0" y="336" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="500" fill="#475569" text-anchor="middle">subnets ← subnet_ids</text>
+<path d="M 640 290.0 L 540 290.0" fill="none" stroke="#2563EB" stroke-width="2" marker-end="url(#ah)"/>
+<text x="590.0" y="278.0" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="12" font-weight="700" fill="#2563EB" text-anchor="middle">clusterRef</text>
+<text x="590.0" y="312.0" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="500" fill="#475569" text-anchor="middle">{ from: { name } }</text>
+<text x="590.0" y="328.0" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="9" font-weight="500" fill="#475569" text-anchor="middle">Nodegroup waits for</text>
+<text x="590.0" y="340.0" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="9" font-weight="500" fill="#475569" text-anchor="middle">Cluster ACTIVE</text>
+<text x="40" y="432" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="14" font-weight="700" fill="#FF9900" text-anchor="start">Pre-existing AWS resources you supply as inputs (this stack does NOT create them)</text>
+<rect x="40" y="452" width="178" height="80" rx="10" fill="#FFF7ED" stroke="#FF9900" stroke-width="2"/>
+<text x="129.0" y="476" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="11" font-weight="700" fill="#1f2937" text-anchor="middle">subnet_ids</text>
+<text x="129.0" y="496" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="500" fill="#b45309" text-anchor="middle">subnet-xxxx …</text>
+<text x="129.0" y="516" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="9" font-weight="500" fill="#475569" text-anchor="middle">VPC subnets for control plane + nodes</text>
+<rect x="226" y="452" width="178" height="80" rx="10" fill="#FFF7ED" stroke="#FF9900" stroke-width="2"/>
+<text x="315.0" y="476" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="11" font-weight="700" fill="#1f2937" text-anchor="middle">control_plane_subnet_ids</text>
+<text x="315.0" y="496" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="500" fill="#b45309" text-anchor="middle">subnet-xxxx …</text>
+<text x="315.0" y="516" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="9" font-weight="500" fill="#475569" text-anchor="middle">optional control-plane ENIs</text>
+<rect x="412" y="452" width="178" height="80" rx="10" fill="#FFF7ED" stroke="#FF9900" stroke-width="2"/>
+<text x="501.0" y="476" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="11" font-weight="700" fill="#1f2937" text-anchor="middle">additional_security_group_ids</text>
+<text x="501.0" y="496" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="500" fill="#b45309" text-anchor="middle">sg-xxxx …</text>
+<text x="501.0" y="516" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="9" font-weight="500" fill="#475569" text-anchor="middle">extra control-plane SGs</text>
+<rect x="598" y="452" width="178" height="80" rx="10" fill="#FFF7ED" stroke="#FF9900" stroke-width="2"/>
+<text x="687.0" y="476" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="11" font-weight="700" fill="#1f2937" text-anchor="middle">cluster_iam_role_arn</text>
+<text x="687.0" y="496" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="500" fill="#b45309" text-anchor="middle">arn:aws:iam::…:role/…</text>
+<text x="687.0" y="516" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="9" font-weight="500" fill="#475569" text-anchor="middle">cluster control-plane role</text>
+<rect x="784" y="452" width="178" height="80" rx="10" fill="#FFF7ED" stroke="#FF9900" stroke-width="2"/>
+<text x="873.0" y="476" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="11" font-weight="700" fill="#1f2937" text-anchor="middle">node_iam_role_arn</text>
+<text x="873.0" y="496" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="500" fill="#b45309" text-anchor="middle">arn:aws:iam::…:role/…</text>
+<text x="873.0" y="516" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="9" font-weight="500" fill="#475569" text-anchor="middle">worker node role</text>
+<path d="M 315.0 452 L 380.0 356" fill="none" stroke="#FF9900" stroke-width="2" marker-end="url(#aho)"/>
+<path d="M 501.0 452 L 440.0 356" fill="none" stroke="#FF9900" stroke-width="2" marker-end="url(#aho)"/>
+<path d="M 687.0 452 L 480.0 356" fill="none" stroke="#FF9900" stroke-width="2" marker-end="url(#aho)"/>
+<path d="M 129.0 452 L 710.0 356" fill="none" stroke="#FF9900" stroke-width="2" marker-end="url(#aho)"/>
+<path d="M 873.0 452 L 810.0 356" fill="none" stroke="#FF9900" stroke-width="2" marker-end="url(#aho)"/>
+<rect x="40" y="574" width="16" height="16" rx="4" fill="#EFF6FF" stroke="#2563EB" stroke-width="2"/>
+<text x="64" y="588" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="11" font-weight="500" fill="#475569" text-anchor="start">ACK resource (created by the stack)</text>
+<rect x="330" y="574" width="16" height="16" rx="4" fill="#FFF7ED" stroke="#FF9900" stroke-width="2"/>
+<text x="354" y="588" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="11" font-weight="500" fill="#475569" text-anchor="start">pre-existing input (you supply)</text>
+<line x1="600" y1="582" x2="630" y2="582" stroke="#2563EB" stroke-width="2"/>
+<text x="636" y="588" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="11" font-weight="500" fill="#475569" text-anchor="start">*Ref wiring</text>
+<line x1="730" y1="582" x2="760" y2="582" stroke="#FF9900" stroke-width="2"/>
+<text x="766" y="588" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="11" font-weight="500" fill="#475569" text-anchor="start">feeds an input field</text>
+</svg>

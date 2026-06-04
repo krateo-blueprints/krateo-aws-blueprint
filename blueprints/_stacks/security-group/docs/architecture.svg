@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 660" width="960" height="660">
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#64748b"/></marker><marker id="ao" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#FF9900"/></marker></defs>
+<rect x="0" y="0" width="960" height="660" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="0"/>
+<text x="480.0" y="36" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="20" font-weight="600" fill="#0f172a" text-anchor="middle">aws-security-group-stack — composed resources</text>
+<text x="480.0" y="57" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="12" font-weight="500" fill="#6b7280" text-anchor="middle">one Composition → one ACK ec2 SecurityGroup (ingress/egress rules inlined)</text>
+<rect x="40" y="92" width="150" height="60" rx="10" fill="#ECFEFF" stroke="#0EA5A4" stroke-width="2"/>
+<text x="115" y="117" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="11.5" font-weight="600" fill="#0f172a" text-anchor="middle">AwsSecurityGroupStack</text>
+<text x="115" y="136" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="11" font-weight="500" fill="#6b7280" text-anchor="middle">Composition</text>
+<path d="M 190 122 L 360 122" fill="none" stroke="#64748b" stroke-width="2.5" marker-end="url(#a)"/>
+<text x="275" y="112" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="11" font-weight="500" fill="#475569" text-anchor="middle">renders</text>
+<rect x="360" y="92" width="230" height="470" rx="12" fill="#EFF6FF" stroke="#2563EB" stroke-width="2.5"/>
+<text x="475.0" y="118" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="15" font-weight="700" fill="#1e3a8a" text-anchor="middle">SecurityGroup</text>
+<text x="475.0" y="137" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10.5" font-weight="500" fill="#2563EB" text-anchor="middle">ec2.services.k8s.aws/v1alpha1</text>
+<text x="475.0" y="156" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="10" font-weight="500" fill="#475569" text-anchor="middle">the only composed ACK resource</text>
+<rect x="376" y="174" width="198" height="44" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+<text x="475.0" y="192" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="11.5" font-weight="600" fill="#0f172a" text-anchor="middle">spec.vpcID</text>
+<text x="475.0" y="209" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="10" font-weight="500" fill="#475569" text-anchor="middle">← vpc_id (existing VPC)</text>
+<rect x="376" y="230" width="198" height="150" rx="8" fill="#ECFDF5" stroke="#16A34A" stroke-width="1.8"/>
+<text x="475.0" y="250" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="11.5" font-weight="700" fill="#166534" text-anchor="middle">spec.ingressRules[]</text>
+<text x="475.0" y="268" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="9.5" font-weight="500" fill="#16A34A" text-anchor="middle">← ingress_rules + ingress_cidr_blocks</text>
+<text x="388" y="286.0" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="9" font-weight="600" fill="#166534" text-anchor="start">ipProtocol</text>
+<text x="562" y="286.0" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="8.5" font-weight="500" fill="#15803d" text-anchor="end">← ip_protocol</text>
+<text x="388" y="301.5" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="9" font-weight="600" fill="#166534" text-anchor="start">fromPort / toPort</text>
+<text x="562" y="301.5" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="8.5" font-weight="500" fill="#15803d" text-anchor="end">← from_port / to_port</text>
+<text x="388" y="317.0" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="9" font-weight="600" fill="#166534" text-anchor="start">ipRanges[].cidrIP</text>
+<text x="562" y="317.0" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="8.5" font-weight="500" fill="#15803d" text-anchor="end">← cidr_ipv4</text>
+<text x="388" y="332.5" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="9" font-weight="600" fill="#166534" text-anchor="start">ipv6Ranges[].cidrIPv6</text>
+<text x="562" y="332.5" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="8.5" font-weight="500" fill="#15803d" text-anchor="end">← cidr_ipv6</text>
+<text x="388" y="348.0" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="9" font-weight="600" fill="#166534" text-anchor="start">prefixListIDs[]</text>
+<text x="562" y="348.0" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="8.5" font-weight="500" fill="#15803d" text-anchor="end">← prefix_list_id</text>
+<text x="388" y="363.5" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="9" font-weight="600" fill="#166534" text-anchor="start">userIDGroupPairs[]</text>
+<text x="562" y="363.5" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="8.5" font-weight="500" fill="#15803d" text-anchor="end">← ref'd_sg_id</text>
+<rect x="376" y="392" width="198" height="56" rx="8" fill="#FFF7ED" stroke="#FF9900" stroke-width="1.8"/>
+<text x="475.0" y="412" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="11.5" font-weight="700" fill="#b45309" text-anchor="middle">spec.egressRules[]</text>
+<text x="475.0" y="429" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="9.5" font-weight="500" fill="#b45309" text-anchor="middle">← egress_rules + egress_cidr_blocks</text>
+<text x="475.0" y="443" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="8.5" font-weight="500" fill="#b45309" text-anchor="middle">same IpPermission mapping as ingress</text>
+<rect x="376" y="460" width="198" height="40" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+<text x="475.0" y="478" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="11.5" font-weight="600" fill="#0f172a" text-anchor="middle">spec.tags[]</text>
+<text x="475.0" y="493" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="10" font-weight="500" fill="#475569" text-anchor="middle">Name + ← tags</text>
+<text x="475.0" y="524" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="600" fill="#475569" text-anchor="middle">metadata.annotations:</text>
+<text x="475.0" y="540" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="9.5" font-weight="500" fill="#6b7280" text-anchor="middle">services.k8s.aws/region ← region</text>
+<rect x="680" y="150" width="200" height="56" rx="10" fill="#EFF6FF" stroke="#2563EB" stroke-width="2"/>
+<text x="780" y="174" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="13" font-weight="600" fill="#0f172a" text-anchor="middle">ACK ec2 controller</text>
+<text x="780" y="192" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10.5" font-weight="500" fill="#6b7280" text-anchor="middle">ec2-chart</text>
+<rect x="680" y="240" width="200" height="64" rx="10" fill="#FFF7ED" stroke="#FF9900" stroke-width="2"/>
+<text x="780" y="266" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="14" font-weight="600" fill="#0f172a" text-anchor="middle">AWS EC2</text>
+<text x="780" y="284" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10.5" font-weight="500" fill="#6b7280" text-anchor="middle">Security Group + rules</text>
+<path d="M 590 178 L 680 178" fill="none" stroke="#64748b" stroke-width="2.5" marker-end="url(#a)"/>
+<text x="635" y="168" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="10" font-weight="500" fill="#475569" text-anchor="middle">reconcile</text>
+<path d="M 780 206 L 780 240" fill="none" stroke="#FF9900" stroke-width="2.5" marker-end="url(#ao)"/>
+<text x="835" y="226" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="10" font-weight="500" fill="#b45309" text-anchor="middle">AWS API</text>
+<rect x="40" y="230" width="280" height="320" rx="12" fill="#FFFBEB" stroke="#FF9900" stroke-width="2" stroke-dasharray="6 5"/>
+<text x="180.0" y="254" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="13.5" font-weight="700" fill="#b45309" text-anchor="middle">Inputs you supply</text>
+<text x="180.0" y="271" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="10" font-weight="500" fill="#b45309" text-anchor="middle">pre-existing external resources (by ID)</text>
+<rect x="58" y="294" width="244" height="64" rx="8" fill="#ffffff" stroke="#FF9900" stroke-width="1.8"/>
+<text x="70" y="314" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10.5" font-weight="700" fill="#92400e" text-anchor="start">vpc_id</text>
+<text x="70" y="331" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="500" fill="#6b7280" text-anchor="start">vpc-xxxxxxxx</text>
+<text x="70" y="347" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="9" font-weight="500" fill="#475569" text-anchor="start">existing VPC the SG lives in</text>
+<path d="M 302 326 C 350 326, 330 192, 360 192" fill="none" stroke="#FF9900" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#ao)"/>
+<rect x="58" y="374" width="244" height="64" rx="8" fill="#ffffff" stroke="#FF9900" stroke-width="1.8"/>
+<text x="70" y="394" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10.5" font-weight="700" fill="#92400e" text-anchor="start">referenced_security_group_id</text>
+<text x="70" y="411" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="500" fill="#6b7280" text-anchor="start">sg-xxxxxxxx</text>
+<text x="70" y="427" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="9" font-weight="500" fill="#475569" text-anchor="start">existing SG as rule source/dest</text>
+<path d="M 302 406 C 350 406, 330 300, 360 300" fill="none" stroke="#FF9900" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#ao)"/>
+<rect x="58" y="454" width="244" height="64" rx="8" fill="#ffffff" stroke="#FF9900" stroke-width="1.8"/>
+<text x="70" y="474" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10.5" font-weight="700" fill="#92400e" text-anchor="start">prefix_list_id</text>
+<text x="70" y="491" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="500" fill="#6b7280" text-anchor="start">pl-xxxxxxxx</text>
+<text x="70" y="507" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="9" font-weight="500" fill="#475569" text-anchor="start">existing managed prefix list</text>
+<path d="M 302 486 C 350 486, 330 345, 360 345" fill="none" stroke="#FF9900" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#ao)"/>
+<text x="40" y="642" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" fill="#b45309" text-anchor="start">→ orange (dashed) = a user-supplied external resource ID feeds an ACK SecurityGroup field; the stack does not create these.</text>
+</svg>

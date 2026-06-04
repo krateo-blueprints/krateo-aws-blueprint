@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1020 560" width="1020" height="560" font-family="sans-serif">
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#64748b"/></marker><marker id="aho" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#FF9900"/></marker><marker id="ahb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2563EB"/></marker></defs>
+<rect x="0" y="0" width="1020" height="560" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="0"/>
+<text x="510.0" y="36" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="22" font-weight="600" fill="#0f172a" text-anchor="middle">aws-ecs-stack — composed resources</text>
+<text x="510.0" y="60" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="13" font-weight="500" fill="#6b7280" text-anchor="middle">One AwsEcsStack Composition → three wired ACK ecs resources (Cluster + TaskDefinition + Service)</text>
+<text x="135.0" y="100" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="15" font-weight="700" fill="#FF9900" text-anchor="middle">Inputs you supply</text>
+<text x="135.0" y="118" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="11" font-weight="500" fill="#6b7280" text-anchor="middle">pre-existing AWS resources — not created</text>
+<rect x="30" y="150" width="210" height="50" rx="10" fill="#FFF7ED" stroke="#FF9900" stroke-width="2"/>
+<text x="135.0" y="172" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="12.5" font-weight="600" fill="#0f172a" text-anchor="middle">subnet_ids</text>
+<text x="135.0" y="189" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="11" font-weight="500" fill="#475569" text-anchor="middle">subnet-xxxx …</text>
+<rect x="30" y="220" width="210" height="50" rx="10" fill="#FFF7ED" stroke="#FF9900" stroke-width="2"/>
+<text x="135.0" y="242" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="12.5" font-weight="600" fill="#0f172a" text-anchor="middle">security_group_ids</text>
+<text x="135.0" y="259" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="11" font-weight="500" fill="#475569" text-anchor="middle">sg-xxxx …</text>
+<rect x="30" y="320" width="210" height="50" rx="10" fill="#FFF7ED" stroke="#FF9900" stroke-width="2"/>
+<text x="135.0" y="342" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="12.5" font-weight="600" fill="#0f172a" text-anchor="middle">task_exec_iam_role_arn</text>
+<text x="135.0" y="359" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="11" font-weight="500" fill="#475569" text-anchor="middle">arn:aws:iam:…:role/…</text>
+<rect x="30" y="390" width="210" height="50" rx="10" fill="#FFF7ED" stroke="#FF9900" stroke-width="2"/>
+<text x="135.0" y="412" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="12.5" font-weight="600" fill="#0f172a" text-anchor="middle">tasks_iam_role_arn</text>
+<text x="135.0" y="429" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="11" font-weight="500" fill="#475569" text-anchor="middle">arn:aws:iam:…:role/… (opt)</text>
+<rect x="540" y="138" width="360" height="96" rx="10" fill="#EFF6FF" stroke="#2563EB" stroke-width="2"/>
+<text x="556" y="164" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="16" font-weight="700" fill="#0f172a" text-anchor="start">TaskDefinition</text>
+<text x="556" y="182" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="11" font-weight="500" fill="#6b7280" text-anchor="start">ecs.services.k8s.aws/v1alpha1</text>
+<text x="556" y="202" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="11.5" font-weight="500" fill="#475569" text-anchor="start">family, containerDefinitions[ image,</text>
+<text x="556" y="218" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="11.5" font-weight="500" fill="#475569" text-anchor="start">port ], cpu, memory, networkMode,</text>
+<text x="884" y="218" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="11" font-weight="600" fill="#b45309" text-anchor="end">execution/taskRoleARN</text>
+<rect x="540" y="268" width="360" height="96" rx="10" fill="#EFF6FF" stroke="#2563EB" stroke-width="2"/>
+<text x="556" y="294" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="16" font-weight="700" fill="#0f172a" text-anchor="start">Cluster</text>
+<text x="556" y="312" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="11" font-weight="500" fill="#6b7280" text-anchor="start">ecs.services.k8s.aws/v1alpha1</text>
+<text x="556" y="332" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="11.5" font-weight="500" fill="#475569" text-anchor="start">name, settings (containerInsights),</text>
+<text x="556" y="348" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="11.5" font-weight="500" fill="#475569" text-anchor="start">capacityProviders, defaultCapacityProviderStrategy</text>
+<rect x="540" y="398" width="360" height="96" rx="10" fill="#ECFEFF" stroke="#0EA5A4" stroke-width="2"/>
+<text x="556" y="424" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="16" font-weight="700" fill="#0f172a" text-anchor="start">Service</text>
+<text x="556" y="442" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="11" font-weight="500" fill="#6b7280" text-anchor="start">ecs.services.k8s.aws/v1alpha1</text>
+<text x="556" y="462" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="11.5" font-weight="500" fill="#475569" text-anchor="start">desiredCount, launchType, schedulingStrategy,</text>
+<text x="556" y="478" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="11.5" font-weight="500" fill="#475569" text-anchor="start">networkConfiguration.awsVPCConfiguration</text>
+<path d="M 720.0 398 L 720.0 364" fill="none" stroke="#0EA5A4" stroke-width="2" marker-end="url(#ah)"/>
+<text x="728.0" y="385.0" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="11" font-weight="600" fill="#0EA5A4" text-anchor="start">clusterRef { from:{ name } }</text>
+<path d="M 820 398 C 934 378, 934 254, 820 234" fill="none" stroke="#0EA5A4" stroke-width="2" marker-end="url(#ah)"/>
+<text x="938" y="310.0" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="11" font-weight="600" fill="#0EA5A4" text-anchor="middle">taskDefinitionRef</text>
+<text x="938" y="325.0" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="11" font-weight="600" fill="#0EA5A4" text-anchor="middle">{ from:{ name } }</text>
+<path d="M 240 175.0 L 540 428" fill="none" stroke="#FF9900" stroke-width="2" marker-end="url(#aho)"/>
+<path d="M 240 245.0 L 540 464" fill="none" stroke="#FF9900" stroke-width="2" marker-end="url(#aho)"/>
+<path d="M 240 345.0 L 540 194" fill="none" stroke="#FF9900" stroke-width="2" marker-end="url(#aho)"/>
+<path d="M 240 415.0 L 540 216" fill="none" stroke="#FF9900" stroke-width="2" marker-end="url(#aho)"/>
+<rect x="30" y="500" width="16" height="16" rx="4" fill="#ECFEFF" stroke="#0EA5A4" stroke-width="2"/>
+<text x="54" y="513" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="12" font-weight="500" fill="#475569" text-anchor="start">references other resources (*Ref)</text>
+<rect x="290" y="500" width="16" height="16" rx="4" fill="#EFF6FF" stroke="#2563EB" stroke-width="2"/>
+<text x="314" y="513" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="12" font-weight="500" fill="#475569" text-anchor="start">ACK ecs custom resource</text>
+<rect x="520" y="500" width="16" height="16" rx="4" fill="#FFF7ED" stroke="#FF9900" stroke-width="2"/>
+<text x="544" y="513" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="12" font-weight="500" fill="#475569" text-anchor="start">pre-existing input passed through as ID / ARN</text>
+</svg>

@@ -4,6 +4,9 @@ A **composite** Krateo blueprint that provisions an AWS RDS database as one Comp
 replicating the [`terraform-aws-modules/rds/aws`](https://registry.terraform.io/modules/terraform-aws-modules/rds/aws)
 module on top of the [ACK](https://aws-controllers-k8s.github.io/community/) **rds** controller.
 
+> **Try it end-to-end:** see [quickstart.md](quickstart.md) — install on kind and provision a real
+> RDS database step by step.
+
 ## How it works
 
 One `AwsRdsStack` Composition is rendered by Krateo's composition-dynamic-controller into native
