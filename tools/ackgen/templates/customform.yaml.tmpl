@@ -1,0 +1,90 @@
+apiVersion: v1
+data:
+  drawer: "true"
+  form: "true"
+  showFormStructure: "true"
+  drawerSize: large
+kind: ConfigMap
+metadata:
+  name: template-[[.ChartName]]-card
+  namespace: [[.Namespace]]
+---
+apiVersion: templates.krateo.io/v1alpha1
+kind: Widget
+metadata:
+  name: template-[[.ChartName]]-card
+  namespace: [[.Namespace]]
+spec:
+  actions:
+  - template:
+      apiVersion: templates.krateo.io/v1alpha1
+      name: template-[[.ChartName]]-customform
+      namespace: [[.Namespace]]
+      resource: customforms
+      verb: GET
+  - template:
+      apiVersion: core.krateo.io/v1alpha1
+      name: [[.ChartName]]
+      namespace: [[.Namespace]]
+      resource: compositiondefinitions
+      verb: DELETE
+  app:
+    template:
+      color: ${ .getCompositionDefinition.status.conditions[] | select(.type == "Ready") | if .status == "False" then "orange" elif .status == "True" then "green" else "grey" end }
+      content: Provision an AWS [[.ServiceTitle]] [[.AckKind]] via the ACK [[.Service]] controller.
+      icon: fa-brands fa-aws
+      tags: [[.Namespace]],[[.ChartVersion]]
+      title: [[.ChartName]]
+      status: ${ .getCompositionDefinition.status.conditions[] | select(.type == "Ready") | "Ready:" + .status }
+      date: ${ .getCompositionDefinition.metadata.creationTimestamp }
+  propsRef:
+    name: template-[[.ChartName]]-card
+    namespace: [[.Namespace]]
+  type: card
+  api:
+  - name: getCompositionDefinition
+    path: "/apis/core.krateo.io/v1alpha1/namespaces/[[.Namespace]]/compositiondefinitions/[[.ChartName]]"
+    verb: GET
+    headers:
+    - 'Accept: application/json'
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: template-[[.ChartName]]-customform
+  namespace: [[.Namespace]]
+data:
+  onSubmitId: submit
+  onSubmitVerb: POST
+  payloadFormKey: spec
+  redirectRoute: /compositions/${metadata.namespace}/${metadata.name}
+  redirectTimeout: "50"
+---
+apiVersion: templates.krateo.io/v1alpha1
+kind: CustomForm
+metadata:
+  name: template-[[.ChartName]]-customform
+  namespace: [[.Namespace]]
+spec:
+  type: customform
+  propsRef:
+    name: template-[[.ChartName]]-customform
+    namespace: [[.Namespace]]
+  actions:
+    - template:
+        id: submit
+        apiVersion: composition.krateo.io/[[.CompVersion]]
+        verb: POST
+        resource: [[.CompPlural]]
+        payloadToOverride:
+        - name: metadata.namespace
+          value: ${ "[[.Namespace]]" }
+  app:
+    template:
+      schema: ${ .getCRD | .spec.versions[] | select(.name == "[[.CompVersion]]") | .schema.openAPIV3Schema.properties.spec }
+  api:
+  - name: getCRD
+    path: "/apis/apiextensions.k8s.io/v1/customresourcedefinitions/[[.CompPlural]].composition.krateo.io"
+    verb: GET
+    headers:
+    - 'Accept: application/json'
