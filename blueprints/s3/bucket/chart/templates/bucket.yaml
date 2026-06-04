@@ -1,0 +1,48 @@
+{{- /*
+Renders a native ACK S3 Bucket custom resource from the Composition spec.
+
+The Composition spec (.Values) mirrors the ACK Bucket spec, so most fields pass through
+directly. Optional blocks are emitted only when set, so an unconfigured field never produces
+an empty/invalid value on the AWS resource. `region` is Krateo-wiring (not part of the ACK
+spec) and is rendered as the standard ACK region annotation.
+*/ -}}
+apiVersion: s3.services.k8s.aws/v1alpha1
+kind: Bucket
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "aws-s3-bucket.labels" . | nindent 4 }}
+  {{- with .Values.region }}
+  annotations:
+    services.k8s.aws/region: {{ . | quote }}
+  {{- end }}
+spec:
+  name: {{ .Values.name | quote }}
+  {{- with .Values.acl }}
+  acl: {{ . | quote }}
+  {{- end }}
+  {{- with .Values.versioning }}
+  {{- if .status }}
+  versioning:
+    status: {{ .status | quote }}
+  {{- end }}
+  {{- end }}
+  {{- if .Values.objectLockEnabledForBucket }}
+  objectLockEnabledForBucket: {{ .Values.objectLockEnabledForBucket }}
+  {{- end }}
+  {{- with .Values.publicAccessBlock }}
+  publicAccessBlock:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.tagging }}
+  {{- if .tagSet }}
+  tagging:
+    tagSet:
+      {{- toYaml .tagSet | nindent 6 }}
+  {{- end }}
+  {{- end }}
+  {{- with .Values.policy }}
+  policy: |
+    {{- . | nindent 4 }}
+  {{- end }}

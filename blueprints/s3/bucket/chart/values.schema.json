@@ -1,0 +1,87 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "title": "AWS S3 Bucket",
+  "description": "Provision an Amazon S3 bucket via the ACK S3 controller. Fields mirror the s3.services.k8s.aws/v1alpha1 Bucket spec (curated subset).",
+  "required": ["name"],
+  "additionalProperties": false,
+  "properties": {
+    "region": {
+      "type": "string",
+      "title": "AWS region",
+      "description": "AWS region for this bucket (e.g. eu-west-1). Empty inherits the ACK controller's default region.",
+      "default": ""
+    },
+    "name": {
+      "type": "string",
+      "title": "Bucket name",
+      "description": "Globally-unique name of the S3 bucket to create.",
+      "minLength": 3,
+      "maxLength": 63,
+      "pattern": "^[a-z0-9][a-z0-9.-]{1,61}[a-z0-9]$"
+    },
+    "acl": {
+      "type": "string",
+      "title": "Canned ACL",
+      "description": "Canned ACL to apply to the bucket. Not supported for directory buckets.",
+      "enum": ["private", "public-read", "public-read-write", "authenticated-read"]
+    },
+    "versioning": {
+      "type": "object",
+      "title": "Versioning",
+      "description": "Object versioning configuration.",
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "type": "string",
+          "title": "Versioning status",
+          "enum": ["Enabled", "Suspended"]
+        }
+      }
+    },
+    "objectLockEnabledForBucket": {
+      "type": "boolean",
+      "title": "Enable Object Lock",
+      "description": "Enable S3 Object Lock at bucket creation. Requires versioning to be Enabled.",
+      "default": false
+    },
+    "publicAccessBlock": {
+      "type": "object",
+      "title": "Public access block",
+      "description": "PublicAccessBlock configuration for the bucket.",
+      "additionalProperties": false,
+      "properties": {
+        "blockPublicACLs": { "type": "boolean", "title": "Block public ACLs" },
+        "blockPublicPolicy": { "type": "boolean", "title": "Block public policy" },
+        "ignorePublicACLs": { "type": "boolean", "title": "Ignore public ACLs" },
+        "restrictPublicBuckets": { "type": "boolean", "title": "Restrict public buckets" }
+      }
+    },
+    "tagging": {
+      "type": "object",
+      "title": "Tags",
+      "description": "Resource tags applied to the bucket.",
+      "additionalProperties": false,
+      "properties": {
+        "tagSet": {
+          "type": "array",
+          "title": "Tag set",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["key", "value"],
+            "properties": {
+              "key": { "type": "string", "title": "Key" },
+              "value": { "type": "string", "title": "Value" }
+            }
+          }
+        }
+      }
+    },
+    "policy": {
+      "type": "string",
+      "title": "Bucket policy",
+      "description": "Bucket policy as a JSON document string."
+    }
+  }
+}

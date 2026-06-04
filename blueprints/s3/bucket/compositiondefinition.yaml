@@ -1,0 +1,18 @@
+apiVersion: core.krateo.io/v1alpha1
+kind: CompositionDefinition
+metadata:
+  name: aws-s3-bucket
+  namespace: aws-s3-system
+spec:
+  chart:
+    # OCI artifact published by .github/workflows/release-tag.yaml.
+    # The chart name (aws-s3-bucket) is appended to the OCI repository path.
+    url: oci://ghcr.io/braghettos/charts/aws-s3-bucket
+    version: "0.1.0"
+    # If the GHCR package is private, provide pull credentials:
+    # credentials:
+    #   username: braghettos
+    #   passwordRef:
+    #     key: token
+    #     name: ghcr-credentials
+    #     namespace: aws-s3-system

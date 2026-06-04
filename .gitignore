@@ -1,0 +1,13 @@
+# Helm packaging artifacts
+*.tgz
+
+# Local tooling
+tools/ackgen/ackgen
+tools/ackgen/bin/
+
+# OS / editor
+.DS_Store
+*.swp
+
+# Claude Code session data
+.claude/

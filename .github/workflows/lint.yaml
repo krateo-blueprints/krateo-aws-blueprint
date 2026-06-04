@@ -1,0 +1,38 @@
+name: lint
+
+# Lints and renders every blueprint chart on pull requests, and validates that each chart's
+# values.yaml satisfies its values.schema.json (the schema that drives the Composition CRD).
+on:
+  pull_request:
+    paths:
+      - "blueprints/**"
+      - ".github/workflows/lint.yaml"
+  workflow_dispatch:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Helm
+        uses: azure/setup-helm@v4
+
+      - name: Stamp a temporary chart version
+        run: |
+          find blueprints -name Chart.yaml -exec sed -i "s/CHART_VERSION/0.0.0-ci/g" {} +
+
+      - name: helm lint + template (validates values.schema.json)
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          rc=0
+          for chart in blueprints/*/*/chart; do
+            echo "::group::${chart}"
+            # `helm lint` and `helm template` both enforce values.schema.json against values.yaml.
+            helm lint "${chart}" || rc=1
+            helm template release "${chart}" >/dev/null || rc=1
+            echo "::endgroup::"
+          done
+          exit $rc

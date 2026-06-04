@@ -1,0 +1,49 @@
+name: release-tag
+
+# Packages every blueprint chart in blueprints/**/chart and publishes each to the GitHub
+# Container Registry as an OCI Helm artifact on every semver tag.
+#
+# Pushing tag "0.1.0" publishes, for each chart named aws-<service>-<resource>:
+#   oci://ghcr.io/<owner>/charts/aws-<service>-<resource>:0.1.0
+on:
+  push:
+    tags: ["[0-9]+.[0-9]+.[0-9]+"]
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  package-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Helm
+        uses: azure/setup-helm@v4
+
+      - name: Resolve version and registry
+        run: |
+          echo "VERSION=${GITHUB_REF_NAME}" >> "$GITHUB_ENV"
+          echo "OCI_REPO=oci://ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/charts" >> "$GITHUB_ENV"
+
+      - name: Log in to GHCR
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | \
+            helm registry login ghcr.io --username "${{ github.actor }}" --password-stdin
+
+      - name: Package and push every blueprint chart
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          for chart in blueprints/*/*/chart; do
+            name=$(awk '/^name:/{print $2; exit}' "${chart}/Chart.yaml")
+            echo "::group::${name} (${chart})"
+            # Stamp the version placeholder used by Chart.yaml.
+            sed -i "s/CHART_VERSION/${VERSION}/g" "${chart}/Chart.yaml"
+            helm package "${chart}" --destination .
+            helm push "${name}-${VERSION}.tgz" "${OCI_REPO}"
+            echo "Published ${OCI_REPO}/${name}:${VERSION}"
+            echo "::endgroup::"
+          done

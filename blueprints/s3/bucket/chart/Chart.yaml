@@ -1,0 +1,33 @@
+apiVersion: v2
+# Krateo blueprint that provisions an Amazon S3 bucket through the AWS Controllers for
+# Kubernetes (ACK) S3 controller. The chart renders a native s3.services.k8s.aws/v1alpha1
+# Bucket custom resource; the ACK S3 controller reconciles it into a real bucket.
+#
+# The chart name is `aws-s3-bucket`, so Krateo's core-provider publishes a Composition Kind
+# `AwsS3Bucket` (plural `awss3buckets`) in the composition.krateo.io API group.
+#
+# The Composition spec mirrors the ACK Bucket spec (curated subset, see values.schema.json),
+# plus the Krateo-wiring `region` field. core-provider builds the Composition CRD from
+# values.schema.json only — never values.yaml.
+name: aws-s3-bucket
+description: A Krateo blueprint that provisions an Amazon S3 bucket via the AWS Controllers for Kubernetes (ACK) S3 controller. Requires the ACK S3 controller and AWS credentials to be installed/configured beforehand (see repo docs).
+type: application
+
+# Drives the Composition CRD version (0.1.0 -> v0-1-0). Stamped by CI.
+version: CHART_VERSION
+# ACK S3 CRD version this blueprint targets.
+appVersion: "v1alpha1"
+
+home: https://krateo.io
+icon: "https://github.com/krateoplatformops/krateo/blob/main/docs/media/logo.svg"
+keywords:
+  - aws
+  - s3
+  - bucket
+  - ack
+  - storage
+sources:
+  - https://github.com/braghettos/krateo-aws-blueprint
+  - https://github.com/aws-controllers-k8s/s3-controller
+annotations:
+  krateoSupportedVersion: "2.7.0"

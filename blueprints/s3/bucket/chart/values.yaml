@@ -1,0 +1,42 @@
+# Composition spec for aws-s3-bucket.
+#
+# NOTE: Krateo's core-provider builds the Composition CRD from values.schema.json ONLY — this
+# file is not read by core-provider. It exists so `helm lint`/`helm template` can render the
+# chart, and to document defaults. Optional fields are left empty so nothing extraneous is
+# rendered onto the ACK Bucket resource.
+
+# AWS region for this bucket. Rendered as the `services.k8s.aws/region` annotation on the ACK
+# Bucket resource. Empty = inherit the ACK controller's default region.
+region: ""
+
+# Bucket name (required). Maps to ACK Bucket spec.name. The value here is only a
+# lint/render placeholder — core-provider ignores values.yaml and the generated CRD requires
+# this field, so every Composition must set it.
+name: example-bucket
+
+# Canned ACL applied to the bucket. Optional — omitted from defaults so the schema's enum is
+# not validated against an empty value. Uncomment to set.
+# acl: private
+
+# Versioning configuration.
+versioning: {}
+  # status: Enabled
+
+# Enable S3 Object Lock at creation time (requires versioning).
+objectLockEnabledForBucket: false
+
+# Block all/various forms of public access.
+publicAccessBlock: {}
+  # blockPublicACLs: true
+  # blockPublicPolicy: true
+  # ignorePublicACLs: true
+  # restrictPublicBuckets: true
+
+# Resource tags.
+tagging: {}
+  # tagSet:
+  #   - key: env
+  #     value: dev
+
+# Bucket policy, as a JSON document string.
+policy: ""
