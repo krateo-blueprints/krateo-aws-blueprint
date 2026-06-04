@@ -1,0 +1,106 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "title": "AWS VPC (terraform-aws-modules/vpc/aws)",
+  "description": "Provision a VPC with subnets, route tables, internet gateway and NAT via ACK ec2. Input names mirror the terraform-aws-modules/vpc/aws module (core subset of its inputs).",
+  "properties": {
+    "region": {
+      "type": "string",
+      "title": "AWS region",
+      "description": "AWS region for the VPC and its resources. Krateo/ACK wiring (not a Terraform module input). Empty inherits the ACK controller default.",
+      "default": ""
+    },
+    "name": {
+      "type": "string",
+      "title": "name",
+      "description": "Name to be used on all the resources as identifier.",
+      "default": ""
+    },
+    "cidr": {
+      "type": "string",
+      "title": "cidr",
+      "description": "The IPv4 CIDR block for the VPC.",
+      "pattern": "^([0-9]{1,3}\\.){3}[0-9]{1,3}/[0-9]{1,2}$",
+      "default": "10.0.0.0/16"
+    },
+    "azs": {
+      "type": "array",
+      "title": "azs",
+      "description": "A list of availability zones names in the region.",
+      "items": { "type": "string" }
+    },
+    "public_subnets": {
+      "type": "array",
+      "title": "public_subnets",
+      "description": "A list of public subnet CIDR blocks inside the VPC.",
+      "items": { "type": "string" }
+    },
+    "private_subnets": {
+      "type": "array",
+      "title": "private_subnets",
+      "description": "A list of private subnet CIDR blocks inside the VPC.",
+      "items": { "type": "string" }
+    },
+    "enable_nat_gateway": {
+      "type": "boolean",
+      "title": "enable_nat_gateway",
+      "description": "Should be true if you want to provision NAT Gateways for each of your private networks.",
+      "default": false
+    },
+    "single_nat_gateway": {
+      "type": "boolean",
+      "title": "single_nat_gateway",
+      "description": "Should be true if you want to provision a single shared NAT Gateway across all of your private networks.",
+      "default": false
+    },
+    "enable_dns_hostnames": {
+      "type": "boolean",
+      "title": "enable_dns_hostnames",
+      "description": "Should be true to enable DNS hostnames in the VPC.",
+      "default": true
+    },
+    "enable_dns_support": {
+      "type": "boolean",
+      "title": "enable_dns_support",
+      "description": "Should be true to enable DNS support in the VPC.",
+      "default": true
+    },
+    "map_public_ip_on_launch": {
+      "type": "boolean",
+      "title": "map_public_ip_on_launch",
+      "description": "Should be false if you do not want to auto-assign public IP on launch in public subnets.",
+      "default": false
+    },
+    "instance_tenancy": {
+      "type": "string",
+      "title": "instance_tenancy",
+      "description": "A tenancy option for instances launched into the VPC.",
+      "enum": ["default", "dedicated"],
+      "default": "default"
+    },
+    "create_igw": {
+      "type": "boolean",
+      "title": "create_igw",
+      "description": "Controls if an Internet Gateway is created for public subnets.",
+      "default": true
+    },
+    "tags": {
+      "type": "object",
+      "title": "tags",
+      "description": "A map of tags to add to all resources.",
+      "additionalProperties": { "type": "string" }
+    },
+    "public_subnet_tags": {
+      "type": "object",
+      "title": "public_subnet_tags",
+      "description": "Additional tags for the public subnets.",
+      "additionalProperties": { "type": "string" }
+    },
+    "private_subnet_tags": {
+      "type": "object",
+      "title": "private_subnet_tags",
+      "description": "Additional tags for the private subnets.",
+      "additionalProperties": { "type": "string" }
+    }
+  }
+}

@@ -1,0 +1,29 @@
+# Composition spec for aws-vpc-stack — input names mirror terraform-aws-modules/vpc/aws.
+#
+# core-provider builds the Composition CRD from values.schema.json ONLY; this file provides a
+# schema-valid example so `helm template`/`helm lint` render a complete 2-AZ VPC.
+
+# AWS region (Krateo/ACK wiring; not a Terraform input). Empty = controller default.
+region: ""
+
+name: krateo-vpc
+cidr: "10.0.0.0/16"
+azs:
+  - eu-central-1a
+  - eu-central-1b
+public_subnets:
+  - "10.0.0.0/24"
+  - "10.0.1.0/24"
+private_subnets:
+  - "10.0.10.0/24"
+  - "10.0.11.0/24"
+enable_nat_gateway: true
+single_nat_gateway: true
+enable_dns_hostnames: true
+enable_dns_support: true
+map_public_ip_on_launch: true
+instance_tenancy: "default"
+create_igw: true
+tags: {}
+public_subnet_tags: {}
+private_subnet_tags: {}

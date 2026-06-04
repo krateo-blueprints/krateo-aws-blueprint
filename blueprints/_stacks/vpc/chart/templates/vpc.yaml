@@ -1,0 +1,247 @@
+{{- /*
+Composes a VPC from native ACK ec2 resources, mirroring terraform-aws-modules/vpc/aws.
+Resources are wired together with ACK *Ref fields ({ from: { name: <k8s-name> } }):
+  VPC <- Subnets/RouteTables/InternetGateway/NATGateway via vpcRef
+  Subnet -> RouteTable via routeTableRefs ; RouteTable route -> IGW/NAT via gatewayRef/natGatewayRef
+  NATGateway -> public Subnet via subnetRef, -> EIP via allocationRef
+*/ -}}
+{{- $r := .Values.region -}}
+{{- $n := .Values.name | default .Release.Name -}}
+{{- $ns := .Release.Namespace -}}
+{{- $azs := .Values.azs | default (list) -}}
+{{- $pub := .Values.public_subnets | default (list) -}}
+{{- $priv := .Values.private_subnets | default (list) -}}
+{{- $createIgw := and .Values.create_igw (gt (len $pub) 0) -}}
+{{- $natOn := and .Values.enable_nat_gateway (gt (len $pub) 0) -}}
+{{- $single := .Values.single_nat_gateway -}}
+{{- $natCount := 0 -}}
+{{- if $natOn -}}{{- $natCount = ternary 1 (len $pub) $single -}}{{- end -}}
+apiVersion: ec2.services.k8s.aws/v1alpha1
+kind: VPC
+metadata:
+  name: {{ $n }}-vpc
+  namespace: {{ $ns }}
+  {{- with $r }}
+  annotations:
+    services.k8s.aws/region: {{ . | quote }}
+  {{- end }}
+  labels:
+    {{- include "aws-vpc-stack.labels" . | nindent 4 }}
+spec:
+  cidrBlocks:
+    - {{ .Values.cidr | quote }}
+  enableDNSHostnames: {{ .Values.enable_dns_hostnames }}
+  enableDNSSupport: {{ .Values.enable_dns_support }}
+  instanceTenancy: {{ .Values.instance_tenancy | quote }}
+  tags:
+    - key: Name
+      value: {{ $n | quote }}
+    {{- if .Values.tags }}{{- include "aws-vpc-stack.tags" .Values.tags | nindent 4 }}{{- end }}
+{{- if $createIgw }}
+---
+apiVersion: ec2.services.k8s.aws/v1alpha1
+kind: InternetGateway
+metadata:
+  name: {{ $n }}-igw
+  namespace: {{ $ns }}
+  {{- with $r }}
+  annotations:
+    services.k8s.aws/region: {{ . | quote }}
+  {{- end }}
+  labels:
+    {{- include "aws-vpc-stack.labels" . | nindent 4 }}
+spec:
+  vpcRef:
+    from:
+      name: {{ $n }}-vpc
+{{- end }}
+{{- if gt (len $pub) 0 }}
+---
+apiVersion: ec2.services.k8s.aws/v1alpha1
+kind: RouteTable
+metadata:
+  name: {{ $n }}-public-rt
+  namespace: {{ $ns }}
+  {{- with $r }}
+  annotations:
+    services.k8s.aws/region: {{ . | quote }}
+  {{- end }}
+  labels:
+    {{- include "aws-vpc-stack.labels" . | nindent 4 }}
+spec:
+  vpcRef:
+    from:
+      name: {{ $n }}-vpc
+  {{- if $createIgw }}
+  routes:
+    - destinationCIDRBlock: "0.0.0.0/0"
+      gatewayRef:
+        from:
+          name: {{ $n }}-igw
+  {{- end }}
+  tags:
+    - key: Name
+      value: {{ printf "%s-public" $n | quote }}
+{{- range $i, $cidr := $pub }}
+---
+apiVersion: ec2.services.k8s.aws/v1alpha1
+kind: Subnet
+metadata:
+  name: {{ $n }}-public-{{ $i }}
+  namespace: {{ $ns }}
+  {{- with $r }}
+  annotations:
+    services.k8s.aws/region: {{ . | quote }}
+  {{- end }}
+  labels:
+    {{- include "aws-vpc-stack.labels" $ | nindent 4 }}
+spec:
+  vpcRef:
+    from:
+      name: {{ $n }}-vpc
+  cidrBlock: {{ $cidr | quote }}
+  {{- if $azs }}
+  availabilityZone: {{ index $azs (mod $i (len $azs)) | quote }}
+  {{- end }}
+  mapPublicIPOnLaunch: {{ $.Values.map_public_ip_on_launch }}
+  routeTableRefs:
+    - from:
+        name: {{ $n }}-public-rt
+  tags:
+    - key: Name
+      value: {{ printf "%s-public-%d" $n $i | quote }}
+    {{- if $.Values.tags }}{{- include "aws-vpc-stack.tags" $.Values.tags | nindent 4 }}{{- end }}
+    {{- if $.Values.public_subnet_tags }}{{- include "aws-vpc-stack.tags" $.Values.public_subnet_tags | nindent 4 }}{{- end }}
+{{- end }}
+{{- end }}
+{{- if $natOn }}
+{{- range $i := until (int $natCount) }}
+---
+apiVersion: ec2.services.k8s.aws/v1alpha1
+kind: ElasticIPAddress
+metadata:
+  name: {{ $n }}-nat-eip-{{ $i }}
+  namespace: {{ $ns }}
+  {{- with $r }}
+  annotations:
+    services.k8s.aws/region: {{ . | quote }}
+  {{- end }}
+  labels:
+    {{- include "aws-vpc-stack.labels" $ | nindent 4 }}
+spec:
+  tags:
+    - key: Name
+      value: {{ printf "%s-nat-%d" $n $i | quote }}
+---
+apiVersion: ec2.services.k8s.aws/v1alpha1
+kind: NATGateway
+metadata:
+  name: {{ $n }}-nat-{{ $i }}
+  namespace: {{ $ns }}
+  {{- with $r }}
+  annotations:
+    services.k8s.aws/region: {{ . | quote }}
+  {{- end }}
+  labels:
+    {{- include "aws-vpc-stack.labels" $ | nindent 4 }}
+spec:
+  subnetRef:
+    from:
+      name: {{ $n }}-public-{{ $i }}
+  allocationRef:
+    from:
+      name: {{ $n }}-nat-eip-{{ $i }}
+  tags:
+    - key: Name
+      value: {{ printf "%s-nat-%d" $n $i | quote }}
+{{- end }}
+{{- end }}
+{{- if gt (len $priv) 0 }}
+{{- if $single }}
+---
+apiVersion: ec2.services.k8s.aws/v1alpha1
+kind: RouteTable
+metadata:
+  name: {{ $n }}-private-rt
+  namespace: {{ $ns }}
+  {{- with $r }}
+  annotations:
+    services.k8s.aws/region: {{ . | quote }}
+  {{- end }}
+  labels:
+    {{- include "aws-vpc-stack.labels" . | nindent 4 }}
+spec:
+  vpcRef:
+    from:
+      name: {{ $n }}-vpc
+  {{- if $natOn }}
+  routes:
+    - destinationCIDRBlock: "0.0.0.0/0"
+      natGatewayRef:
+        from:
+          name: {{ $n }}-nat-0
+  {{- end }}
+  tags:
+    - key: Name
+      value: {{ printf "%s-private" $n | quote }}
+{{- else }}
+{{- range $i, $cidr := $priv }}
+---
+apiVersion: ec2.services.k8s.aws/v1alpha1
+kind: RouteTable
+metadata:
+  name: {{ $n }}-private-rt-{{ $i }}
+  namespace: {{ $ns }}
+  {{- with $r }}
+  annotations:
+    services.k8s.aws/region: {{ . | quote }}
+  {{- end }}
+  labels:
+    {{- include "aws-vpc-stack.labels" $ | nindent 4 }}
+spec:
+  vpcRef:
+    from:
+      name: {{ $n }}-vpc
+  {{- if $natOn }}
+  routes:
+    - destinationCIDRBlock: "0.0.0.0/0"
+      natGatewayRef:
+        from:
+          name: {{ $n }}-nat-{{ mod $i (int $natCount) }}
+  {{- end }}
+  tags:
+    - key: Name
+      value: {{ printf "%s-private-%d" $n $i | quote }}
+{{- end }}
+{{- end }}
+{{- range $i, $cidr := $priv }}
+---
+apiVersion: ec2.services.k8s.aws/v1alpha1
+kind: Subnet
+metadata:
+  name: {{ $n }}-private-{{ $i }}
+  namespace: {{ $ns }}
+  {{- with $r }}
+  annotations:
+    services.k8s.aws/region: {{ . | quote }}
+  {{- end }}
+  labels:
+    {{- include "aws-vpc-stack.labels" $ | nindent 4 }}
+spec:
+  vpcRef:
+    from:
+      name: {{ $n }}-vpc
+  cidrBlock: {{ $cidr | quote }}
+  {{- if $azs }}
+  availabilityZone: {{ index $azs (mod $i (len $azs)) | quote }}
+  {{- end }}
+  routeTableRefs:
+    - from:
+        name: {{ if $single }}{{ printf "%s-private-rt" $n }}{{ else }}{{ printf "%s-private-rt-%d" $n $i }}{{ end }}
+  tags:
+    - key: Name
+      value: {{ printf "%s-private-%d" $n $i | quote }}
+    {{- if $.Values.tags }}{{- include "aws-vpc-stack.tags" $.Values.tags | nindent 4 }}{{- end }}
+    {{- if $.Values.private_subnet_tags }}{{- include "aws-vpc-stack.tags" $.Values.private_subnet_tags | nindent 4 }}{{- end }}
+{{- end }}
+{{- end }}

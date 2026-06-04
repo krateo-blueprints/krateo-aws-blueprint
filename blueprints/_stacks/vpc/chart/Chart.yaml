@@ -1,0 +1,33 @@
+apiVersion: v2
+# Krateo "complex" blueprint replicating the terraform-aws-modules/vpc/aws module as a
+# composition of native ACK ec2 resources (VPC + public/private Subnets + RouteTables + Routes
+# + InternetGateway + ElasticIPAddress + NATGateway), wired via ACK *Ref fields.
+#
+# The Composition spec uses the SAME input names as the Terraform module (cidr, azs,
+# public_subnets, private_subnets, enable_nat_gateway, single_nat_gateway, tags, ...) — a
+# curated subset of the module's inputs (the module has 200+; see values.schema.json).
+#
+# Composition Kind: AwsVpcStack (plural awsvpcstacks) in composition.krateo.io.
+name: aws-vpc-stack
+description: A Krateo composite blueprint that provisions an AWS VPC (subnets, route tables, internet gateway, NAT) via the ACK ec2 controller. Inputs mirror terraform-aws-modules/vpc/aws. Requires the ACK ec2 controller and AWS credentials (see repo docs).
+type: application
+
+# Drives the Composition CRD version (0.1.0 -> v0-1-0). Stamped by CI.
+version: CHART_VERSION
+# Terraform module version whose input interface this mirrors.
+appVersion: "tfmod-6.6.1"
+
+home: https://krateo.io
+icon: "https://github.com/krateoplatformops/krateo/blob/main/docs/media/logo.svg"
+keywords:
+  - aws
+  - vpc
+  - ec2
+  - ack
+  - network
+  - stack
+sources:
+  - https://github.com/braghettos/krateo-aws-blueprint
+  - https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws
+annotations:
+  krateoSupportedVersion: "2.7.0"
