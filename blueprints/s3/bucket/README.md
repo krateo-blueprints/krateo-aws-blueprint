@@ -10,6 +10,9 @@ resource; the ACK controller reconciles it into the real AWS resource and report
 Once the `CompositionDefinition` is applied, every `AwsS3Bucket` Composition you create
 becomes an AWS Bucket.
 
+> **Try it end-to-end on a local kind cluster:** follow [`quickstart.md`](quickstart.md) — it
+> provisions a real S3 bucket from scratch and verifies it in the AWS console.
+
 ## Prerequisites
 
 - **ACK s3 controller installed** — see
