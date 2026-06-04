@@ -2,9 +2,11 @@
 
 ### Why putting Krateo on top of AWS — with Kubernetes as the backbone — beats handing every team a Terraform module
 
+![Krateo ❤ AWS — VPC-as-a-Service on Kubernetes + ACK](article-hero.svg)
+
 Every platform team eventually hits the same wall. A product squad needs "a VPC with public and private subnets and a NAT gateway, in eu-central-1." Simple enough — except the squad doesn't know Terraform, the platform team owns the state file, and now there's a ticket, a review, a `terraform apply`, and a Slack thread that lives for three days.
 
-What if that squad could instead write twelve lines of YAML, `kubectl apply`, and get a correct, opinionated network a minute later — while the platform team keeps full control of *what* "correct" means?
+What if that squad could instead write a dozen lines of YAML, `kubectl apply`, and get a correct, opinionated network a minute later — while the platform team keeps full control of *what* "correct" means?
 
 That's what we built with `aws-vpc-stack`: a Krateo blueprint that turns one Composition into a complete AWS VPC, using **Kubernetes as the backbone** and **AWS Controllers for Kubernetes (ACK)** as the hands. Here's the design — and why this stack of choices is more than the sum of its parts.
 
@@ -30,9 +32,27 @@ spec:
 
 If those field names look familiar, that's deliberate: they're the **same inputs as the popular `terraform-aws-modules/vpc/aws` module**. We didn't invent a new vocabulary; we met people where they already are.
 
-Applying that one object produces ~10 real AWS resources, correctly wired: a VPC, public and private subnets across two AZs, an internet gateway, a NAT gateway with its Elastic IP, and route tables sending public traffic to the IGW and private traffic through the NAT. Delete the Composition and they're torn down in reverse. No state bucket, no `apply`, no ticket.
+Applying that one object produces ten real AWS resources, correctly wired: a VPC, public and private subnets across two AZs, an internet gateway, a NAT gateway with its Elastic IP, and route tables sending public traffic to the IGW and private traffic through the NAT:
 
-So how does twelve lines become a network? Three layers, each doing one job well.
+![The network produced by the Composition: a VPC with public and private subnets across two AZs, an Internet Gateway for public egress, and a single NAT gateway for private egress](topology.svg)
+
+Registering and using it is just `kubectl`. The platform team publishes the blueprint once; every team then applies a Composition:
+
+```sh
+# platform team — once: publish the AwsVpcStack type from the OCI chart
+kubectl apply -f compositiondefinition.yaml
+
+# any team — per network:
+kubectl apply -f my-vpc.yaml
+
+# watch it converge, then inspect the real resources:
+kubectl get awsvpcstacks -n aws-vpc-system
+kubectl get vpcs,subnets,natgateways,routetables.ec2.services.k8s.aws -n aws-vpc-system
+```
+
+Delete the Composition and everything is torn down in reverse. No state bucket, no `apply`, no ticket.
+
+So how does a dozen lines become a network? Three layers, each doing one job well.
 
 ## The backbone: Kubernetes as a control plane
 
@@ -54,6 +74,8 @@ Crucially, ACK resources can reference each other by name. A `Subnet` points at 
 That gives us a dependency state machine for free. Each resource moves through *New → Resolving refs → Creating → Synced*, and the references gate the order:
 
 > VPC → Internet Gateway → public route table → public subnets → NAT gateway (+ EIP) → private route table → private subnets
+
+![How the blueprint works: one Composition renders ~10 ACK resources; each reconciles through New → Resolving refs → Creating → Synced, and the *Ref graph gates the creation order](how-it-works.svg)
 
 We didn't write an orchestrator. We wrote a Helm chart that emits ten cross-referencing resources and let ACK's reconciliation figure out the order. (When we first tested it live, the logs literally showed each resource politely waiting — "the referenced resource is not synced yet" — until its turn.)
 
