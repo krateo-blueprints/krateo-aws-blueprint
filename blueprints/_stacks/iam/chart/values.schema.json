@@ -1,0 +1,81 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "title": "AWS IAM (terraform-aws-modules/iam/aws)",
+  "description": "Provision an IAM role with an optional inline policy and attached managed policies via ACK iam. Input names mirror the terraform-aws-modules/iam/aws module (iam-role / iam-assumable-role submodules, core subset of its inputs).",
+  "properties": {
+    "region": {
+      "type": "string",
+      "title": "AWS region",
+      "description": "AWS region for the IAM resources. Krateo/ACK wiring (not a Terraform module input). IAM is a global service; this only sets the services.k8s.aws/region annotation used by the ACK controller. Empty inherits the ACK controller default.",
+      "default": ""
+    },
+    "create": {
+      "type": "boolean",
+      "title": "create",
+      "description": "Controls if resources should be created (affects all resources).",
+      "default": true
+    },
+    "name": {
+      "type": "string",
+      "title": "name",
+      "description": "Name to use on IAM role created.",
+      "default": ""
+    },
+    "path": {
+      "type": "string",
+      "title": "path",
+      "description": "Path of IAM role.",
+      "default": "/"
+    },
+    "description": {
+      "type": "string",
+      "title": "description",
+      "description": "Description of the role."
+    },
+    "max_session_duration": {
+      "type": "integer",
+      "title": "max_session_duration",
+      "description": "Maximum session duration (in seconds) that you want to set for the specified role. If you do not specify a value for this setting, the default maximum of one hour is applied. This setting can have a value from 1 hour (3600) to 12 hours (43200)."
+    },
+    "permissions_boundary": {
+      "type": "string",
+      "title": "permissions_boundary",
+      "description": "ARN of the policy that is used to set the permissions boundary for the IAM role."
+    },
+    "assume_role_policy": {
+      "type": "string",
+      "title": "assume_role_policy",
+      "description": "The trust relationship policy document as a JSON-formatted string. Maps to the ACK Role.spec.assumeRolePolicyDocument. If empty, a trust policy is generated from trusted_role_services."
+    },
+    "trusted_role_services": {
+      "type": "array",
+      "title": "trusted_role_services",
+      "description": "AWS Services that can assume this role (e.g. ec2.amazonaws.com). Used to generate a sts:AssumeRole trust policy when assume_role_policy is not provided.",
+      "items": { "type": "string" }
+    },
+    "managed_policy_arns": {
+      "type": "array",
+      "title": "managed_policy_arns",
+      "description": "List of ARNs of IAM managed policies to attach to the role. These must reference EXISTING managed policies and are passed through to ACK Role.spec.policies.",
+      "items": { "type": "string" }
+    },
+    "create_inline_policy": {
+      "type": "boolean",
+      "title": "create_inline_policy",
+      "description": "Determines whether to create a customer-managed IAM policy from inline_policy and attach it to the role (rendered as a separate ACK Policy wired via policyRefs).",
+      "default": false
+    },
+    "inline_policy": {
+      "type": "string",
+      "title": "inline_policy",
+      "description": "The JSON-formatted permissions policy document for the customer-managed policy created when create_inline_policy is true. Maps to ACK Policy.spec.policyDocument."
+    },
+    "tags": {
+      "type": "object",
+      "title": "tags",
+      "description": "A map of tags to add to all resources.",
+      "additionalProperties": { "type": "string" }
+    }
+  }
+}

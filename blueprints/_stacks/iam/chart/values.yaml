@@ -1,0 +1,22 @@
+# Composition spec for aws-iam-stack — input names mirror terraform-aws-modules/iam/aws.
+#
+# core-provider builds the Composition CRD from values.schema.json ONLY; this file provides a
+# schema-valid example so `helm template`/`helm lint` render a complete IAM role + inline policy.
+
+# AWS region (Krateo/ACK wiring; not a Terraform input). Empty = controller default.
+region: ""
+
+create: true
+name: krateo-iam-role
+path: "/"
+description: "IAM role provisioned by the Krateo aws-iam-stack blueprint"
+max_session_duration: 3600
+trusted_role_services:
+  - ec2.amazonaws.com
+managed_policy_arns:
+  - "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess"
+create_inline_policy: true
+inline_policy: |
+  {"Version":"2012-10-17","Statement":[{"Effect":"Allow","Action":["s3:GetObject"],"Resource":"*"}]}
+tags:
+  managed-by: krateo

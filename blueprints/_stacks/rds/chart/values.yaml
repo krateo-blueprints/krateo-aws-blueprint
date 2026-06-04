@@ -1,0 +1,56 @@
+# Composition spec for aws-rds-stack — input names mirror terraform-aws-modules/rds/aws.
+#
+# core-provider builds the Composition CRD from values.schema.json ONLY; this file provides a
+# schema-valid example so `helm template`/`helm lint` render a complete RDS stack.
+
+# AWS region (Krateo/ACK wiring; not a Terraform input). Empty = controller default.
+region: ""
+
+identifier: krateo-rds
+engine: postgres
+engine_version: "16.4"
+instance_class: db.t3.micro
+allocated_storage: 20
+max_allocated_storage: 0
+storage_type: gp3
+storage_encrypted: true
+
+db_name: appdb
+username: krateoadmin
+# Let RDS manage the master password in Secrets Manager (no plaintext secret required).
+manage_master_user_password: true
+# When manage_master_user_password is false, reference a Kubernetes Secret instead:
+# master_user_password_secret:
+#   name: krateo-rds-master
+#   key: password
+
+port: "5432"
+multi_az: false
+publicly_accessible: false
+
+# Existing subnet / security-group IDs (this stack does not create the VPC).
+subnet_ids: []
+vpc_security_group_ids: []
+
+backup_retention_period: 7
+copy_tags_to_snapshot: true
+deletion_protection: false
+auto_minor_version_upgrade: true
+iam_database_authentication_enabled: false
+performance_insights_enabled: false
+monitoring_interval: 0
+
+# DB subnet group (created from subnet_ids when create_db_subnet_group is true).
+create_db_subnet_group: true
+db_subnet_group_description: "Subnet group for krateo-rds"
+
+# Optional DB parameter group.
+create_db_parameter_group: false
+family: postgres16
+parameter_group_description: "Parameter group for krateo-rds"
+parameters: {}
+
+tags: {}
+db_instance_tags: {}
+db_subnet_group_tags: {}
+db_parameter_group_tags: {}

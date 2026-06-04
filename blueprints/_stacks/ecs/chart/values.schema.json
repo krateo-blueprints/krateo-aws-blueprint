@@ -1,0 +1,184 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "title": "AWS ECS (terraform-aws-modules/ecs/aws)",
+  "description": "Provision an ECS cluster, task definition and service via ACK ecs. Input names mirror the terraform-aws-modules/ecs/aws module (a curated CORE subset of its inputs: cluster-level inputs plus the per-service inputs from the module's `services` map, flattened for a single service).",
+  "properties": {
+    "region": {
+      "type": "string",
+      "title": "AWS region",
+      "description": "AWS region for the ECS cluster, task definition and service. Krateo/ACK wiring (not a Terraform module input). Empty inherits the ACK controller default.",
+      "default": ""
+    },
+    "cluster_name": {
+      "type": "string",
+      "title": "cluster_name",
+      "description": "Name of the cluster (up to 255 letters, numbers, hyphens, and underscores).",
+      "default": ""
+    },
+    "cluster_setting": {
+      "type": "array",
+      "title": "cluster_setting",
+      "description": "List of configuration block(s) with cluster settings. For example, this can be used to enable CloudWatch Container Insights for a cluster.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "value": { "type": "string" }
+        }
+      }
+    },
+    "default_capacity_provider_strategy": {
+      "type": "object",
+      "title": "default_capacity_provider_strategy",
+      "description": "Map of default capacity provider strategy definitions to use for the cluster. Keyed by capacity provider name; each entry sets base/weight.",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "base": { "type": "integer" },
+          "weight": { "type": "integer" }
+        }
+      }
+    },
+    "cluster_capacity_providers": {
+      "type": "array",
+      "title": "cluster_capacity_providers",
+      "description": "List of short names of one or more capacity providers to associate with the cluster (e.g. FARGATE, FARGATE_SPOT).",
+      "items": { "type": "string" }
+    },
+    "family": {
+      "type": "string",
+      "title": "family",
+      "description": "A unique name for the task definition (the `services.<name>.family` input in the module).",
+      "default": ""
+    },
+    "container_name": {
+      "type": "string",
+      "title": "container_name",
+      "description": "Name of the container as it appears in the task definition (the `services.<name>.container_name` input).",
+      "default": ""
+    },
+    "image": {
+      "type": "string",
+      "title": "image",
+      "description": "The image used to start the container (the `services.<name>.container_definitions.*.image` input).",
+      "default": ""
+    },
+    "container_port": {
+      "type": "integer",
+      "title": "container_port",
+      "description": "Port on the container to associate with the service / port mapping (the `services.<name>.container_port` input)."
+    },
+    "cpu": {
+      "type": "string",
+      "title": "cpu",
+      "description": "Number of CPU units used by the task, expressed as a string (the `services.<name>.cpu` input). e.g. \"256\".",
+      "default": "256"
+    },
+    "memory": {
+      "type": "string",
+      "title": "memory",
+      "description": "Amount (in MiB) of memory used by the task, expressed as a string (the `services.<name>.memory` input). e.g. \"512\".",
+      "default": "512"
+    },
+    "network_mode": {
+      "type": "string",
+      "title": "network_mode",
+      "description": "Docker networking mode to use for the containers in the task (the `services.<name>.network_mode` input).",
+      "enum": ["awsvpc", "bridge", "host", "none"],
+      "default": "awsvpc"
+    },
+    "requires_compatibilities": {
+      "type": "array",
+      "title": "requires_compatibilities",
+      "description": "Set of launch types required by the task (the `services.<name>.requires_compatibilities` input). e.g. [\"FARGATE\"].",
+      "items": { "type": "string" }
+    },
+    "task_exec_iam_role_arn": {
+      "type": "string",
+      "title": "task_exec_iam_role_arn",
+      "description": "Existing IAM role ARN for the task execution role (the `services.<name>.task_exec_iam_role_arn` input). Passed through to the ACK TaskDefinition `executionRoleARN`; this stack does NOT create IAM roles.",
+      "default": ""
+    },
+    "tasks_iam_role_arn": {
+      "type": "string",
+      "title": "tasks_iam_role_arn",
+      "description": "Existing IAM role ARN for the task role (the `services.<name>.tasks_iam_role_arn` input). Passed through to the ACK TaskDefinition `taskRoleARN`; this stack does NOT create IAM roles.",
+      "default": ""
+    },
+    "desired_count": {
+      "type": "integer",
+      "title": "desired_count",
+      "description": "Number of instances of the task definition to place and keep running (the `services.<name>.desired_count` input).",
+      "default": 1
+    },
+    "launch_type": {
+      "type": "string",
+      "title": "launch_type",
+      "description": "Launch type on which to run the service (the `services.<name>.launch_type` input).",
+      "enum": ["FARGATE", "EC2", "EXTERNAL"],
+      "default": "FARGATE"
+    },
+    "platform_version": {
+      "type": "string",
+      "title": "platform_version",
+      "description": "Platform version on which to run the service, for the FARGATE launch type (the `services.<name>.platform_version` input).",
+      "default": ""
+    },
+    "scheduling_strategy": {
+      "type": "string",
+      "title": "scheduling_strategy",
+      "description": "Scheduling strategy to use for the service (the `services.<name>.scheduling_strategy` input).",
+      "enum": ["REPLICA", "DAEMON"],
+      "default": "REPLICA"
+    },
+    "assign_public_ip": {
+      "type": "boolean",
+      "title": "assign_public_ip",
+      "description": "Assign a public IP address to the ENI of the service tasks (the `services.<name>.assign_public_ip` input). Only used with `awsvpc` network mode.",
+      "default": false
+    },
+    "subnet_ids": {
+      "type": "array",
+      "title": "subnet_ids",
+      "description": "List of EXISTING subnet IDs associated with the service task ENIs (the `services.<name>.subnet_ids` input). Passed through to the ACK Service `networkConfiguration.awsVPCConfiguration.subnets`; this stack does NOT create subnets.",
+      "items": { "type": "string" }
+    },
+    "security_group_ids": {
+      "type": "array",
+      "title": "security_group_ids",
+      "description": "List of EXISTING security group IDs associated with the service task ENIs (the `services.<name>.security_group_ids` input). Passed through to the ACK Service `networkConfiguration.awsVPCConfiguration.securityGroups`; this stack does NOT create security groups.",
+      "items": { "type": "string" }
+    },
+    "enable_execute_command": {
+      "type": "boolean",
+      "title": "enable_execute_command",
+      "description": "Whether the execute command functionality is turned on for the service (the `services.<name>.enable_execute_command` input).",
+      "default": false
+    },
+    "enable_ecs_managed_tags": {
+      "type": "boolean",
+      "title": "enable_ecs_managed_tags",
+      "description": "Whether to turn on Amazon ECS managed tags for the tasks within the service (the `services.<name>.enable_ecs_managed_tags` input).",
+      "default": false
+    },
+    "tags": {
+      "type": "object",
+      "title": "tags",
+      "description": "A map of tags to add to all resources.",
+      "additionalProperties": { "type": "string" }
+    },
+    "cluster_tags": {
+      "type": "object",
+      "title": "cluster_tags",
+      "description": "A map of additional tags to add to the cluster.",
+      "additionalProperties": { "type": "string" }
+    },
+    "service_tags": {
+      "type": "object",
+      "title": "service_tags",
+      "description": "A map of additional tags to add to the service (the `services.<name>.service_tags` input).",
+      "additionalProperties": { "type": "string" }
+    }
+  }
+}

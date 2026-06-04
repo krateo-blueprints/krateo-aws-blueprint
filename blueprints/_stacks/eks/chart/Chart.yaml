@@ -1,0 +1,36 @@
+apiVersion: v2
+# Krateo "complex" blueprint replicating the terraform-aws-modules/eks/aws module as a
+# composition of native ACK eks resources (Cluster + one managed Nodegroup), wired via
+# ACK *Ref fields.
+#
+# The Composition spec uses the SAME input names as the Terraform module (name,
+# kubernetes_version, subnet_ids, control_plane_subnet_ids, endpoint_public_access,
+# authentication_mode, tags, ...) — a curated CORE subset of the module's inputs (the module
+# has 100+; see values.schema.json).
+#
+# IAM roles + OIDC provider are heavy in the TF module; this stack accepts the cluster and node
+# IAM role ARNs as inputs (cluster_iam_role_arn / node_iam_role_arn) rather than creating them.
+#
+# Composition Kind: AwsEksStack (plural awseksstacks) in composition.krateo.io.
+name: aws-eks-stack
+description: A Krateo composite blueprint that provisions an AWS EKS cluster and one managed node group via the ACK eks controller. Inputs mirror terraform-aws-modules/eks/aws. Requires the ACK eks controller, pre-existing VPC subnets and IAM role ARNs, and AWS credentials (see repo docs).
+type: application
+
+# Drives the Composition CRD version (0.3.0 -> v0-3-0). Stamped by CI.
+version: CHART_VERSION
+# Terraform module version whose input interface this mirrors.
+appVersion: "tfmod-21.23.0"
+
+home: https://krateo.io
+icon: "https://github.com/krateoplatformops/krateo/blob/main/docs/media/logo.svg"
+keywords:
+  - aws
+  - eks
+  - kubernetes
+  - ack
+  - stack
+sources:
+  - https://github.com/braghettos/krateo-aws-blueprint
+  - https://registry.terraform.io/modules/terraform-aws-modules/eks/aws
+annotations:
+  krateoSupportedVersion: "2.7.0"

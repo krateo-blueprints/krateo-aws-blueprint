@@ -1,12 +1,12 @@
 apiVersion: core.krateo.io/v1alpha1
 kind: CompositionDefinition
 metadata:
-  name: aws-vpc-stack
-  namespace: aws-vpc-system
+  name: aws-alb-stack
+  namespace: aws-alb-system
 spec:
   chart:
     # OCI artifact published by .github/workflows/release-tag.yaml.
-    url: oci://ghcr.io/braghettos/charts/aws-vpc-stack
+    url: oci://ghcr.io/braghettos/charts/aws-alb-stack
     version: "0.3.0"
     # If the GHCR package is private, provide pull credentials:
     # credentials:
@@ -14,4 +14,4 @@ spec:
     #   passwordRef:
     #     key: token
     #     name: ghcr-credentials
-    #     namespace: aws-vpc-system
+    #     namespace: aws-alb-system

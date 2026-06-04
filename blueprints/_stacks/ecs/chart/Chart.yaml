@@ -1,0 +1,37 @@
+apiVersion: v2
+# Krateo "complex" blueprint replicating the terraform-aws-modules/ecs/aws module as a
+# composition of native ACK ecs resources (Cluster + TaskDefinition + Service), wired via
+# ACK *Ref fields.
+#
+# The Composition spec uses the SAME input names as the Terraform module (cluster_name,
+# cluster_setting, default_capacity_provider_strategy, tags, ...) plus the per-service inputs
+# from the module's `services` map (family, container_name, image, container_port, cpu, memory,
+# desired_count, launch_type, network_mode, requires_compatibilities, subnet_ids,
+# security_group_ids, assign_public_ip, ...) flattened for a single service — a curated CORE
+# subset of the module's inputs (the module has 60 top-level inputs and a deeply-nested
+# `services` map; see values.schema.json).
+#
+# Composition Kind: AwsEcsStack (plural awsecsstacks) in composition.krateo.io.
+name: aws-ecs-stack
+description: A Krateo composite blueprint that provisions an AWS ECS cluster, task definition and service via the ACK ecs controller. Inputs mirror terraform-aws-modules/ecs/aws. Requires the ACK ecs controller and AWS credentials (see repo docs).
+type: application
+
+# Drives the Composition CRD version (0.3.0 -> v0-3-0). Stamped by CI.
+version: CHART_VERSION
+# Terraform module version whose input interface this mirrors.
+appVersion: "tfmod-7.5.0"
+
+home: https://krateo.io
+icon: "https://github.com/krateoplatformops/krateo/blob/main/docs/media/logo.svg"
+keywords:
+  - aws
+  - ecs
+  - ack
+  - container
+  - fargate
+  - stack
+sources:
+  - https://github.com/braghettos/krateo-aws-blueprint
+  - https://registry.terraform.io/modules/terraform-aws-modules/ecs/aws
+annotations:
+  krateoSupportedVersion: "2.7.0"

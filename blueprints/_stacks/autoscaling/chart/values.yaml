@@ -1,0 +1,31 @@
+# Composition spec for aws-autoscaling-stack — input names mirror terraform-aws-modules/autoscaling/aws.
+#
+# core-provider builds the Composition CRD from values.schema.json ONLY; this file provides a
+# schema-valid example so `helm template`/`helm lint` render a complete launch template + ASG.
+
+# AWS region (Krateo/ACK wiring; not a Terraform input). Empty = controller default.
+region: ""
+
+name: krateo-asg
+min_size: 1
+max_size: 3
+desired_capacity: 2
+image_id: "ami-0123456789abcdef0"
+instance_type: "t3.micro"
+vpc_zone_identifier:
+  - "subnet-0123456789abcdef0"
+  - "subnet-0fedcba9876543210"
+health_check_type: "EC2"
+health_check_grace_period: 300
+default_cooldown: 300
+capacity_rebalance: false
+ebs_optimized: false
+key_name: ""
+user_data: ""
+security_groups: []
+target_group_arns: []
+iam_instance_profile_arn: ""
+launch_template_name: ""
+launch_template_description: ""
+launch_template_version: "$Latest"
+tags: {}

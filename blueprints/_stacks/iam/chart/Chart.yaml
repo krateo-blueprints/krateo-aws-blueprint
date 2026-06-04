@@ -1,0 +1,34 @@
+apiVersion: v2
+# Krateo "complex" blueprint replicating the terraform-aws-modules/iam/aws module (the
+# iam-role / iam-assumable-role submodules) as a composition of native ACK iam resources
+# (an iam Role + an optional inline iam Policy), wired via ACK *Ref fields.
+#
+# The Composition spec uses the SAME input names as the Terraform module (name, path,
+# description, assume_role_policy, trusted_role_services, managed_policy_arns,
+# create_inline_policy, inline_policy, max_session_duration, permissions_boundary, tags, ...)
+# — a curated CORE subset of the module's inputs (see values.schema.json).
+#
+# Composition Kind: AwsIamStack (plural awsiamstacks) in composition.krateo.io.
+name: aws-iam-stack
+description: A Krateo composite blueprint that provisions an AWS IAM role (with an optional inline policy and attached managed policies) via the ACK iam controller. Inputs mirror terraform-aws-modules/iam/aws. Requires the ACK iam controller and AWS credentials (see repo docs).
+type: application
+
+# Drives the Composition CRD version (0.3.0 -> v0-3-0). Stamped by CI.
+version: CHART_VERSION
+# Terraform module version whose input interface this mirrors.
+appVersion: "tfmod-6.6.1"
+
+home: https://krateo.io
+icon: "https://github.com/krateoplatformops/krateo/blob/main/docs/media/logo.svg"
+keywords:
+  - aws
+  - iam
+  - role
+  - policy
+  - ack
+  - stack
+sources:
+  - https://github.com/braghettos/krateo-aws-blueprint
+  - https://registry.terraform.io/modules/terraform-aws-modules/iam/aws
+annotations:
+  krateoSupportedVersion: "2.7.0"

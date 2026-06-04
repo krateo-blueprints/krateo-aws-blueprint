@@ -1,0 +1,159 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "title": "AWS Security Group (terraform-aws-modules/security-group/aws)",
+  "description": "Provision an EC2 Security Group with ingress/egress rules via ACK ec2. Input names mirror the terraform-aws-modules/security-group/aws module (core subset of its inputs).",
+  "required": ["name"],
+  "properties": {
+    "region": {
+      "type": "string",
+      "title": "AWS region",
+      "description": "AWS region for the security group. Krateo/ACK wiring (not a Terraform module input). Empty inherits the ACK controller default.",
+      "default": ""
+    },
+    "name": {
+      "type": "string",
+      "title": "name",
+      "description": "Name of security group.",
+      "default": ""
+    },
+    "description": {
+      "type": "string",
+      "title": "description",
+      "description": "Description of security group.",
+      "default": "Security group managed by Krateo"
+    },
+    "vpc_id": {
+      "type": "string",
+      "title": "vpc_id",
+      "description": "ID of the VPC where the security group is created. Reference to an existing VPC; this stack does not create the VPC.",
+      "default": ""
+    },
+    "tags": {
+      "type": "object",
+      "title": "tags",
+      "description": "A map of tags to add to all resources.",
+      "additionalProperties": { "type": "string" }
+    },
+    "ingress_cidr_blocks": {
+      "type": "array",
+      "title": "ingress_cidr_blocks",
+      "description": "List of IPv4 CIDR ranges to use on all ingress rules.",
+      "items": { "type": "string" }
+    },
+    "egress_cidr_blocks": {
+      "type": "array",
+      "title": "egress_cidr_blocks",
+      "description": "List of IPv4 CIDR ranges to use on all egress rules.",
+      "items": { "type": "string" }
+    },
+    "ingress_rules": {
+      "type": "array",
+      "title": "ingress_rules",
+      "description": "Map of ingress rules to add to the security group (modeled here as a list of rule objects). Each rule mirrors the module's rule object fields.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string",
+            "title": "description",
+            "description": "Description of the rule."
+          },
+          "from_port": {
+            "type": "integer",
+            "title": "from_port",
+            "description": "Start port (or ICMP type number). Use -1 for all ports with ip_protocol \"-1\"."
+          },
+          "to_port": {
+            "type": "integer",
+            "title": "to_port",
+            "description": "End port (or ICMP code). Use -1 for all ports with ip_protocol \"-1\"."
+          },
+          "ip_protocol": {
+            "type": "string",
+            "title": "ip_protocol",
+            "description": "IP protocol name (tcp, udp, icmp, icmpv6) or number; \"-1\" for all protocols.",
+            "default": "tcp"
+          },
+          "cidr_ipv4": {
+            "type": "string",
+            "title": "cidr_ipv4",
+            "description": "IPv4 CIDR range for the rule."
+          },
+          "cidr_ipv6": {
+            "type": "string",
+            "title": "cidr_ipv6",
+            "description": "IPv6 CIDR range for the rule."
+          },
+          "prefix_list_id": {
+            "type": "string",
+            "title": "prefix_list_id",
+            "description": "ID of a managed prefix list for the rule."
+          },
+          "referenced_security_group_id": {
+            "type": "string",
+            "title": "referenced_security_group_id",
+            "description": "ID of a security group referenced as the source for the rule."
+          }
+        }
+      }
+    },
+    "egress_rules": {
+      "type": "array",
+      "title": "egress_rules",
+      "description": "Map of egress rules to add to the security group (modeled here as a list of rule objects). Each rule mirrors the module's rule object fields.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string",
+            "title": "description",
+            "description": "Description of the rule."
+          },
+          "from_port": {
+            "type": "integer",
+            "title": "from_port",
+            "description": "Start port (or ICMP type number). Use -1 for all ports with ip_protocol \"-1\"."
+          },
+          "to_port": {
+            "type": "integer",
+            "title": "to_port",
+            "description": "End port (or ICMP code). Use -1 for all ports with ip_protocol \"-1\"."
+          },
+          "ip_protocol": {
+            "type": "string",
+            "title": "ip_protocol",
+            "description": "IP protocol name (tcp, udp, icmp, icmpv6) or number; \"-1\" for all protocols.",
+            "default": "tcp"
+          },
+          "cidr_ipv4": {
+            "type": "string",
+            "title": "cidr_ipv4",
+            "description": "IPv4 CIDR range for the rule."
+          },
+          "cidr_ipv6": {
+            "type": "string",
+            "title": "cidr_ipv6",
+            "description": "IPv6 CIDR range for the rule."
+          },
+          "prefix_list_id": {
+            "type": "string",
+            "title": "prefix_list_id",
+            "description": "ID of a managed prefix list for the rule."
+          },
+          "referenced_security_group_id": {
+            "type": "string",
+            "title": "referenced_security_group_id",
+            "description": "ID of a security group referenced as the destination for the rule."
+          }
+        }
+      }
+    },
+    "revoke_rules_on_delete": {
+      "type": "boolean",
+      "title": "revoke_rules_on_delete",
+      "description": "Instruct Terraform to revoke all of the Security Groups attached ingress and egress rules before deleting the rule itself. Informational only in this stack; ACK handles rule teardown on delete.",
+      "default": false
+    }
+  }
+}

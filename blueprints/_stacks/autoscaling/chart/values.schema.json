@@ -1,0 +1,141 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "title": "AWS Auto Scaling group (terraform-aws-modules/autoscaling/aws)",
+  "description": "Provision an EC2 Auto Scaling group with its launch template via ACK ec2 (LaunchTemplate) and autoscaling (AutoScalingGroup). Input names mirror the terraform-aws-modules/autoscaling/aws module (core subset of its inputs).",
+  "properties": {
+    "region": {
+      "type": "string",
+      "title": "AWS region",
+      "description": "AWS region for the Auto Scaling group and launch template. Krateo/ACK wiring (not a Terraform module input). Empty inherits the ACK controller default.",
+      "default": ""
+    },
+    "name": {
+      "type": "string",
+      "title": "name",
+      "description": "Name used across the resources created.",
+      "default": ""
+    },
+    "min_size": {
+      "type": "integer",
+      "title": "min_size",
+      "description": "The minimum size of the autoscaling group.",
+      "default": 0
+    },
+    "max_size": {
+      "type": "integer",
+      "title": "max_size",
+      "description": "The maximum size of the autoscaling group.",
+      "default": 0
+    },
+    "desired_capacity": {
+      "type": "integer",
+      "title": "desired_capacity",
+      "description": "The number of Amazon EC2 instances that should be running in the autoscaling group."
+    },
+    "image_id": {
+      "type": "string",
+      "title": "image_id",
+      "description": "The AMI from which to launch the instance.",
+      "default": ""
+    },
+    "instance_type": {
+      "type": "string",
+      "title": "instance_type",
+      "description": "The type of the instance. If present then `instance_requirements` cannot be present.",
+      "default": ""
+    },
+    "vpc_zone_identifier": {
+      "type": "array",
+      "title": "vpc_zone_identifier",
+      "description": "A list of subnet IDs to launch resources in. Subnets automatically determine which availability zones the group will reside. Conflicts with `availability_zones`. These reference EXISTING subnets (passed through as IDs); this stack does not create them.",
+      "items": { "type": "string" }
+    },
+    "availability_zones": {
+      "type": "array",
+      "title": "availability_zones",
+      "description": "A list of one or more availability zones for the group. Used for EC2-Classic and default subnets when not specifying `vpc_zone_identifier`. Conflicts with `vpc_zone_identifier`.",
+      "items": { "type": "string" }
+    },
+    "health_check_type": {
+      "type": "string",
+      "title": "health_check_type",
+      "description": "`EC2` or `ELB`. Controls how health checking is done.",
+      "enum": ["EC2", "ELB"]
+    },
+    "health_check_grace_period": {
+      "type": "integer",
+      "title": "health_check_grace_period",
+      "description": "Time (in seconds) after instance comes into service before checking health."
+    },
+    "default_cooldown": {
+      "type": "integer",
+      "title": "default_cooldown",
+      "description": "The amount of time, in seconds, after a scaling activity completes before another scaling activity can start."
+    },
+    "capacity_rebalance": {
+      "type": "boolean",
+      "title": "capacity_rebalance",
+      "description": "Indicates whether capacity rebalance is enabled."
+    },
+    "key_name": {
+      "type": "string",
+      "title": "key_name",
+      "description": "The key name that should be used for the instance. References an EXISTING EC2 key pair (passed through by name); this stack does not create it.",
+      "default": ""
+    },
+    "ebs_optimized": {
+      "type": "boolean",
+      "title": "ebs_optimized",
+      "description": "If true, the launched EC2 instance will be EBS-optimized."
+    },
+    "user_data": {
+      "type": "string",
+      "title": "user_data",
+      "description": "The Base64-encoded user data to provide when launching the instance.",
+      "default": ""
+    },
+    "security_groups": {
+      "type": "array",
+      "title": "security_groups",
+      "description": "A list of security group IDs to associate with the launch template. These reference EXISTING security groups (passed through as IDs); this stack does not create them.",
+      "items": { "type": "string" }
+    },
+    "target_group_arns": {
+      "type": "array",
+      "title": "target_group_arns",
+      "description": "A set of `aws_alb_target_group` ARNs, for use with Application or Network Load Balancing. These reference EXISTING target groups (passed through as ARNs); this stack does not create them.",
+      "items": { "type": "string" }
+    },
+    "iam_instance_profile_arn": {
+      "type": "string",
+      "title": "iam_instance_profile_arn",
+      "description": "Amazon Resource Name (ARN) of an existing IAM instance profile. Used when `create_iam_instance_profile` = `false`. References an EXISTING instance profile (passed through as ARN); this stack does not create it.",
+      "default": ""
+    },
+    "launch_template_name": {
+      "type": "string",
+      "title": "launch_template_name",
+      "description": "Name of launch template to be created. Empty defaults to `<name>`.",
+      "default": ""
+    },
+    "launch_template_description": {
+      "type": "string",
+      "title": "launch_template_description",
+      "description": "Description of the launch template.",
+      "default": ""
+    },
+    "launch_template_version": {
+      "type": "string",
+      "title": "launch_template_version",
+      "description": "Launch template version. Can be version number, `$Latest`, or `$Default`.",
+      "default": "$Latest"
+    },
+    "tags": {
+      "type": "object",
+      "title": "tags",
+      "description": "A map of tags to assign to resources.",
+      "additionalProperties": { "type": "string" }
+    }
+  }
+}

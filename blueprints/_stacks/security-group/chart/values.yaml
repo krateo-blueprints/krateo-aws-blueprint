@@ -1,0 +1,41 @@
+# Composition spec for aws-security-group-stack — input names mirror
+# terraform-aws-modules/security-group/aws.
+#
+# core-provider builds the Composition CRD from values.schema.json ONLY; this file provides a
+# schema-valid example so `helm template`/`helm lint` render a complete Security Group.
+
+# AWS region (Krateo/ACK wiring; not a Terraform input). Empty = controller default.
+region: ""
+
+name: krateo-sg
+description: "Example web security group managed by Krateo"
+
+# ID of an EXISTING VPC. Empty places the SG in the region's default VPC.
+vpc_id: ""
+
+ingress_rules:
+  - description: "HTTP from anywhere"
+    from_port: 80
+    to_port: 80
+    ip_protocol: tcp
+    cidr_ipv4: "0.0.0.0/0"
+  - description: "HTTPS from anywhere"
+    from_port: 443
+    to_port: 443
+    ip_protocol: tcp
+    cidr_ipv4: "0.0.0.0/0"
+
+egress_rules:
+  - description: "All outbound traffic"
+    from_port: -1
+    to_port: -1
+    ip_protocol: "-1"
+    cidr_ipv4: "0.0.0.0/0"
+
+ingress_cidr_blocks: []
+egress_cidr_blocks: []
+
+revoke_rules_on_delete: false
+
+tags:
+  managed-by: krateo

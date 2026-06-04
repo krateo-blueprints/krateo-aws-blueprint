@@ -1,0 +1,127 @@
+{{- /*
+Composes an EC2 Security Group from a native ACK ec2 SecurityGroup, mirroring
+terraform-aws-modules/security-group/aws. Ingress/egress rules are inlined into the
+SecurityGroup spec (ingressRules/egressRules). The SG is attached to an existing VPC by ID
+(vpc_id -> spec.vpcID); this stack does not create the VPC.
+
+Each Terraform-style rule object (cidr_ipv4 / cidr_ipv6 / prefix_list_id /
+referenced_security_group_id / ip_protocol / from_port / to_port / description) is mapped to an
+ACK IpPermission: { ipProtocol, fromPort, toPort, ipRanges:[{cidrIP,description}],
+ipv6Ranges:[{cidrIPv6,description}], prefixListIDs:[{prefixListID}],
+userIDGroupPairs:[{groupID,description}] }.
+
+The module convenience inputs ingress_cidr_blocks / egress_cidr_blocks add one IPv4 range per
+listed CIDR to every rule that does not already set cidr_ipv4.
+*/ -}}
+{{- $r := .Values.region -}}
+{{- $n := .Values.name | default .Release.Name -}}
+{{- $ns := .Release.Namespace -}}
+apiVersion: ec2.services.k8s.aws/v1alpha1
+kind: SecurityGroup
+metadata:
+  name: {{ $n }}
+  namespace: {{ $ns }}
+  {{- with $r }}
+  annotations:
+    services.k8s.aws/region: {{ . | quote }}
+  {{- end }}
+  labels:
+    {{- include "aws-security-group-stack.labels" . | nindent 4 }}
+spec:
+  name: {{ $n | quote }}
+  description: {{ .Values.description | default (printf "Security group %s managed by Krateo" $n) | quote }}
+  {{- with .Values.vpc_id }}
+  vpcID: {{ . | quote }}
+  {{- end }}
+  {{- $ingress := .Values.ingress_rules | default (list) -}}
+  {{- $ingressCidrs := .Values.ingress_cidr_blocks | default (list) -}}
+  {{- if $ingress }}
+  ingressRules:
+    {{- range $rule := $ingress }}
+    - ipProtocol: {{ $rule.ip_protocol | default "tcp" | quote }}
+      {{- if not (kindIs "invalid" $rule.from_port) }}
+      fromPort: {{ int $rule.from_port }}
+      {{- end }}
+      {{- if not (kindIs "invalid" $rule.to_port) }}
+      toPort: {{ int $rule.to_port }}
+      {{- end }}
+      {{- $ipv4 := list -}}
+      {{- with $rule.cidr_ipv4 }}{{ $ipv4 = append $ipv4 . }}{{ end -}}
+      {{- if and (not $rule.cidr_ipv4) $ingressCidrs }}{{ $ipv4 = $ingressCidrs }}{{ end -}}
+      {{- if $ipv4 }}
+      ipRanges:
+        {{- range $cidr := $ipv4 }}
+        - cidrIP: {{ $cidr | quote }}
+          {{- with $rule.description }}
+          description: {{ . | quote }}
+          {{- end }}
+        {{- end }}
+      {{- end }}
+      {{- with $rule.cidr_ipv6 }}
+      ipv6Ranges:
+        - cidrIPv6: {{ . | quote }}
+          {{- with $rule.description }}
+          description: {{ . | quote }}
+          {{- end }}
+      {{- end }}
+      {{- with $rule.prefix_list_id }}
+      prefixListIDs:
+        - prefixListID: {{ . | quote }}
+      {{- end }}
+      {{- with $rule.referenced_security_group_id }}
+      userIDGroupPairs:
+        - groupID: {{ . | quote }}
+          {{- with $rule.description }}
+          description: {{ . | quote }}
+          {{- end }}
+      {{- end }}
+    {{- end }}
+  {{- end }}
+  {{- $egress := .Values.egress_rules | default (list) -}}
+  {{- $egressCidrs := .Values.egress_cidr_blocks | default (list) -}}
+  {{- if $egress }}
+  egressRules:
+    {{- range $rule := $egress }}
+    - ipProtocol: {{ $rule.ip_protocol | default "tcp" | quote }}
+      {{- if not (kindIs "invalid" $rule.from_port) }}
+      fromPort: {{ int $rule.from_port }}
+      {{- end }}
+      {{- if not (kindIs "invalid" $rule.to_port) }}
+      toPort: {{ int $rule.to_port }}
+      {{- end }}
+      {{- $ipv4 := list -}}
+      {{- with $rule.cidr_ipv4 }}{{ $ipv4 = append $ipv4 . }}{{ end -}}
+      {{- if and (not $rule.cidr_ipv4) $egressCidrs }}{{ $ipv4 = $egressCidrs }}{{ end -}}
+      {{- if $ipv4 }}
+      ipRanges:
+        {{- range $cidr := $ipv4 }}
+        - cidrIP: {{ $cidr | quote }}
+          {{- with $rule.description }}
+          description: {{ . | quote }}
+          {{- end }}
+        {{- end }}
+      {{- end }}
+      {{- with $rule.cidr_ipv6 }}
+      ipv6Ranges:
+        - cidrIPv6: {{ . | quote }}
+          {{- with $rule.description }}
+          description: {{ . | quote }}
+          {{- end }}
+      {{- end }}
+      {{- with $rule.prefix_list_id }}
+      prefixListIDs:
+        - prefixListID: {{ . | quote }}
+      {{- end }}
+      {{- with $rule.referenced_security_group_id }}
+      userIDGroupPairs:
+        - groupID: {{ . | quote }}
+          {{- with $rule.description }}
+          description: {{ . | quote }}
+          {{- end }}
+      {{- end }}
+    {{- end }}
+  {{- end }}
+  tags:
+    - key: Name
+      value: {{ $n | quote }}
+    {{- if .Values.tags }}{{- include "aws-security-group-stack.tags" .Values.tags | nindent 4 }}{{- end }}

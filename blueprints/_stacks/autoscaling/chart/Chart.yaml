@@ -1,0 +1,34 @@
+apiVersion: v2
+# Krateo "complex" blueprint replicating the terraform-aws-modules/autoscaling/aws module as a
+# composition of native ACK resources (ec2 LaunchTemplate + autoscaling AutoScalingGroup), wired
+# so the AutoScalingGroup launches instances from the LaunchTemplate created by the same stack.
+#
+# The Composition spec uses the SAME input names as the Terraform module (name, min_size,
+# max_size, desired_capacity, image_id, instance_type, vpc_zone_identifier, ...) — a curated
+# subset of the module's inputs (the module has 100+; see values.schema.json).
+#
+# Composition Kind: AwsAutoscalingStack (plural awsautoscalingstacks) in composition.krateo.io.
+name: aws-autoscaling-stack
+description: A Krateo composite blueprint that provisions an AWS EC2 Auto Scaling group (launch template + auto scaling group) via the ACK ec2 and autoscaling controllers. Inputs mirror terraform-aws-modules/autoscaling/aws. Requires the ACK ec2 and autoscaling controllers and AWS credentials (see repo docs).
+type: application
+
+# Drives the Composition CRD version (0.3.0 -> v0-3-0). Stamped by CI.
+version: CHART_VERSION
+# Terraform module version whose input interface this mirrors.
+appVersion: "tfmod-9.2.1"
+
+home: https://krateo.io
+icon: "https://github.com/krateoplatformops/krateo/blob/main/docs/media/logo.svg"
+keywords:
+  - aws
+  - autoscaling
+  - asg
+  - ec2
+  - launchtemplate
+  - ack
+  - stack
+sources:
+  - https://github.com/braghettos/krateo-aws-blueprint
+  - https://registry.terraform.io/modules/terraform-aws-modules/autoscaling/aws
+annotations:
+  krateoSupportedVersion: "2.7.0"

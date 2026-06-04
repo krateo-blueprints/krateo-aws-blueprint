@@ -1,0 +1,166 @@
+{{- /*
+Composes an Application/Network Load Balancer from native ACK elbv2 resources, mirroring
+terraform-aws-modules/alb/aws. Resources are wired together with ACK *Ref fields
+({ from: { name: <k8s-name> } }):
+  LoadBalancer  <- subnets / securityGroups (existing external IDs, passed through)
+  TargetGroup   -> VPC via vpcID (existing external VPC ID)
+  Listener      -> LoadBalancer via loadBalancerRef ; forward action -> TargetGroup via
+                   forwardConfig.targetGroups[].targetGroupRef
+*/ -}}
+{{- $r := .Values.region -}}
+{{- $n := .Values.name | default .Release.Name -}}
+{{- $ns := .Release.Namespace -}}
+{{- $defPort := .Values.default_port | default 80 -}}
+{{- $defProto := .Values.default_protocol | default "HTTP" -}}
+{{- $tgs := .Values.target_groups | default dict -}}
+{{- $lsns := .Values.listeners | default dict -}}
+apiVersion: elbv2.services.k8s.aws/v1alpha1
+kind: LoadBalancer
+metadata:
+  name: {{ $n }}-lb
+  namespace: {{ $ns }}
+  {{- with $r }}
+  annotations:
+    services.k8s.aws/region: {{ . | quote }}
+  {{- end }}
+  labels:
+    {{- include "aws-alb-stack.labels" . | nindent 4 }}
+spec:
+  name: {{ $n | quote }}
+  type: {{ .Values.load_balancer_type | default "application" | quote }}
+  scheme: {{ if .Values.internal }}internal{{ else }}internet-facing{{ end }}
+  {{- with .Values.ip_address_type }}
+  ipAddressType: {{ . | quote }}
+  {{- end }}
+  {{- with .Values.subnets }}
+  subnets:
+    {{- range . }}
+    - {{ . | quote }}
+    {{- end }}
+  {{- end }}
+  {{- with .Values.security_groups }}
+  securityGroups:
+    {{- range . }}
+    - {{ . | quote }}
+    {{- end }}
+  {{- end }}
+  attributes:
+    {{- if eq (.Values.load_balancer_type | default "application") "application" }}
+    - key: idle_timeout.timeout_seconds
+      value: {{ .Values.idle_timeout | default 60 | quote }}
+    - key: routing.http2.enabled
+      value: {{ .Values.enable_http2 | default true | quote }}
+    {{- end }}
+    - key: deletion_protection.enabled
+      value: {{ .Values.enable_deletion_protection | default false | quote }}
+    {{- if ne (.Values.load_balancer_type | default "application") "application" }}
+    - key: load_balancing.cross_zone.enabled
+      value: {{ .Values.enable_cross_zone_load_balancing | default true | quote }}
+    {{- end }}
+  tags:
+    - key: Name
+      value: {{ $n | quote }}
+    {{- if .Values.tags }}{{- include "aws-alb-stack.tags" .Values.tags | nindent 4 }}{{- end }}
+{{- range $key, $tg := $tgs }}
+---
+apiVersion: elbv2.services.k8s.aws/v1alpha1
+kind: TargetGroup
+metadata:
+  name: {{ $n }}-tg-{{ $key }}
+  namespace: {{ $ns }}
+  {{- with $r }}
+  annotations:
+    services.k8s.aws/region: {{ . | quote }}
+  {{- end }}
+  labels:
+    {{- include "aws-alb-stack.labels" $ | nindent 4 }}
+spec:
+  name: {{ $tg.name | default (printf "%s-%s" $n $key) | quote }}
+  port: {{ $tg.port | default $defPort }}
+  protocol: {{ $tg.protocol | default $defProto | quote }}
+  targetType: {{ $tg.target_type | default "instance" | quote }}
+  {{- with $tg.protocol_version }}
+  protocolVersion: {{ . | quote }}
+  {{- end }}
+  {{- if $.Values.vpc_id }}
+  vpcID: {{ $.Values.vpc_id | quote }}
+  {{- end }}
+  {{- with $tg.health_check }}
+  {{- if hasKey . "enabled" }}
+  healthCheckEnabled: {{ .enabled }}
+  {{- end }}
+  {{- with .protocol }}
+  healthCheckProtocol: {{ . | quote }}
+  {{- end }}
+  {{- with .port }}
+  healthCheckPort: {{ . | quote }}
+  {{- end }}
+  {{- with .path }}
+  healthCheckPath: {{ . | quote }}
+  {{- end }}
+  {{- with .interval }}
+  healthCheckIntervalSeconds: {{ . }}
+  {{- end }}
+  {{- with .timeout }}
+  healthCheckTimeoutSeconds: {{ . }}
+  {{- end }}
+  {{- with .healthy_threshold }}
+  healthyThresholdCount: {{ . }}
+  {{- end }}
+  {{- with .unhealthy_threshold }}
+  unhealthyThresholdCount: {{ . }}
+  {{- end }}
+  {{- with .matcher }}
+  matcher:
+    httpCode: {{ . | quote }}
+  {{- end }}
+  {{- end }}
+  tags:
+    - key: Name
+      value: {{ $tg.name | default (printf "%s-%s" $n $key) | quote }}
+    {{- if $.Values.tags }}{{- include "aws-alb-stack.tags" $.Values.tags | nindent 4 }}{{- end }}
+    {{- if $tg.tags }}{{- include "aws-alb-stack.tags" $tg.tags | nindent 4 }}{{- end }}
+{{- end }}
+{{- range $key, $ls := $lsns }}
+{{- $fwdKey := "" }}
+{{- if $ls.forward }}{{- $fwdKey = $ls.forward.target_group_key }}{{- end }}
+{{- if and (not $fwdKey) (gt (len $tgs) 0) }}{{- range $tk, $tv := $tgs }}{{- if not $fwdKey }}{{- $fwdKey = $tk }}{{- end }}{{- end }}{{- end }}
+---
+apiVersion: elbv2.services.k8s.aws/v1alpha1
+kind: Listener
+metadata:
+  name: {{ $n }}-ls-{{ $key }}
+  namespace: {{ $ns }}
+  {{- with $r }}
+  annotations:
+    services.k8s.aws/region: {{ . | quote }}
+  {{- end }}
+  labels:
+    {{- include "aws-alb-stack.labels" $ | nindent 4 }}
+spec:
+  loadBalancerRef:
+    from:
+      name: {{ $n }}-lb
+  port: {{ $ls.port | default $defPort }}
+  protocol: {{ $ls.protocol | default $defProto | quote }}
+  {{- with $ls.ssl_policy }}
+  sslPolicy: {{ . | quote }}
+  {{- end }}
+  {{- with $ls.certificate_arn }}
+  certificates:
+    - certificateARN: {{ . | quote }}
+  {{- end }}
+  defaultActions:
+    - type: forward
+      {{- if $fwdKey }}
+      forwardConfig:
+        targetGroups:
+          - targetGroupRef:
+              from:
+                name: {{ $n }}-tg-{{ $fwdKey }}
+      {{- end }}
+  {{- if $ls.tags }}
+  tags:
+    {{- include "aws-alb-stack.tags" $ls.tags | nindent 4 }}
+  {{- end }}
+{{- end }}

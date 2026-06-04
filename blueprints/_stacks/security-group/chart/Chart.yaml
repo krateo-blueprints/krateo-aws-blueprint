@@ -1,0 +1,34 @@
+apiVersion: v2
+# Krateo "complex" blueprint replicating the terraform-aws-modules/security-group/aws module as a
+# composition of a native ACK ec2 SecurityGroup resource (with ingress/egress rules inlined in the
+# SecurityGroup spec), wired to a VPC by ID via vpcID/vpcRef.
+#
+# The Composition spec uses the SAME input names as the Terraform module (name, description,
+# vpc_id, ingress_rules, egress_rules, ingress_cidr_blocks, tags, ...) — a curated subset of the
+# module's inputs (see values.schema.json).
+#
+# Composition Kind: AwsSecurityGroupStack (plural awssecuritygroupstacks) in composition.krateo.io.
+name: aws-security-group-stack
+description: A Krateo composite blueprint that provisions an AWS EC2 Security Group with ingress/egress rules via the ACK ec2 controller. Inputs mirror terraform-aws-modules/security-group/aws. Requires the ACK ec2 controller and AWS credentials (see repo docs).
+type: application
+
+# Drives the Composition CRD version (0.3.0 -> v0-3-0). Stamped by CI.
+version: CHART_VERSION
+# Terraform module version whose input interface this mirrors.
+appVersion: "tfmod-6.0.0"
+
+home: https://krateo.io
+icon: "https://github.com/krateoplatformops/krateo/blob/main/docs/media/logo.svg"
+keywords:
+  - aws
+  - security-group
+  - ec2
+  - ack
+  - network
+  - firewall
+  - stack
+sources:
+  - https://github.com/braghettos/krateo-aws-blueprint
+  - https://registry.terraform.io/modules/terraform-aws-modules/security-group/aws
+annotations:
+  krateoSupportedVersion: "2.7.0"

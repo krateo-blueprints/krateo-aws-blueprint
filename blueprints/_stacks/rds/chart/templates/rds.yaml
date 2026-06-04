@@ -1,0 +1,190 @@
+{{- /*
+Composes an RDS database from native ACK rds resources, mirroring terraform-aws-modules/rds/aws.
+Resources are wired together with ACK *Ref fields ({ from: { name: <k8s-name> } }):
+  DBSubnetGroup  <- created from subnet_ids when create_db_subnet_group
+  DBParameterGroup <- created from parameters when create_db_parameter_group
+  DBInstance -> DBSubnetGroup via dbSubnetGroupRef
+  DBInstance -> DBParameterGroup via dbParameterGroupRef
+Existing external resources (subnet IDs, security group IDs, KMS/monitoring ARNs) are passed
+through by ID/ARN and are NOT created here.
+*/ -}}
+{{- $r := .Values.region -}}
+{{- $n := .Values.identifier | default .Release.Name -}}
+{{- $ns := .Release.Namespace -}}
+{{- $createSubnetGroup := and .Values.create_db_subnet_group (gt (len (.Values.subnet_ids | default (list))) 0) -}}
+{{- $createParamGroup := .Values.create_db_parameter_group -}}
+{{- if $createSubnetGroup }}
+apiVersion: rds.services.k8s.aws/v1alpha1
+kind: DBSubnetGroup
+metadata:
+  name: {{ $n }}-subnet-group
+  namespace: {{ $ns }}
+  {{- with $r }}
+  annotations:
+    services.k8s.aws/region: {{ . | quote }}
+  {{- end }}
+  labels:
+    {{- include "aws-rds-stack.labels" . | nindent 4 }}
+spec:
+  name: {{ printf "%s-subnet-group" $n | quote }}
+  description: {{ .Values.db_subnet_group_description | default (printf "Subnet group for %s" $n) | quote }}
+  subnetIDs:
+    {{- range .Values.subnet_ids }}
+    - {{ . | quote }}
+    {{- end }}
+  tags:
+    - key: Name
+      value: {{ printf "%s-subnet-group" $n | quote }}
+    {{- if .Values.tags }}{{- include "aws-rds-stack.tags" .Values.tags | nindent 4 }}{{- end }}
+    {{- if .Values.db_subnet_group_tags }}{{- include "aws-rds-stack.tags" .Values.db_subnet_group_tags | nindent 4 }}{{- end }}
+{{- end }}
+{{- if $createParamGroup }}
+---
+apiVersion: rds.services.k8s.aws/v1alpha1
+kind: DBParameterGroup
+metadata:
+  name: {{ $n }}-param-group
+  namespace: {{ $ns }}
+  {{- with $r }}
+  annotations:
+    services.k8s.aws/region: {{ . | quote }}
+  {{- end }}
+  labels:
+    {{- include "aws-rds-stack.labels" . | nindent 4 }}
+spec:
+  name: {{ printf "%s-param-group" $n | quote }}
+  description: {{ .Values.parameter_group_description | default (printf "Parameter group for %s" $n) | quote }}
+  family: {{ required "family is required when create_db_parameter_group is true" .Values.family | quote }}
+  {{- if .Values.parameters }}
+  parameterOverrides:
+    {{- range $k, $v := .Values.parameters }}
+    {{ $k | quote }}: {{ $v | quote }}
+    {{- end }}
+  {{- end }}
+  tags:
+    - key: Name
+      value: {{ printf "%s-param-group" $n | quote }}
+    {{- if .Values.tags }}{{- include "aws-rds-stack.tags" .Values.tags | nindent 4 }}{{- end }}
+    {{- if .Values.db_parameter_group_tags }}{{- include "aws-rds-stack.tags" .Values.db_parameter_group_tags | nindent 4 }}{{- end }}
+{{- end }}
+---
+apiVersion: rds.services.k8s.aws/v1alpha1
+kind: DBInstance
+metadata:
+  name: {{ $n }}-instance
+  namespace: {{ $ns }}
+  {{- with $r }}
+  annotations:
+    services.k8s.aws/region: {{ . | quote }}
+  {{- end }}
+  labels:
+    {{- include "aws-rds-stack.labels" . | nindent 4 }}
+spec:
+  dbInstanceIdentifier: {{ $n | quote }}
+  dbInstanceClass: {{ .Values.instance_class | quote }}
+  engine: {{ .Values.engine | quote }}
+  {{- with .Values.engine_version }}
+  engineVersion: {{ . | quote }}
+  {{- end }}
+  {{- with .Values.allocated_storage }}
+  allocatedStorage: {{ . }}
+  {{- end }}
+  {{- if gt (int (.Values.max_allocated_storage | default 0)) 0 }}
+  maxAllocatedStorage: {{ .Values.max_allocated_storage }}
+  {{- end }}
+  {{- with .Values.storage_type }}
+  storageType: {{ . | quote }}
+  {{- end }}
+  {{- with .Values.iops }}
+  iops: {{ . }}
+  {{- end }}
+  {{- with .Values.storage_throughput }}
+  storageThroughput: {{ . }}
+  {{- end }}
+  storageEncrypted: {{ .Values.storage_encrypted }}
+  {{- with .Values.kms_key_id }}
+  kmsKeyID: {{ . | quote }}
+  {{- end }}
+  {{- with .Values.db_name }}
+  dbName: {{ . | quote }}
+  {{- end }}
+  {{- with .Values.username }}
+  masterUsername: {{ . | quote }}
+  {{- end }}
+  manageMasterUserPassword: {{ .Values.manage_master_user_password }}
+  {{- if and (not .Values.manage_master_user_password) .Values.master_user_password_secret }}
+  {{- with .Values.master_user_password_secret }}
+  masterUserPassword:
+    name: {{ required "master_user_password_secret.name is required" .name | quote }}
+    namespace: {{ .namespace | default $ns | quote }}
+    key: {{ .key | default "password" | quote }}
+  {{- end }}
+  {{- end }}
+  {{- with .Values.port }}
+  port: {{ . }}
+  {{- end }}
+  multiAZ: {{ .Values.multi_az }}
+  {{- if and .Values.availability_zone (not .Values.multi_az) }}
+  availabilityZone: {{ .Values.availability_zone | quote }}
+  {{- end }}
+  publiclyAccessible: {{ .Values.publicly_accessible }}
+  {{- with .Values.network_type }}
+  networkType: {{ . | quote }}
+  {{- end }}
+  {{- if $createSubnetGroup }}
+  dbSubnetGroupRef:
+    from:
+      name: {{ $n }}-subnet-group
+  {{- else if .Values.db_subnet_group_name }}
+  dbSubnetGroupName: {{ .Values.db_subnet_group_name | quote }}
+  {{- end }}
+  {{- if $createParamGroup }}
+  dbParameterGroupRef:
+    from:
+      name: {{ $n }}-param-group
+  {{- else if .Values.parameter_group_name }}
+  dbParameterGroupName: {{ .Values.parameter_group_name | quote }}
+  {{- end }}
+  {{- if .Values.vpc_security_group_ids }}
+  vpcSecurityGroupIDs:
+    {{- range .Values.vpc_security_group_ids }}
+    - {{ . | quote }}
+    {{- end }}
+  {{- end }}
+  {{- with .Values.backup_retention_period }}
+  backupRetentionPeriod: {{ . }}
+  {{- end }}
+  {{- with .Values.backup_window }}
+  preferredBackupWindow: {{ . | quote }}
+  {{- end }}
+  {{- with .Values.maintenance_window }}
+  preferredMaintenanceWindow: {{ . | quote }}
+  {{- end }}
+  copyTagsToSnapshot: {{ .Values.copy_tags_to_snapshot }}
+  deletionProtection: {{ .Values.deletion_protection }}
+  autoMinorVersionUpgrade: {{ .Values.auto_minor_version_upgrade }}
+  enableIAMDatabaseAuthentication: {{ .Values.iam_database_authentication_enabled }}
+  performanceInsightsEnabled: {{ .Values.performance_insights_enabled }}
+  {{- if .Values.enabled_cloudwatch_logs_exports }}
+  enableCloudwatchLogsExports:
+    {{- range .Values.enabled_cloudwatch_logs_exports }}
+    - {{ . | quote }}
+    {{- end }}
+  {{- end }}
+  {{- with .Values.license_model }}
+  licenseModel: {{ . | quote }}
+  {{- end }}
+  {{- with .Values.ca_cert_identifier }}
+  caCertificateIdentifier: {{ . | quote }}
+  {{- end }}
+  {{- if gt (int (.Values.monitoring_interval | default 0)) 0 }}
+  monitoringInterval: {{ .Values.monitoring_interval }}
+  {{- with .Values.monitoring_role_arn }}
+  monitoringRoleARN: {{ . | quote }}
+  {{- end }}
+  {{- end }}
+  tags:
+    - key: Name
+      value: {{ $n | quote }}
+    {{- if .Values.tags }}{{- include "aws-rds-stack.tags" .Values.tags | nindent 4 }}{{- end }}
+    {{- if .Values.db_instance_tags }}{{- include "aws-rds-stack.tags" .Values.db_instance_tags | nindent 4 }}{{- end }}

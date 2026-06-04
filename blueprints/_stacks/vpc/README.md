@@ -78,13 +78,13 @@ kubectl apply -f compositiondefinition.yaml   # publishes the AwsVpcStack type
 kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
-This publishes an `AwsVpcStack` Composition type (`composition.krateo.io/v0-2-0`, plural
+This publishes an `AwsVpcStack` Composition type (`composition.krateo.io/v0-3-0`, plural
 `awsvpcstacks`), pulling `oci://ghcr.io/braghettos/charts/aws-vpc-stack`.
 
 ### Create a Composition
 
 ```yaml
-apiVersion: composition.krateo.io/v0-2-0
+apiVersion: composition.krateo.io/v0-3-0
 kind: AwsVpcStack
 metadata:
   name: my-vpc

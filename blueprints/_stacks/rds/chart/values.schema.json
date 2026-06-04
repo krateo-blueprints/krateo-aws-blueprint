@@ -1,0 +1,289 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "title": "AWS RDS (terraform-aws-modules/rds/aws)",
+  "description": "Provision an RDS database (DB subnet group, DB instance and optional DB parameter group) via ACK rds. Input names mirror the terraform-aws-modules/rds/aws module (core subset of its inputs).",
+  "properties": {
+    "region": {
+      "type": "string",
+      "title": "AWS region",
+      "description": "AWS region for the RDS resources. Krateo/ACK wiring (not a Terraform module input). Empty inherits the ACK controller default.",
+      "default": ""
+    },
+    "identifier": {
+      "type": "string",
+      "title": "identifier",
+      "description": "The name of the RDS instance.",
+      "default": ""
+    },
+    "engine": {
+      "type": "string",
+      "title": "engine",
+      "description": "The database engine to use."
+    },
+    "engine_version": {
+      "type": "string",
+      "title": "engine_version",
+      "description": "The engine version to use."
+    },
+    "instance_class": {
+      "type": "string",
+      "title": "instance_class",
+      "description": "The instance type of the RDS instance."
+    },
+    "allocated_storage": {
+      "type": "integer",
+      "title": "allocated_storage",
+      "description": "The allocated storage in gigabytes."
+    },
+    "max_allocated_storage": {
+      "type": "integer",
+      "title": "max_allocated_storage",
+      "description": "Specifies the value for Storage Autoscaling.",
+      "default": 0
+    },
+    "storage_type": {
+      "type": "string",
+      "title": "storage_type",
+      "description": "One of 'standard' (magnetic), 'gp2' (general purpose SSD), 'gp3' (new generation of general purpose SSD), or 'io1' (provisioned IOPS SSD)."
+    },
+    "iops": {
+      "type": "integer",
+      "title": "iops",
+      "description": "The amount of provisioned IOPS. Setting this implies a storage_type of 'io1' or 'gp3'."
+    },
+    "storage_throughput": {
+      "type": "integer",
+      "title": "storage_throughput",
+      "description": "Storage throughput value for the DB instance. Only applies to the gp3 storage type."
+    },
+    "storage_encrypted": {
+      "type": "boolean",
+      "title": "storage_encrypted",
+      "description": "Specifies whether the DB instance is encrypted.",
+      "default": true
+    },
+    "kms_key_id": {
+      "type": "string",
+      "title": "kms_key_id",
+      "description": "The ARN for the KMS encryption key. If creating an encrypted replica, set this to the destination KMS ARN."
+    },
+    "db_name": {
+      "type": "string",
+      "title": "db_name",
+      "description": "The DB name to create. If omitted, no database is created initially."
+    },
+    "username": {
+      "type": "string",
+      "title": "username",
+      "description": "Username for the master DB user."
+    },
+    "manage_master_user_password": {
+      "type": "boolean",
+      "title": "manage_master_user_password",
+      "description": "Set to true to allow RDS to manage the master user password in Secrets Manager. When true, master_user_password_secret is ignored.",
+      "default": true
+    },
+    "master_user_password_secret": {
+      "type": "object",
+      "title": "master_user_password_secret",
+      "description": "Krateo/ACK wiring for the master password (the TF module accepts a literal `password`; ACK requires a SecretKeyRef). When manage_master_user_password is false, this references a Kubernetes Secret holding the master user password.",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of the Kubernetes Secret containing the master user password."
+        },
+        "namespace": {
+          "type": "string",
+          "description": "Namespace of the Secret. Defaults to the Composition namespace when empty."
+        },
+        "key": {
+          "type": "string",
+          "description": "Key within the Secret that holds the password.",
+          "default": "password"
+        }
+      }
+    },
+    "port": {
+      "type": "string",
+      "title": "port",
+      "description": "The port on which the DB accepts connections."
+    },
+    "multi_az": {
+      "type": "boolean",
+      "title": "multi_az",
+      "description": "Specifies if the RDS instance is multi-AZ.",
+      "default": false
+    },
+    "availability_zone": {
+      "type": "string",
+      "title": "availability_zone",
+      "description": "The Availability Zone of the RDS instance."
+    },
+    "publicly_accessible": {
+      "type": "boolean",
+      "title": "publicly_accessible",
+      "description": "Bool to control if instance is publicly accessible.",
+      "default": false
+    },
+    "subnet_ids": {
+      "type": "array",
+      "title": "subnet_ids",
+      "description": "A list of VPC subnet IDs. Used to create the DB subnet group this instance is placed in.",
+      "items": { "type": "string" }
+    },
+    "vpc_security_group_ids": {
+      "type": "array",
+      "title": "vpc_security_group_ids",
+      "description": "List of VPC security groups to associate.",
+      "items": { "type": "string" }
+    },
+    "network_type": {
+      "type": "string",
+      "title": "network_type",
+      "description": "The type of network stack to use. Valid values: IPV4 | DUAL.",
+      "enum": ["IPV4", "DUAL"]
+    },
+    "backup_retention_period": {
+      "type": "integer",
+      "title": "backup_retention_period",
+      "description": "The days to retain backups for."
+    },
+    "backup_window": {
+      "type": "string",
+      "title": "backup_window",
+      "description": "The daily time range (in UTC) during which automated backups are created if they are enabled."
+    },
+    "maintenance_window": {
+      "type": "string",
+      "title": "maintenance_window",
+      "description": "The window to perform maintenance in. Syntax: 'ddd:hh24:mi-ddd:hh24:mi'. Eg: 'Mon:00:00-Mon:03:00'."
+    },
+    "copy_tags_to_snapshot": {
+      "type": "boolean",
+      "title": "copy_tags_to_snapshot",
+      "description": "On delete, copy all Instance tags to the final snapshot.",
+      "default": true
+    },
+    "deletion_protection": {
+      "type": "boolean",
+      "title": "deletion_protection",
+      "description": "The database can't be deleted when this value is set to true.",
+      "default": false
+    },
+    "auto_minor_version_upgrade": {
+      "type": "boolean",
+      "title": "auto_minor_version_upgrade",
+      "description": "Indicates that minor engine upgrades will be applied automatically to the DB instance during the maintenance window.",
+      "default": true
+    },
+    "iam_database_authentication_enabled": {
+      "type": "boolean",
+      "title": "iam_database_authentication_enabled",
+      "description": "Specifies whether mappings of AWS Identity and Access Management (IAM) accounts to database accounts is enabled.",
+      "default": false
+    },
+    "performance_insights_enabled": {
+      "type": "boolean",
+      "title": "performance_insights_enabled",
+      "description": "Specifies whether Performance Insights are enabled.",
+      "default": false
+    },
+    "enabled_cloudwatch_logs_exports": {
+      "type": "array",
+      "title": "enabled_cloudwatch_logs_exports",
+      "description": "List of log types to enable for exporting to CloudWatch logs. If omitted, no logs will be exported.",
+      "items": { "type": "string" }
+    },
+    "license_model": {
+      "type": "string",
+      "title": "license_model",
+      "description": "License model information for this DB instance. Optional, but required for some DB engines."
+    },
+    "ca_cert_identifier": {
+      "type": "string",
+      "title": "ca_cert_identifier",
+      "description": "Specifies the identifier of the CA certificate for the DB instance."
+    },
+    "monitoring_interval": {
+      "type": "integer",
+      "title": "monitoring_interval",
+      "description": "The interval, in seconds, between points when Enhanced Monitoring metrics are collected for the instance. Set to 0 to disable.",
+      "default": 0
+    },
+    "monitoring_role_arn": {
+      "type": "string",
+      "title": "monitoring_role_arn",
+      "description": "The ARN for the IAM role that permits RDS to send enhanced monitoring metrics to CloudWatch Logs."
+    },
+    "create_db_subnet_group": {
+      "type": "boolean",
+      "title": "create_db_subnet_group",
+      "description": "Whether to create a database subnet group from subnet_ids.",
+      "default": true
+    },
+    "db_subnet_group_name": {
+      "type": "string",
+      "title": "db_subnet_group_name",
+      "description": "Name of DB subnet group. The DB instance will be created in the VPC associated with the DB subnet group. When create_db_subnet_group is false, this must reference an existing subnet group."
+    },
+    "db_subnet_group_description": {
+      "type": "string",
+      "title": "db_subnet_group_description",
+      "description": "Description of the DB subnet group to create."
+    },
+    "create_db_parameter_group": {
+      "type": "boolean",
+      "title": "create_db_parameter_group",
+      "description": "Whether to create a database parameter group.",
+      "default": false
+    },
+    "parameter_group_name": {
+      "type": "string",
+      "title": "parameter_group_name",
+      "description": "Name of the DB parameter group to associate or create. When create_db_parameter_group is false, this must reference an existing parameter group."
+    },
+    "parameter_group_description": {
+      "type": "string",
+      "title": "parameter_group_description",
+      "description": "Description of the DB parameter group to create."
+    },
+    "family": {
+      "type": "string",
+      "title": "family",
+      "description": "The family of the DB parameter group (e.g. mysql8.0, postgres16). Required when create_db_parameter_group is true."
+    },
+    "parameters": {
+      "type": "object",
+      "title": "parameters",
+      "description": "A map of DB parameters to apply to the created DB parameter group (parameter name -> value). The TF module accepts a list of objects; here it is expressed as a map(string) matching the ACK parameterOverrides field.",
+      "additionalProperties": { "type": "string" }
+    },
+    "tags": {
+      "type": "object",
+      "title": "tags",
+      "description": "A mapping of tags to assign to all resources.",
+      "additionalProperties": { "type": "string" }
+    },
+    "db_instance_tags": {
+      "type": "object",
+      "title": "db_instance_tags",
+      "description": "Additional tags for the DB instance.",
+      "additionalProperties": { "type": "string" }
+    },
+    "db_subnet_group_tags": {
+      "type": "object",
+      "title": "db_subnet_group_tags",
+      "description": "Additional tags for the DB subnet group.",
+      "additionalProperties": { "type": "string" }
+    },
+    "db_parameter_group_tags": {
+      "type": "object",
+      "title": "db_parameter_group_tags",
+      "description": "Additional tags for the DB parameter group.",
+      "additionalProperties": { "type": "string" }
+    }
+  },
+  "required": ["identifier", "engine", "instance_class"]
+}

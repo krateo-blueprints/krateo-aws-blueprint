@@ -1,0 +1,90 @@
+{{- /*
+Composes an IAM role from native ACK iam resources, mirroring terraform-aws-modules/iam/aws
+(iam-role / iam-assumable-role submodules). Resources are wired with ACK *Ref fields
+({ from: { name: <k8s-name> } }):
+  Role.spec.assumeRolePolicyDocument <- assume_role_policy (raw JSON) or generated from
+    trusted_role_services
+  Role.spec.policies                 <- managed_policy_arns (existing managed-policy ARNs)
+  Role.spec.policyRefs               -> the inline Policy rendered below (when
+    create_inline_policy is true), referenced by k8s name
+*/ -}}
+{{- if .Values.create -}}
+{{- $r := .Values.region -}}
+{{- $n := .Values.name | default .Release.Name -}}
+{{- $ns := .Release.Namespace -}}
+{{- $services := .Values.trusted_role_services | default (list) -}}
+{{- $assume := .Values.assume_role_policy | default "" -}}
+{{- if and (eq $assume "") (gt (len $services) 0) -}}
+{{- $assume = include "aws-iam-stack.assumeRolePolicy" $services -}}
+{{- end -}}
+{{- $managed := .Values.managed_policy_arns | default (list) -}}
+{{- $inline := and .Values.create_inline_policy (ne (.Values.inline_policy | default "") "") -}}
+apiVersion: iam.services.k8s.aws/v1alpha1
+kind: Role
+metadata:
+  name: {{ $n }}-role
+  namespace: {{ $ns }}
+  {{- with $r }}
+  annotations:
+    services.k8s.aws/region: {{ . | quote }}
+  {{- end }}
+  labels:
+    {{- include "aws-iam-stack.labels" . | nindent 4 }}
+spec:
+  name: {{ $n | quote }}
+  {{- with .Values.path }}
+  path: {{ . | quote }}
+  {{- end }}
+  {{- with .Values.description }}
+  description: {{ . | quote }}
+  {{- end }}
+  {{- with .Values.max_session_duration }}
+  maxSessionDuration: {{ . }}
+  {{- end }}
+  {{- with .Values.permissions_boundary }}
+  permissionsBoundary: {{ . | quote }}
+  {{- end }}
+  assumeRolePolicyDocument: {{ $assume | quote }}
+  {{- if gt (len $managed) 0 }}
+  policies:
+    {{- range $arn := $managed }}
+    - {{ $arn | quote }}
+    {{- end }}
+  {{- end }}
+  {{- if $inline }}
+  policyRefs:
+    - from:
+        name: {{ $n }}-inline-policy
+  {{- end }}
+  {{- if .Values.tags }}
+  tags:
+    {{- include "aws-iam-stack.tags" .Values.tags | nindent 4 }}
+  {{- end }}
+{{- if $inline }}
+---
+apiVersion: iam.services.k8s.aws/v1alpha1
+kind: Policy
+metadata:
+  name: {{ $n }}-inline-policy
+  namespace: {{ $ns }}
+  {{- with $r }}
+  annotations:
+    services.k8s.aws/region: {{ . | quote }}
+  {{- end }}
+  labels:
+    {{- include "aws-iam-stack.labels" . | nindent 4 }}
+spec:
+  name: {{ printf "%s-policy" $n | quote }}
+  {{- with .Values.path }}
+  path: {{ . | quote }}
+  {{- end }}
+  {{- with .Values.description }}
+  description: {{ . | quote }}
+  {{- end }}
+  policyDocument: {{ .Values.inline_policy | quote }}
+  {{- if .Values.tags }}
+  tags:
+    {{- include "aws-iam-stack.tags" .Values.tags | nindent 4 }}
+  {{- end }}
+{{- end }}
+{{- end }}

@@ -1,0 +1,51 @@
+# Composition spec for aws-ecs-stack — input names mirror terraform-aws-modules/ecs/aws.
+#
+# core-provider builds the Composition CRD from values.schema.json ONLY; this file provides a
+# schema-valid example so `helm template`/`helm lint` render a complete single-service ECS stack
+# (Cluster + TaskDefinition + Service) on Fargate.
+
+# AWS region (Krateo/ACK wiring; not a Terraform input). Empty = controller default.
+region: ""
+
+# Cluster
+cluster_name: krateo-ecs
+cluster_setting:
+  - name: containerInsights
+    value: enabled
+default_capacity_provider_strategy:
+  FARGATE:
+    base: 1
+    weight: 100
+cluster_capacity_providers:
+  - FARGATE
+  - FARGATE_SPOT
+
+# Task definition (mirrors services.<name> task inputs)
+family: krateo-app
+container_name: app
+image: public.ecr.aws/nginx/nginx:latest
+container_port: 80
+cpu: "256"
+memory: "512"
+network_mode: awsvpc
+requires_compatibilities:
+  - FARGATE
+# Existing IAM role ARNs (not created by this stack). Leave empty to omit.
+task_exec_iam_role_arn: ""
+tasks_iam_role_arn: ""
+
+# Service (mirrors services.<name> service inputs)
+desired_count: 1
+launch_type: FARGATE
+scheduling_strategy: REPLICA
+assign_public_ip: true
+enable_execute_command: false
+enable_ecs_managed_tags: false
+# Existing subnet / security group IDs (not created by this stack).
+subnet_ids: []
+security_group_ids: []
+
+# Tags
+tags: {}
+cluster_tags: {}
+service_tags: {}

@@ -1,0 +1,159 @@
+{{- /*
+Composes an ECS workload from native ACK ecs resources, mirroring terraform-aws-modules/ecs/aws.
+Resources are wired together with ACK *Ref fields ({ from: { name: <k8s-name> } }):
+  Cluster  <- Service via clusterRef
+  TaskDefinition <- Service via taskDefinitionRef
+Existing external resources (subnet IDs, security group IDs, IAM role ARNs) are passed through
+as IDs/ARNs — this stack does NOT create VPC/subnets/security-groups/IAM-roles.
+*/ -}}
+{{- $r := .Values.region -}}
+{{- $cn := .Values.cluster_name | default .Release.Name -}}
+{{- $family := .Values.family | default (printf "%s-task" .Release.Name) -}}
+{{- $container := .Values.container_name | default "app" -}}
+{{- $ns := .Release.Namespace -}}
+{{- $awsvpc := eq (.Values.network_mode | default "awsvpc") "awsvpc" -}}
+apiVersion: ecs.services.k8s.aws/v1alpha1
+kind: Cluster
+metadata:
+  name: {{ $cn }}-cluster
+  namespace: {{ $ns }}
+  {{- with $r }}
+  annotations:
+    services.k8s.aws/region: {{ . | quote }}
+  {{- end }}
+  labels:
+    {{- include "aws-ecs-stack.labels" . | nindent 4 }}
+spec:
+  name: {{ $cn | quote }}
+  {{- with .Values.cluster_capacity_providers }}
+  capacityProviders:
+    {{- range . }}
+    - {{ . | quote }}
+    {{- end }}
+  {{- end }}
+  {{- with .Values.default_capacity_provider_strategy }}
+  defaultCapacityProviderStrategy:
+    {{- range $provider, $cfg := . }}
+    - capacityProvider: {{ $provider | quote }}
+      {{- with $cfg.base }}
+      base: {{ . }}
+      {{- end }}
+      {{- with $cfg.weight }}
+      weight: {{ . }}
+      {{- end }}
+    {{- end }}
+  {{- end }}
+  {{- with .Values.cluster_setting }}
+  settings:
+    {{- range . }}
+    - name: {{ .name | quote }}
+      value: {{ .value | quote }}
+    {{- end }}
+  {{- end }}
+  {{- if or .Values.tags .Values.cluster_tags }}
+  tags:
+    {{- if .Values.tags }}{{- include "aws-ecs-stack.tags" .Values.tags | nindent 4 }}{{- end }}
+    {{- if .Values.cluster_tags }}{{- include "aws-ecs-stack.tags" .Values.cluster_tags | nindent 4 }}{{- end }}
+  {{- end }}
+---
+apiVersion: ecs.services.k8s.aws/v1alpha1
+kind: TaskDefinition
+metadata:
+  name: {{ $family }}-taskdef
+  namespace: {{ $ns }}
+  {{- with $r }}
+  annotations:
+    services.k8s.aws/region: {{ . | quote }}
+  {{- end }}
+  labels:
+    {{- include "aws-ecs-stack.labels" . | nindent 4 }}
+spec:
+  family: {{ $family | quote }}
+  {{- with .Values.network_mode }}
+  networkMode: {{ . | quote }}
+  {{- end }}
+  {{- with .Values.requires_compatibilities }}
+  requiresCompatibilities:
+    {{- range . }}
+    - {{ . | quote }}
+    {{- end }}
+  {{- end }}
+  {{- with .Values.cpu }}
+  cpu: {{ . | quote }}
+  {{- end }}
+  {{- with .Values.memory }}
+  memory: {{ . | quote }}
+  {{- end }}
+  {{- with .Values.task_exec_iam_role_arn }}
+  executionRoleARN: {{ . | quote }}
+  {{- end }}
+  {{- with .Values.tasks_iam_role_arn }}
+  taskRoleARN: {{ . | quote }}
+  {{- end }}
+  containerDefinitions:
+    - name: {{ $container | quote }}
+      image: {{ .Values.image | quote }}
+      essential: true
+      {{- with .Values.container_port }}
+      portMappings:
+        - containerPort: {{ . }}
+          protocol: tcp
+      {{- end }}
+  {{- if or .Values.tags .Values.service_tags }}
+  tags:
+    {{- if .Values.tags }}{{- include "aws-ecs-stack.tags" .Values.tags | nindent 4 }}{{- end }}
+  {{- end }}
+---
+apiVersion: ecs.services.k8s.aws/v1alpha1
+kind: Service
+metadata:
+  name: {{ $cn }}-service
+  namespace: {{ $ns }}
+  {{- with $r }}
+  annotations:
+    services.k8s.aws/region: {{ . | quote }}
+  {{- end }}
+  labels:
+    {{- include "aws-ecs-stack.labels" . | nindent 4 }}
+spec:
+  name: {{ printf "%s-service" $cn | quote }}
+  clusterRef:
+    from:
+      name: {{ $cn }}-cluster
+  taskDefinitionRef:
+    from:
+      name: {{ $family }}-taskdef
+  desiredCount: {{ .Values.desired_count | default 1 }}
+  {{- with .Values.launch_type }}
+  launchType: {{ . | quote }}
+  {{- end }}
+  {{- with .Values.platform_version }}
+  platformVersion: {{ . | quote }}
+  {{- end }}
+  {{- with .Values.scheduling_strategy }}
+  schedulingStrategy: {{ . | quote }}
+  {{- end }}
+  enableExecuteCommand: {{ .Values.enable_execute_command | default false }}
+  enableECSManagedTags: {{ .Values.enable_ecs_managed_tags | default false }}
+  {{- if and $awsvpc (or .Values.subnet_ids .Values.security_group_ids) }}
+  networkConfiguration:
+    awsVPCConfiguration:
+      assignPublicIP: {{ ternary "ENABLED" "DISABLED" .Values.assign_public_ip | quote }}
+      {{- with .Values.subnet_ids }}
+      subnets:
+        {{- range . }}
+        - {{ . | quote }}
+        {{- end }}
+      {{- end }}
+      {{- with .Values.security_group_ids }}
+      securityGroups:
+        {{- range . }}
+        - {{ . | quote }}
+        {{- end }}
+      {{- end }}
+  {{- end }}
+  {{- if or .Values.tags .Values.service_tags }}
+  tags:
+    {{- if .Values.tags }}{{- include "aws-ecs-stack.tags" .Values.tags | nindent 4 }}{{- end }}
+    {{- if .Values.service_tags }}{{- include "aws-ecs-stack.tags" .Values.service_tags | nindent 4 }}{{- end }}
+  {{- end }}

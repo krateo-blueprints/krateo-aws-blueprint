@@ -1,0 +1,171 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "title": "AWS EKS (terraform-aws-modules/eks/aws)",
+  "description": "Provision an EKS cluster and one managed node group via ACK eks. Input names mirror the terraform-aws-modules/eks/aws module (core subset of its inputs). IAM role ARNs and VPC subnet IDs are accepted as inputs rather than created here.",
+  "properties": {
+    "region": {
+      "type": "string",
+      "title": "AWS region",
+      "description": "AWS region for the cluster and node group. Krateo/ACK wiring (not a Terraform module input). Empty inherits the ACK controller default.",
+      "default": ""
+    },
+    "name": {
+      "type": "string",
+      "title": "name",
+      "description": "Name of the EKS cluster.",
+      "default": ""
+    },
+    "kubernetes_version": {
+      "type": "string",
+      "title": "kubernetes_version",
+      "description": "Kubernetes `<major>.<minor>` version to use for the EKS cluster (i.e.: `1.33`).",
+      "default": ""
+    },
+    "authentication_mode": {
+      "type": "string",
+      "title": "authentication_mode",
+      "description": "The authentication mode for the cluster. Valid values are `CONFIG_MAP`, `API` or `API_AND_CONFIG_MAP`.",
+      "enum": ["CONFIG_MAP", "API", "API_AND_CONFIG_MAP"],
+      "default": "API_AND_CONFIG_MAP"
+    },
+    "endpoint_public_access": {
+      "type": "boolean",
+      "title": "endpoint_public_access",
+      "description": "Indicates whether or not the Amazon EKS public API server endpoint is enabled.",
+      "default": false
+    },
+    "endpoint_private_access": {
+      "type": "boolean",
+      "title": "endpoint_private_access",
+      "description": "Indicates whether or not the Amazon EKS private API server endpoint is enabled.",
+      "default": true
+    },
+    "cluster_endpoint_public_access_cidrs": {
+      "type": "array",
+      "title": "cluster_endpoint_public_access_cidrs",
+      "description": "List of CIDR blocks which can access the Amazon EKS public API server endpoint.",
+      "items": { "type": "string" }
+    },
+    "subnet_ids": {
+      "type": "array",
+      "title": "subnet_ids",
+      "description": "A list of subnet IDs where the nodes/node groups will be provisioned. If `control_plane_subnet_ids` is not provided, the EKS cluster control plane (ENIs) will be provisioned in these subnets.",
+      "items": { "type": "string" }
+    },
+    "control_plane_subnet_ids": {
+      "type": "array",
+      "title": "control_plane_subnet_ids",
+      "description": "A list of subnet IDs where the EKS cluster control plane (ENIs) will be provisioned. Used for expanding the pool of subnets used by nodes/node groups without replacing the EKS control plane.",
+      "items": { "type": "string" }
+    },
+    "additional_security_group_ids": {
+      "type": "array",
+      "title": "additional_security_group_ids",
+      "description": "List of additional, externally created security group IDs to attach to the cluster control plane.",
+      "items": { "type": "string" }
+    },
+    "service_ipv4_cidr": {
+      "type": "string",
+      "title": "service_ipv4_cidr",
+      "description": "The CIDR block to assign Kubernetes service IP addresses from. If you don't specify a block, Kubernetes assigns addresses from either the 10.100.0.0/16 or 172.20.0.0/16 CIDR blocks.",
+      "default": ""
+    },
+    "ip_family": {
+      "type": "string",
+      "title": "ip_family",
+      "description": "The IP family used to assign Kubernetes pod and service addresses. Valid values are `ipv4` (default) and `ipv6`.",
+      "enum": ["ipv4", "ipv6"],
+      "default": "ipv4"
+    },
+    "enabled_log_types": {
+      "type": "array",
+      "title": "enabled_log_types",
+      "description": "A list of the desired control plane logs to enable. For more information, see Amazon EKS Control Plane Logging.",
+      "items": {
+        "type": "string",
+        "enum": ["api", "audit", "authenticator", "controllerManager", "scheduler"]
+      }
+    },
+    "cluster_iam_role_arn": {
+      "type": "string",
+      "title": "cluster_iam_role_arn",
+      "description": "Existing IAM role ARN for the cluster control plane (maps to the TF `iam_role_arn` input). This stack does NOT create the IAM role; provide a pre-existing role ARN with the EKS cluster trust policy and AmazonEKSClusterPolicy attached.",
+      "default": ""
+    },
+    "node_iam_role_arn": {
+      "type": "string",
+      "title": "node_iam_role_arn",
+      "description": "Existing IAM role ARN for the managed node group worker nodes (maps to the per-node-group `iam_role_arn`). This stack does NOT create the IAM role; provide a pre-existing role ARN with the EC2 trust policy and the worker node policies attached (AmazonEKSWorkerNodePolicy, AmazonEKS_CNI_Policy, AmazonEC2ContainerRegistryReadOnly).",
+      "default": ""
+    },
+    "node_group_name": {
+      "type": "string",
+      "title": "node_group_name",
+      "description": "Name of the managed node group (the map key under the TF `eks_managed_node_groups` input). Defaults to `<name>-default` when empty.",
+      "default": ""
+    },
+    "node_ami_type": {
+      "type": "string",
+      "title": "node_ami_type",
+      "description": "Type of Amazon Machine Image (AMI) associated with the EKS managed node group (per-node-group `ami_type`).",
+      "enum": ["AL2_x86_64", "AL2_x86_64_GPU", "AL2_ARM_64", "AL2023_x86_64_STANDARD", "AL2023_ARM_64_STANDARD", "AL2023_x86_64_NEURON", "AL2023_x86_64_NVIDIA", "BOTTLEROCKET_x86_64", "BOTTLEROCKET_ARM_64"],
+      "default": "AL2023_x86_64_STANDARD"
+    },
+    "node_capacity_type": {
+      "type": "string",
+      "title": "node_capacity_type",
+      "description": "Type of capacity associated with the EKS managed node group (per-node-group `capacity_type`). Valid values: `ON_DEMAND`, `SPOT`.",
+      "enum": ["ON_DEMAND", "SPOT"],
+      "default": "ON_DEMAND"
+    },
+    "node_instance_types": {
+      "type": "array",
+      "title": "node_instance_types",
+      "description": "Set of instance types associated with the EKS managed node group (per-node-group `instance_types`).",
+      "items": { "type": "string" }
+    },
+    "node_disk_size": {
+      "type": "integer",
+      "title": "node_disk_size",
+      "description": "Disk size in GiB for the managed node group worker nodes (per-node-group `disk_size`).",
+      "default": 20
+    },
+    "node_desired_size": {
+      "type": "integer",
+      "title": "node_desired_size",
+      "description": "Desired number of worker nodes in the managed node group (per-node-group `desired_size`).",
+      "default": 2
+    },
+    "node_min_size": {
+      "type": "integer",
+      "title": "node_min_size",
+      "description": "Minimum number of worker nodes in the managed node group (per-node-group `min_size`).",
+      "default": 1
+    },
+    "node_max_size": {
+      "type": "integer",
+      "title": "node_max_size",
+      "description": "Maximum number of worker nodes in the managed node group (per-node-group `max_size`).",
+      "default": 3
+    },
+    "node_labels": {
+      "type": "object",
+      "title": "node_labels",
+      "description": "Key-value map of Kubernetes labels applied to the nodes in the managed node group (per-node-group `labels`).",
+      "additionalProperties": { "type": "string" }
+    },
+    "tags": {
+      "type": "object",
+      "title": "tags",
+      "description": "A map of tags to add to all resources.",
+      "additionalProperties": { "type": "string" }
+    },
+    "cluster_tags": {
+      "type": "object",
+      "title": "cluster_tags",
+      "description": "A map of additional tags to add to the cluster.",
+      "additionalProperties": { "type": "string" }
+    }
+  }
+}

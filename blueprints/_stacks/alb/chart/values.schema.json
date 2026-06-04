@@ -1,0 +1,204 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "title": "AWS ALB (terraform-aws-modules/alb/aws)",
+  "description": "Provision an Application/Network Load Balancer with target groups and listeners via ACK elbv2. Input names mirror the terraform-aws-modules/alb/aws module (core subset of its inputs).",
+  "properties": {
+    "region": {
+      "type": "string",
+      "title": "AWS region",
+      "description": "AWS region for the load balancer and its resources. Krateo/ACK wiring (not a Terraform module input). Empty inherits the ACK controller default.",
+      "default": ""
+    },
+    "name": {
+      "type": "string",
+      "title": "name",
+      "description": "The name of the LB. This name must be unique within your AWS account, can have a maximum of 32 characters, must contain only alphanumeric characters or hyphens, and must not begin or end with a hyphen.",
+      "default": ""
+    },
+    "name_prefix": {
+      "type": "string",
+      "title": "name_prefix",
+      "description": "Creates a unique name beginning with the specified prefix. Conflicts with `name`."
+    },
+    "load_balancer_type": {
+      "type": "string",
+      "title": "load_balancer_type",
+      "description": "The type of load balancer to create. Possible values are `application`, `gateway`, or `network`. The default value is `application`.",
+      "enum": ["application", "network", "gateway"],
+      "default": "application"
+    },
+    "internal": {
+      "type": "boolean",
+      "title": "internal",
+      "description": "If true, the LB will be internal. Defaults to `false`.",
+      "default": false
+    },
+    "vpc_id": {
+      "type": "string",
+      "title": "vpc_id",
+      "description": "Identifier of the VPC where the target group(s) and security group will be created. An existing VPC ID — passed through to the ACK TargetGroup `vpcID` field.",
+      "default": ""
+    },
+    "subnets": {
+      "type": "array",
+      "title": "subnets",
+      "description": "A list of subnet IDs to attach to the LB. Subnets cannot be updated for Load Balancers of type `network`. Existing subnet IDs — passed through to the ACK LoadBalancer `subnets` field.",
+      "items": { "type": "string" }
+    },
+    "security_groups": {
+      "type": "array",
+      "title": "security_groups",
+      "description": "A list of security group IDs to assign to the LB. Existing security group IDs — passed through to the ACK LoadBalancer `securityGroups` field.",
+      "items": { "type": "string" }
+    },
+    "ip_address_type": {
+      "type": "string",
+      "title": "ip_address_type",
+      "description": "The type of IP addresses used by the subnets for your load balancer. The possible values are `ipv4` and `dualstack`.",
+      "enum": ["ipv4", "dualstack", "dualstack-without-public-ipv4"]
+    },
+    "enable_deletion_protection": {
+      "type": "boolean",
+      "title": "enable_deletion_protection",
+      "description": "If `true`, deletion of the load balancer will be disabled via the AWS API. This will prevent Terraform from deleting the load balancer. Defaults to `true`.",
+      "default": false
+    },
+    "enable_http2": {
+      "type": "boolean",
+      "title": "enable_http2",
+      "description": "Indicates whether HTTP/2 is enabled in application load balancers. Defaults to `true`.",
+      "default": true
+    },
+    "enable_cross_zone_load_balancing": {
+      "type": "boolean",
+      "title": "enable_cross_zone_load_balancing",
+      "description": "If `true`, cross-zone load balancing of the load balancer will be enabled. For `network` and `gateway` type load balancers, this feature is disabled by default.",
+      "default": true
+    },
+    "idle_timeout": {
+      "type": "integer",
+      "title": "idle_timeout",
+      "description": "The time in seconds that the connection is allowed to be idle. Only valid for Load Balancers of type `application`. Default: 60.",
+      "default": 60
+    },
+    "default_port": {
+      "type": "integer",
+      "title": "default_port",
+      "description": "Default port used across the listener and target group.",
+      "default": 80
+    },
+    "default_protocol": {
+      "type": "string",
+      "title": "default_protocol",
+      "description": "Default protocol used across the listener and target group.",
+      "default": "HTTP"
+    },
+    "target_groups": {
+      "type": "object",
+      "title": "target_groups",
+      "description": "Map of target group configurations to create. Each key is a logical target group name; the value mirrors the core fields of the terraform-aws-modules/alb/aws `target_groups` object (name, port, protocol, target_type, plus health check). Composed as ACK TargetGroup resources wired to the VPC via `vpcID`.",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the target group. If omitted, the stack name and target group key are used."
+          },
+          "name_prefix": {
+            "type": "string",
+            "description": "Creates a unique name beginning with the specified prefix."
+          },
+          "port": {
+            "type": "integer",
+            "description": "The port on which the targets receive traffic."
+          },
+          "protocol": {
+            "type": "string",
+            "description": "The protocol to use for routing traffic to the targets (e.g. HTTP, HTTPS, TCP)."
+          },
+          "protocol_version": {
+            "type": "string",
+            "description": "[HTTP/HTTPS protocol] The protocol version. One of GRPC, HTTP1 or HTTP2."
+          },
+          "target_type": {
+            "type": "string",
+            "description": "The type of target that you must specify when registering targets with this target group. One of instance, ip, lambda, or alb.",
+            "enum": ["instance", "ip", "lambda", "alb"]
+          },
+          "deregistration_delay": {
+            "type": "integer",
+            "description": "Amount of time for Elastic Load Balancing to wait before changing the state of a deregistering target from draining to unused, in seconds."
+          },
+          "health_check": {
+            "type": "object",
+            "description": "Health check configuration block for the target group.",
+            "properties": {
+              "enabled": { "type": "boolean", "description": "Indicates whether health checks are enabled." },
+              "healthy_threshold": { "type": "integer", "description": "Number of consecutive health check successes required before considering a target healthy." },
+              "interval": { "type": "integer", "description": "Approximate amount of time, in seconds, between health checks of an individual target." },
+              "matcher": { "type": "string", "description": "Response codes to use when checking for a healthy response from a target." },
+              "path": { "type": "string", "description": "Destination for the health check request." },
+              "port": { "type": "string", "description": "The port to use to connect with the target for health checks." },
+              "protocol": { "type": "string", "description": "Protocol to use to connect with the target for health checks." },
+              "timeout": { "type": "integer", "description": "Amount of time, in seconds, during which no response means a failed health check." },
+              "unhealthy_threshold": { "type": "integer", "description": "Number of consecutive health check failures required before considering a target unhealthy." }
+            }
+          },
+          "tags": {
+            "type": "object",
+            "description": "A map of tags to add to the target group.",
+            "additionalProperties": { "type": "string" }
+          }
+        }
+      }
+    },
+    "listeners": {
+      "type": "object",
+      "title": "listeners",
+      "description": "Map of listener configurations to create. Each key is a logical listener name; the value mirrors the core fields of the terraform-aws-modules/alb/aws `listeners` object (port, protocol, certificate_arn, ssl_policy, and a default `forward` action). Composed as ACK Listener resources wired to the LoadBalancer via `loadBalancerRef` and to a TargetGroup via the forward action's `targetGroupRef`.",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "port": {
+            "type": "integer",
+            "description": "The port on which the load balancer is listening."
+          },
+          "protocol": {
+            "type": "string",
+            "description": "The protocol for connections from clients to the load balancer (e.g. HTTP, HTTPS, TCP)."
+          },
+          "certificate_arn": {
+            "type": "string",
+            "description": "[HTTPS/TLS listeners] The ARN of an existing default ACM/IAM certificate for the listener. Passed through to the ACK Listener `certificates` field."
+          },
+          "ssl_policy": {
+            "type": "string",
+            "description": "[HTTPS/TLS listeners] The security policy that defines which protocols and ciphers are supported."
+          },
+          "forward": {
+            "type": "object",
+            "description": "Default forward action for the listener. References a target group declared in `target_groups`.",
+            "properties": {
+              "target_group_key": {
+                "type": "string",
+                "description": "Key of the target group (from the `target_groups` map) to forward traffic to. Wired via the ACK Listener forward action `targetGroupRef`."
+              }
+            }
+          },
+          "tags": {
+            "type": "object",
+            "description": "A map of tags to add to the listener.",
+            "additionalProperties": { "type": "string" }
+          }
+        }
+      }
+    },
+    "tags": {
+      "type": "object",
+      "title": "tags",
+      "description": "A map of tags to add to all resources.",
+      "additionalProperties": { "type": "string" }
+    }
+  }
+}

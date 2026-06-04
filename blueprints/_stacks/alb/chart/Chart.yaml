@@ -1,0 +1,34 @@
+apiVersion: v2
+# Krateo "complex" blueprint replicating the terraform-aws-modules/alb/aws module as a
+# composition of native ACK elbv2 resources (LoadBalancer + TargetGroup(s) + Listener(s)),
+# wired via ACK *Ref fields.
+#
+# The Composition spec uses the SAME input names as the Terraform module (name, vpc_id,
+# subnets, security_groups, load_balancer_type, internal, target_groups, listeners, ...) — a
+# curated CORE subset of the module's inputs (the module has 60+; see values.schema.json).
+#
+# Composition Kind: AwsAlbStack (plural awsalbstacks) in composition.krateo.io.
+name: aws-alb-stack
+description: A Krateo composite blueprint that provisions an AWS Application/Network Load Balancer (LoadBalancer + TargetGroup + Listener) via the ACK elbv2 controller. Inputs mirror terraform-aws-modules/alb/aws. Requires the ACK elbv2 controller and AWS credentials (see repo docs).
+type: application
+
+# Drives the Composition CRD version (0.3.0 -> v0-3-0). Stamped by CI.
+version: CHART_VERSION
+# Terraform module version whose input interface this mirrors.
+appVersion: "tfmod-10.5.0"
+
+home: https://krateo.io
+icon: "https://github.com/krateoplatformops/krateo/blob/main/docs/media/logo.svg"
+keywords:
+  - aws
+  - alb
+  - elbv2
+  - loadbalancer
+  - ack
+  - network
+  - stack
+sources:
+  - https://github.com/braghettos/krateo-aws-blueprint
+  - https://registry.terraform.io/modules/terraform-aws-modules/alb/aws
+annotations:
+  krateoSupportedVersion: "2.7.0"

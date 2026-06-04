@@ -1,0 +1,118 @@
+{{- /*
+Composes an EKS cluster + one managed node group from native ACK eks resources, mirroring
+terraform-aws-modules/eks/aws. Resources are wired together with ACK *Ref fields
+({ from: { name: <k8s-name> } }):
+  Nodegroup -> Cluster via clusterRef
+Subnets and IAM roles are passed by ID/ARN (pre-existing; this stack does not create them):
+  Cluster.spec.roleARN <- cluster_iam_role_arn
+  Cluster.spec.resourcesVPCConfig.subnetIDs <- (control_plane_subnet_ids | subnet_ids)
+  Nodegroup.spec.nodeRole <- node_iam_role_arn
+  Nodegroup.spec.subnets  <- subnet_ids
+*/ -}}
+{{- $r := .Values.region -}}
+{{- $n := .Values.name | default .Release.Name -}}
+{{- $ns := .Release.Namespace -}}
+{{- $subnets := .Values.subnet_ids | default (list) -}}
+{{- $cpSubnets := .Values.control_plane_subnet_ids | default (list) -}}
+{{- if eq (len $cpSubnets) 0 }}{{- $cpSubnets = $subnets -}}{{- end -}}
+{{- $ngName := .Values.node_group_name | default "default" -}}
+apiVersion: eks.services.k8s.aws/v1alpha1
+kind: Cluster
+metadata:
+  name: {{ $n }}
+  namespace: {{ $ns }}
+  {{- with $r }}
+  annotations:
+    services.k8s.aws/region: {{ . | quote }}
+  {{- end }}
+  labels:
+    {{- include "aws-eks-stack.labels" . | nindent 4 }}
+spec:
+  name: {{ $n | quote }}
+  {{- with .Values.kubernetes_version }}
+  version: {{ . | quote }}
+  {{- end }}
+  roleARN: {{ .Values.cluster_iam_role_arn | quote }}
+  accessConfig:
+    authenticationMode: {{ .Values.authentication_mode | quote }}
+  resourcesVPCConfig:
+    endpointPublicAccess: {{ .Values.endpoint_public_access }}
+    endpointPrivateAccess: {{ .Values.endpoint_private_access }}
+    subnetIDs:
+      {{- range $cpSubnets }}
+      - {{ . | quote }}
+      {{- end }}
+    {{- with .Values.cluster_endpoint_public_access_cidrs }}
+    publicAccessCIDRs:
+      {{- range . }}
+      - {{ . | quote }}
+      {{- end }}
+    {{- end }}
+    {{- with .Values.additional_security_group_ids }}
+    securityGroupIDs:
+      {{- range . }}
+      - {{ . | quote }}
+      {{- end }}
+    {{- end }}
+  kubernetesNetworkConfig:
+    ipFamily: {{ .Values.ip_family | quote }}
+    {{- with .Values.service_ipv4_cidr }}
+    serviceIPv4CIDR: {{ . | quote }}
+    {{- end }}
+  {{- with .Values.enabled_log_types }}
+  logging:
+    clusterLogging:
+      - enabled: true
+        types:
+          {{- range . }}
+          - {{ . | quote }}
+          {{- end }}
+  {{- end }}
+  {{- if or .Values.tags .Values.cluster_tags }}
+  tags:
+    {{- if .Values.tags }}{{- include "aws-eks-stack.tags" .Values.tags | nindent 4 }}{{- end }}
+    {{- if .Values.cluster_tags }}{{- include "aws-eks-stack.tags" .Values.cluster_tags | nindent 4 }}{{- end }}
+  {{- end }}
+---
+apiVersion: eks.services.k8s.aws/v1alpha1
+kind: Nodegroup
+metadata:
+  name: {{ printf "%s-%s" $n $ngName }}
+  namespace: {{ $ns }}
+  {{- with $r }}
+  annotations:
+    services.k8s.aws/region: {{ . | quote }}
+  {{- end }}
+  labels:
+    {{- include "aws-eks-stack.labels" . | nindent 4 }}
+spec:
+  name: {{ $ngName | quote }}
+  clusterRef:
+    from:
+      name: {{ $n }}
+  nodeRole: {{ .Values.node_iam_role_arn | quote }}
+  subnets:
+    {{- range $subnets }}
+    - {{ . | quote }}
+    {{- end }}
+  amiType: {{ .Values.node_ami_type | quote }}
+  capacityType: {{ .Values.node_capacity_type | quote }}
+  diskSize: {{ .Values.node_disk_size }}
+  {{- with .Values.node_instance_types }}
+  instanceTypes:
+    {{- range . }}
+    - {{ . | quote }}
+    {{- end }}
+  {{- end }}
+  scalingConfig:
+    desiredSize: {{ .Values.node_desired_size }}
+    minSize: {{ .Values.node_min_size }}
+    maxSize: {{ .Values.node_max_size }}
+  {{- with .Values.node_labels }}
+  labels:
+    {{- include "aws-eks-stack.tags" . | nindent 4 }}
+  {{- end }}
+  {{- if .Values.tags }}
+  tags:
+    {{- include "aws-eks-stack.tags" .Values.tags | nindent 4 }}
+  {{- end }}

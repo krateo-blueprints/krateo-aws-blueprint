@@ -1,0 +1,48 @@
+# Composition spec for aws-eks-stack — input names mirror terraform-aws-modules/eks/aws.
+#
+# core-provider builds the Composition CRD from values.schema.json ONLY; this file provides a
+# schema-valid example so `helm template`/`helm lint` render a complete EKS cluster + one
+# managed node group.
+
+# AWS region (Krateo/ACK wiring; not a Terraform input). Empty = controller default.
+region: ""
+
+name: krateo-eks
+kubernetes_version: "1.33"
+authentication_mode: "API_AND_CONFIG_MAP"
+
+endpoint_public_access: true
+endpoint_private_access: true
+cluster_endpoint_public_access_cidrs:
+  - "0.0.0.0/0"
+
+# Pre-existing VPC subnets (this stack does not create a VPC; see Limitations in README).
+subnet_ids:
+  - subnet-0aaaaaaaaaaaaaaa1
+  - subnet-0aaaaaaaaaaaaaaa2
+control_plane_subnet_ids: []
+additional_security_group_ids: []
+
+ip_family: "ipv4"
+enabled_log_types:
+  - api
+  - audit
+  - authenticator
+
+# Pre-existing IAM role ARNs (this stack does not create IAM; see Limitations in README).
+cluster_iam_role_arn: "arn:aws:iam::111122223333:role/krateo-eks-cluster-role"
+node_iam_role_arn: "arn:aws:iam::111122223333:role/krateo-eks-node-role"
+
+node_group_name: "default"
+node_ami_type: "AL2023_x86_64_STANDARD"
+node_capacity_type: "ON_DEMAND"
+node_instance_types:
+  - m5.large
+node_disk_size: 20
+node_desired_size: 2
+node_min_size: 1
+node_max_size: 3
+node_labels: {}
+
+tags: {}
+cluster_tags: {}

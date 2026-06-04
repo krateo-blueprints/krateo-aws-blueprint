@@ -1,0 +1,114 @@
+{{- /*
+Composes an EC2 Auto Scaling group from native ACK resources, mirroring
+terraform-aws-modules/autoscaling/aws:
+  ec2 LaunchTemplate  -> holds image_id / instance_type / key_name / user_data / sg / iam profile
+  autoscaling AutoScalingGroup -> min/max/desired size, subnets, health check, target groups
+
+The AutoScalingGroup references the LaunchTemplate by its AWS launch-template NAME
+(spec.launchTemplate.launchTemplateName) — the ACK AutoScalingGroup has no launchTemplateRef
+field, so the two are wired by the deterministic launch-template name set on both resources.
+External resources (subnet IDs, security group IDs, target group ARNs, IAM instance profile ARN,
+key pair name) are passed through as IDs/ARNs and are NOT created by this stack.
+*/ -}}
+{{- $r := .Values.region -}}
+{{- $n := .Values.name | default .Release.Name -}}
+{{- $ns := .Release.Namespace -}}
+{{- $ltName := .Values.launch_template_name | default $n -}}
+apiVersion: ec2.services.k8s.aws/v1alpha1
+kind: LaunchTemplate
+metadata:
+  name: {{ $n }}-lt
+  namespace: {{ $ns }}
+  {{- with $r }}
+  annotations:
+    services.k8s.aws/region: {{ . | quote }}
+  {{- end }}
+  labels:
+    {{- include "aws-autoscaling-stack.labels" . | nindent 4 }}
+spec:
+  name: {{ $ltName | quote }}
+  {{- with .Values.launch_template_description }}
+  versionDescription: {{ . | quote }}
+  {{- end }}
+  data:
+    {{- with .Values.image_id }}
+    imageID: {{ . | quote }}
+    {{- end }}
+    {{- with .Values.instance_type }}
+    instanceType: {{ . | quote }}
+    {{- end }}
+    {{- with .Values.key_name }}
+    keyName: {{ . | quote }}
+    {{- end }}
+    {{- with .Values.user_data }}
+    userData: {{ . | quote }}
+    {{- end }}
+    {{- if .Values.ebs_optimized }}
+    ebsOptimized: {{ .Values.ebs_optimized }}
+    {{- end }}
+    {{- with .Values.iam_instance_profile_arn }}
+    iamInstanceProfile:
+      arn: {{ . | quote }}
+    {{- end }}
+    {{- with .Values.security_groups }}
+    securityGroupIDs:
+      {{- range . }}
+      - {{ . | quote }}
+      {{- end }}
+    {{- end }}
+  tags:
+    - key: Name
+      value: {{ $ltName | quote }}
+    {{- if .Values.tags }}{{- include "aws-autoscaling-stack.tags" .Values.tags | nindent 4 }}{{- end }}
+---
+apiVersion: autoscaling.services.k8s.aws/v1alpha1
+kind: AutoScalingGroup
+metadata:
+  name: {{ $n }}-asg
+  namespace: {{ $ns }}
+  {{- with $r }}
+  annotations:
+    services.k8s.aws/region: {{ . | quote }}
+  {{- end }}
+  labels:
+    {{- include "aws-autoscaling-stack.labels" . | nindent 4 }}
+spec:
+  name: {{ $n | quote }}
+  minSize: {{ .Values.min_size }}
+  maxSize: {{ .Values.max_size }}
+  {{- if .Values.desired_capacity }}
+  desiredCapacity: {{ .Values.desired_capacity }}
+  {{- end }}
+  launchTemplate:
+    launchTemplateName: {{ $ltName | quote }}
+    version: {{ .Values.launch_template_version | default "$Latest" | quote }}
+  {{- if .Values.vpc_zone_identifier }}
+  vpcZoneIdentifier: {{ join "," .Values.vpc_zone_identifier | quote }}
+  {{- else if .Values.availability_zones }}
+  availabilityZones:
+    {{- range .Values.availability_zones }}
+    - {{ . | quote }}
+    {{- end }}
+  {{- end }}
+  {{- with .Values.health_check_type }}
+  healthCheckType: {{ . | quote }}
+  {{- end }}
+  {{- if .Values.health_check_grace_period }}
+  healthCheckGracePeriod: {{ .Values.health_check_grace_period }}
+  {{- end }}
+  {{- if .Values.default_cooldown }}
+  defaultCooldown: {{ .Values.default_cooldown }}
+  {{- end }}
+  {{- if .Values.capacity_rebalance }}
+  capacityRebalance: {{ .Values.capacity_rebalance }}
+  {{- end }}
+  {{- with .Values.target_group_arns }}
+  targetGroupARNs:
+    {{- range . }}
+    - {{ . | quote }}
+    {{- end }}
+  {{- end }}
+  tags:
+    - key: Name
+      value: {{ $n | quote }}
+    {{- if .Values.tags }}{{- include "aws-autoscaling-stack.tags" .Values.tags | nindent 4 }}{{- end }}

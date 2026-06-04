@@ -1,0 +1,51 @@
+# Composition spec for aws-alb-stack — input names mirror terraform-aws-modules/alb/aws.
+#
+# core-provider builds the Composition CRD from values.schema.json ONLY; this file provides a
+# schema-valid example so `helm template`/`helm lint` render a complete public ALB with one
+# HTTP target group and listener.
+
+# AWS region (Krateo/ACK wiring; not a Terraform input). Empty = controller default.
+region: ""
+
+name: krateo-alb
+load_balancer_type: application
+internal: false
+
+# Existing external resources (not created by this stack) — see README "Limitations".
+vpc_id: "vpc-0123456789abcdef0"
+subnets:
+  - "subnet-0aaaa1111bbbb2222"
+  - "subnet-0cccc3333dddd4444"
+security_groups:
+  - "sg-00001111222233334"
+
+enable_deletion_protection: false
+enable_http2: true
+idle_timeout: 60
+default_port: 80
+default_protocol: HTTP
+
+target_groups:
+  http:
+    name: krateo-alb-http
+    port: 80
+    protocol: HTTP
+    target_type: instance
+    health_check:
+      enabled: true
+      path: "/"
+      protocol: HTTP
+      healthy_threshold: 3
+      unhealthy_threshold: 3
+      interval: 30
+      timeout: 6
+      matcher: "200"
+
+listeners:
+  http:
+    port: 80
+    protocol: HTTP
+    forward:
+      target_group_key: http
+
+tags: {}
