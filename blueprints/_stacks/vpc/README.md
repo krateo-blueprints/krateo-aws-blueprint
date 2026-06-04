@@ -4,6 +4,23 @@ A **composite** Krateo blueprint that provisions a full AWS VPC as one Compositi
 the [`terraform-aws-modules/vpc/aws`](https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws)
 module on top of the [ACK](https://aws-controllers-k8s.github.io/community/) **ec2** controller.
 
+## How it works
+
+![How the aws-vpc-stack blueprint works: Krateo renders the Composition into wired ACK resources, each reconciles through a state machine, and they become Ready in dependency order](docs/how-it-works.svg)
+
+One `AwsVpcStack` Composition is rendered by Krateo's composition-dynamic-controller into ~10
+native ACK ec2 resources. Each resource reconciles through the ACK state machine — **New →
+Resolving refs → Creating (AWS API) → Synced/Ready** — where a resource stays in *Resolving refs*
+until every `*Ref` target it points at is itself `Synced`, and retries on `ACK.Recoverable`
+errors. Because the resources reference each other (`vpcRef`, `routeTableRefs`, `gatewayRef`,
+`natGatewayRef`, `subnetRef`, `allocationRef`), they come up in strict dependency order:
+**VPC → Internet Gateway → public route table → public subnets → NAT gateway (+ EIP) → private
+route table → private subnets**. This was verified live end-to-end on AWS (real VPC, 4 subnets,
+IGW, NAT, and `0.0.0.0/0` routes to IGW/NAT), and the delete path tears the real resources down
+when the Composition is deleted.
+
+## Composed resources
+
 Unlike the single-resource `blueprints/<service>/<resource>` charts (one ACK CR each), a *stack*
 composes several wired-together ACK resources. Creating one `AwsVpcStack` Composition renders:
 

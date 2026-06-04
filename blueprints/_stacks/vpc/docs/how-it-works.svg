@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1060 710" width="1060" height="710" font-family="sans-serif">
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#64748b"/></marker><marker id="aho" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#FF9900"/></marker></defs>
+<rect x="0" y="0" width="1060" height="710" rx="0" fill="#ffffff" stroke="#ffffff" stroke-width="0"/>
+<text x="530.0" y="34" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="22" font-weight="600" fill="#0f172a" text-anchor="middle">How the aws-vpc-stack blueprint works</text>
+<text x="40" y="76" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="15" font-weight="700" fill="#0EA5A4" text-anchor="start">1 · Krateo renders one Composition into many wired ACK resources</text>
+<rect x="43.0" y="94.0" width="134" height="52" rx="8" fill="#ECFEFF" stroke="#0EA5A4" stroke-width="2"/>
+<text x="110" y="117" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="14" font-weight="600" fill="#1f2937" text-anchor="middle">AwsVpcStack</text>
+<text x="110" y="135" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="11" font-weight="500" fill="#6b7280" text-anchor="middle">Composition</text>
+<rect x="196.0" y="94.0" width="148" height="52" rx="8" fill="#ECFEFF" stroke="#0EA5A4" stroke-width="2"/>
+<text x="270" y="117" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="14" font-weight="600" fill="#1f2937" text-anchor="middle">composition-</text>
+<text x="270" y="135" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="11" font-weight="500" fill="#6b7280" text-anchor="middle">dynamic-controller</text>
+<rect x="363.0" y="94.0" width="134" height="52" rx="8" fill="#ECFEFF" stroke="#0EA5A4" stroke-width="2"/>
+<text x="430" y="117" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="14" font-weight="600" fill="#1f2937" text-anchor="middle">Helm chart</text>
+<text x="430" y="135" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="11" font-weight="500" fill="#6b7280" text-anchor="middle">render</text>
+<rect x="523.0" y="94.0" width="134" height="52" rx="8" fill="#EFF6FF" stroke="#2563EB" stroke-width="2"/>
+<text x="590" y="117" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="14" font-weight="600" fill="#1f2937" text-anchor="middle">10 ACK ec2</text>
+<text x="590" y="135" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="11" font-weight="500" fill="#6b7280" text-anchor="middle">custom resources</text>
+<rect x="693.0" y="94.0" width="134" height="52" rx="8" fill="#EFF6FF" stroke="#2563EB" stroke-width="2"/>
+<text x="760" y="117" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="14" font-weight="600" fill="#1f2937" text-anchor="middle">ACK ec2</text>
+<text x="760" y="135" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="11" font-weight="500" fill="#6b7280" text-anchor="middle">controller</text>
+<rect x="866.0" y="94.0" width="148" height="52" rx="8" fill="#FFF7ED" stroke="#FF9900" stroke-width="2"/>
+<text x="940" y="117" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="14" font-weight="600" fill="#1f2937" text-anchor="middle">AWS</text>
+<text x="940" y="135" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="11" font-weight="500" fill="#6b7280" text-anchor="middle">VPC + subnets…</text>
+<path d="M 177 120 L 196 120" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#ah)"/>
+<path d="M 344 120 L 363 120" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#ah)"/>
+<path d="M 497 120 L 523 120" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#ah)"/>
+<path d="M 657 120 L 693 120" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#ah)"/>
+<path d="M 827 120 L 866 120" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#ah)"/>
+<text x="40" y="212" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="15" font-weight="700" fill="#0EA5A4" text-anchor="start">2 · Each ACK resource reconciles through this state machine</text>
+<circle cx="60" cy="296" r="7" fill="#0f172a"/>
+<path d="M 70 296 L 88 296" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#ah)"/>
+<rect x="88" y="266" width="124" height="60" rx="30" fill="#f1f5f9" stroke="#94a3b8" stroke-width="2"/>
+<text x="150" y="301" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="14" font-weight="600" fill="#1f2937" text-anchor="middle">New</text>
+<rect x="338" y="266" width="124" height="60" rx="30" fill="#FEF9C3" stroke="#CA8A04" stroke-width="2"/>
+<text x="400" y="292" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="14" font-weight="600" fill="#1f2937" text-anchor="middle">Resolving</text>
+<text x="400" y="312" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="13" font-weight="600" fill="#1f2937" text-anchor="middle">refs</text>
+<rect x="588" y="266" width="124" height="60" rx="30" fill="#FFEDD5" stroke="#FF9900" stroke-width="2"/>
+<text x="650" y="292" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="14" font-weight="600" fill="#1f2937" text-anchor="middle">Creating</text>
+<text x="650" y="312" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="13" font-weight="600" fill="#1f2937" text-anchor="middle">(AWS API)</text>
+<rect x="838" y="266" width="124" height="60" rx="30" fill="#DCFCE7" stroke="#16A34A" stroke-width="2"/>
+<text x="900" y="292" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="14" font-weight="600" fill="#1f2937" text-anchor="middle">Synced /</text>
+<text x="900" y="312" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="13" font-weight="600" fill="#1f2937" text-anchor="middle">Ready</text>
+<path d="M 212 296 L 338 296" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#ah)"/>
+<text x="275.0" y="282" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="11" font-weight="500" fill="#475569" text-anchor="middle">all *Ref targets Synced</text>
+<path d="M 462 296 L 588 296" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#ah)"/>
+<path d="M 712 296 L 838 296" fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#ah)"/>
+<text x="775.0" y="282" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="11" font-weight="500" fill="#475569" text-anchor="middle">resource exists</text>
+<path d="M 620 326 C 580 374, 720 374, 680 326" fill="none" stroke="#FF9900" stroke-width="2" marker-end="url(#aho)"/>
+<text x="650" y="388" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="11" font-weight="600" fill="#b45309" text-anchor="middle">ACK.Recoverable — retry on AWS error / missing dep</text>
+<path d="M 370 266 C 334 224, 466 224, 430 266" fill="none" stroke="#CA8A04" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#ah)"/>
+<text x="400" y="238" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="11" font-weight="600" fill="#a16207" text-anchor="middle">waits for referenced resources</text>
+<text x="40" y="440" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="15" font-weight="700" fill="#0EA5A4" text-anchor="start">3 · …so resources become Ready in dependency order (the *Ref graph)</text>
+<rect x="8.0" y="486" width="124" height="68" rx="10" fill="#ffffff" stroke="#2563EB" stroke-width="2"/>
+<text x="70.0" y="512" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="13" font-weight="600" fill="#1f2937" text-anchor="middle">VPC</text>
+<text x="70.0" y="547" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="500" fill="#6b7280" text-anchor="middle">vpc</text>
+<rect x="161.33333333333334" y="486" width="124" height="68" rx="10" fill="#ffffff" stroke="#2563EB" stroke-width="2"/>
+<text x="223.33333333333334" y="512" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="13" font-weight="600" fill="#1f2937" text-anchor="middle">Internet</text>
+<text x="223.33333333333334" y="529" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="13" font-weight="600" fill="#1f2937" text-anchor="middle">Gateway</text>
+<text x="223.33333333333334" y="547" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="500" fill="#6b7280" text-anchor="middle">igw</text>
+<rect x="314.6666666666667" y="486" width="124" height="68" rx="10" fill="#ffffff" stroke="#2563EB" stroke-width="2"/>
+<text x="376.6666666666667" y="512" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="13" font-weight="600" fill="#1f2937" text-anchor="middle">public</text>
+<text x="376.6666666666667" y="529" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="13" font-weight="600" fill="#1f2937" text-anchor="middle">RouteTable</text>
+<text x="376.6666666666667" y="547" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="500" fill="#6b7280" text-anchor="middle">route→igw</text>
+<rect x="468.0" y="486" width="124" height="68" rx="10" fill="#ffffff" stroke="#2563EB" stroke-width="2"/>
+<text x="530.0" y="512" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="13" font-weight="600" fill="#1f2937" text-anchor="middle">public</text>
+<text x="530.0" y="529" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="13" font-weight="600" fill="#1f2937" text-anchor="middle">Subnet ×N</text>
+<text x="530.0" y="547" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="500" fill="#6b7280" text-anchor="middle">→ public RT</text>
+<rect x="621.3333333333334" y="486" width="124" height="68" rx="10" fill="#ffffff" stroke="#2563EB" stroke-width="2"/>
+<text x="683.3333333333334" y="512" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="13" font-weight="600" fill="#1f2937" text-anchor="middle">NAT</text>
+<text x="683.3333333333334" y="529" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="13" font-weight="600" fill="#1f2937" text-anchor="middle">Gateway</text>
+<text x="683.3333333333334" y="547" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="500" fill="#6b7280" text-anchor="middle">→ subnet+eip</text>
+<rect x="774.6666666666667" y="486" width="124" height="68" rx="10" fill="#ffffff" stroke="#2563EB" stroke-width="2"/>
+<text x="836.6666666666667" y="512" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="13" font-weight="600" fill="#1f2937" text-anchor="middle">private</text>
+<text x="836.6666666666667" y="529" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="13" font-weight="600" fill="#1f2937" text-anchor="middle">RouteTable</text>
+<text x="836.6666666666667" y="547" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="500" fill="#6b7280" text-anchor="middle">route→nat</text>
+<rect x="928.0" y="486" width="124" height="68" rx="10" fill="#ffffff" stroke="#2563EB" stroke-width="2"/>
+<text x="990.0" y="512" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="13" font-weight="600" fill="#1f2937" text-anchor="middle">private</text>
+<text x="990.0" y="529" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="13" font-weight="600" fill="#1f2937" text-anchor="middle">Subnet ×N</text>
+<text x="990.0" y="547" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="500" fill="#6b7280" text-anchor="middle">→ private RT</text>
+<path d="M 132.0 520 L 161.33333333333334 520" fill="none" stroke="#2563EB" stroke-width="2" marker-end="url(#ah)"/>
+<path d="M 285.33333333333337 520 L 314.6666666666667 520" fill="none" stroke="#2563EB" stroke-width="2" marker-end="url(#ah)"/>
+<path d="M 438.6666666666667 520 L 468.0 520" fill="none" stroke="#2563EB" stroke-width="2" marker-end="url(#ah)"/>
+<path d="M 592.0 520 L 621.3333333333334 520" fill="none" stroke="#2563EB" stroke-width="2" marker-end="url(#ah)"/>
+<path d="M 745.3333333333334 520 L 774.6666666666667 520" fill="none" stroke="#2563EB" stroke-width="2" marker-end="url(#ah)"/>
+<path d="M 898.6666666666667 520 L 928.0 520" fill="none" stroke="#2563EB" stroke-width="2" marker-end="url(#ah)"/>
+<rect x="628.3333333333334" y="590" width="110" height="40" rx="8" fill="#FFF7ED" stroke="#FF9900" stroke-width="2"/>
+<text x="683.3333333333334" y="615" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="13" font-weight="600" fill="#1f2937" text-anchor="middle">ElasticIP</text>
+<path d="M 683.3333333333334 590 L 683.3333333333334 554" fill="none" stroke="#FF9900" stroke-width="2" marker-end="url(#ah)"/>
+<text x="70.0" y="575" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="10" font-weight="500" fill="#475569" text-anchor="middle">VPC is referenced (vpcRef)</text>
+<text x="70.0" y="590" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="10" font-weight="500" fill="#475569" text-anchor="middle">by every resource</text>
+</svg>
