@@ -1,5 +1,12 @@
 # Krateo AWS Blueprints
 
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/hero-dark.svg">
+    <img alt="Krateo ❤ AWS" src="docs/hero-light.svg" width="820">
+  </picture>
+</p>
+
 A catalog of [Krateo](https://krateo.io) blueprints that expose **AWS resources** as
 self-service Krateo Compositions, backed by the
 [AWS Controllers for Kubernetes (ACK)](https://aws-controllers-k8s.github.io/community/).
