@@ -32,6 +32,8 @@ spec:
 
 If those field names look familiar, that's deliberate: they're the **same inputs as the popular `terraform-aws-modules/vpc/aws` module**. We didn't invent a new vocabulary; we met people where they already are.
 
+In fact the blueprint is a **faithful replica of that module's interface** — the same `cidr`, `azs`, `public_subnets`, `private_subnets`, and `enable_nat_gateway` knobs yield the same network. What changes is everything *wrapped around* it. Because the request is a Kubernetes object, **who** may create a VPC is governed by ordinary Kubernetes **RBAC** and namespaces — least-privilege access, not a bespoke pipeline secret. **Every** create, change, and delete flows through the Kubernetes API server, so the **audit trail** is the same one you already keep for your workloads (and, with GitOps, a pull-request history on top of it). And where `terraform apply` runs once and walks away, the ACK controllers **continuously reconcile**: delete a route in the console and it comes back; the live network is forced to match the declared one, forever. A Terraform module hands you the network. The blueprint hands you the *same* network plus least-privilege access control, a built-in audit log, and drift that heals itself.
+
 Applying that one object produces ten real AWS resources, correctly wired: a VPC, public and private subnets across two AZs, an internet gateway, a NAT gateway with its Elastic IP, and route tables sending public traffic to the IGW and private traffic through the NAT:
 
 ![The network produced by the Composition: a VPC with public and private subnets across two AZs, an Internet Gateway for public egress, and a single NAT gateway for private egress](topology.svg)
