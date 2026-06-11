@@ -8,7 +8,7 @@ Every platform team eventually hits the same wall. A product squad needs "a VPC 
 
 What if that squad could instead write a dozen lines of YAML, `kubectl apply`, and get a correct, opinionated network a minute later — while the platform team keeps full control of *what* "correct" means?
 
-That's what we built with `aws-vpc-stack`: a Krateo blueprint that turns one Composition into a complete AWS VPC, using **Kubernetes as the backbone** and **AWS Controllers for Kubernetes (ACK)** as the hands. Here's the design — and why this stack of choices is more than the sum of its parts.
+That's what we built with *aws-vpc-stack*: a Krateo blueprint that turns one Composition into a complete AWS VPC, using **Kubernetes as the backbone** and **AWS Controllers for Kubernetes (ACK)** as the hands. Here's the design — and why this stack of choices is more than the sum of its parts.
 
 ## One Composition, not a ticket
 
@@ -29,6 +29,8 @@ spec:
   enable_nat_gateway: true
   single_nat_gateway: true
 ```
+
+## A faithful replica of the Terraform module
 
 If those field names look familiar, that's deliberate: they're the **same inputs as the popular `terraform-aws-modules/vpc/aws` module**. We didn't invent a new vocabulary; we met people where they already are.
 
@@ -85,7 +87,7 @@ We didn't write an orchestrator. We wrote a Helm chart that emits ten cross-refe
 
 ACK gives you the building blocks. It does **not** give you a product. A developer still has to know which ten resources to create, how to wire `vpcRef` to `routeTableRefs`, and which fields matter. That's where [Krateo](https://krateo.io) comes in.
 
-A Krateo **CompositionDefinition** points at a Helm chart (our `aws-vpc-stack`). When applied, Krateo:
+A Krateo **CompositionDefinition** points at a Helm chart (our *aws-vpc-stack*). When applied, Krateo:
 
 1. Builds a brand-new CRD — `AwsVpcStack` — from the chart's JSON Schema. The schema *is* the API contract: it's how we expose a curated, Terraform-module-shaped set of inputs and hide the 200+ knobs nobody needs.
 2. Spins up a controller that, on each `AwsVpcStack` you create, renders the chart and applies the resulting ACK resources.
@@ -107,6 +109,6 @@ To be honest about the trade-offs: you need ACK controllers and IAM permissions 
 
 ## Try it
 
-`aws-vpc-stack` is one of a set of composite "stack" blueprints (RDS, EKS, ALB, IAM, security groups, autoscaling, ECS) that replicate the most-used Terraform modules on top of ACK. Each is a published OCI chart with a quickstart and an architecture diagram. We validated the VPC stack end-to-end on a real AWS account: one Composition in, a real multi-AZ network out, and a clean teardown when the Composition is deleted.
+*aws-vpc-stack* is one of a set of composite "stack" blueprints (RDS, EKS, ALB, IAM, security groups, autoscaling, ECS) that replicate the most-used Terraform modules on top of ACK. Each is a published OCI chart with a quickstart and an architecture diagram. We validated the VPC stack end-to-end on a real AWS account: one Composition in, a real multi-AZ network out, and a clean teardown when the Composition is deleted.
 
 Kubernetes as the backbone, ACK as the hands, Krateo as the product. Twelve lines of YAML, a whole network, and a platform team that finally gets out of the ticket queue.
