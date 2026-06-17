@@ -15,6 +15,6 @@ spec:
       navigate:
         - id: install
           type: navigate
-          path: /marketplace/aws-ram-permission/new
+          path: /marketplace/aws-ram-system/aws-ram-permission/new
   resourcesRefs:
     items: []

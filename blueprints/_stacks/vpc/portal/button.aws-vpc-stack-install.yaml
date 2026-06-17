@@ -15,6 +15,6 @@ spec:
       navigate:
         - id: install
           type: navigate
-          path: /marketplace/aws-vpc-stack/new
+          path: /marketplace/aws-vpc-system/aws-vpc-stack/new
   resourcesRefs:
     items: []

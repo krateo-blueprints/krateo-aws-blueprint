@@ -15,6 +15,6 @@ spec:
       navigate:
         - id: install
           type: navigate
-          path: /marketplace/aws-ssm-resourcedatasync/new
+          path: /marketplace/aws-ssm-system/aws-ssm-resourcedatasync/new
   resourcesRefs:
     items: []

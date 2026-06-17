@@ -15,6 +15,6 @@ spec:
       navigate:
         - id: install
           type: navigate
-          path: /marketplace/aws-sagemaker-transformjob/new
+          path: /marketplace/aws-sagemaker-system/aws-sagemaker-transformjob/new
   resourcesRefs:
     items: []

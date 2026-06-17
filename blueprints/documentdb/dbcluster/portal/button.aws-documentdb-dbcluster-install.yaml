@@ -15,6 +15,6 @@ spec:
       navigate:
         - id: install
           type: navigate
-          path: /marketplace/aws-documentdb-dbcluster/new
+          path: /marketplace/aws-documentdb-system/aws-documentdb-dbcluster/new
   resourcesRefs:
     items: []

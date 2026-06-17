@@ -15,6 +15,6 @@ spec:
       navigate:
         - id: install
           type: navigate
-          path: /marketplace/aws-recyclebin-rule/new
+          path: /marketplace/aws-recyclebin-system/aws-recyclebin-rule/new
   resourcesRefs:
     items: []

@@ -15,6 +15,6 @@ spec:
       navigate:
         - id: install
           type: navigate
-          path: /marketplace/aws-apigateway-apimethodresponse/new
+          path: /marketplace/aws-apigateway-system/aws-apigateway-apimethodresponse/new
   resourcesRefs:
     items: []

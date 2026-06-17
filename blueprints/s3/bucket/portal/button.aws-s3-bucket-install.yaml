@@ -15,6 +15,6 @@ spec:
       navigate:
         - id: install
           type: navigate
-          path: /marketplace/aws-s3-bucket/new
+          path: /marketplace/aws-s3-system/aws-s3-bucket/new
   resourcesRefs:
     items: []

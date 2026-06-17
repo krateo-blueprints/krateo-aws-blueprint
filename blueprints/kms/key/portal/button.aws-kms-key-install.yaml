@@ -15,6 +15,6 @@ spec:
       navigate:
         - id: install
           type: navigate
-          path: /marketplace/aws-kms-key/new
+          path: /marketplace/aws-kms-system/aws-kms-key/new
   resourcesRefs:
     items: []

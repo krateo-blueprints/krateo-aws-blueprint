@@ -15,6 +15,6 @@ spec:
       navigate:
         - id: install
           type: navigate
-          path: /marketplace/aws-codeartifact-packagegroup/new
+          path: /marketplace/aws-codeartifact-system/aws-codeartifact-packagegroup/new
   resourcesRefs:
     items: []

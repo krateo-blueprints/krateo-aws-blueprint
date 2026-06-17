@@ -15,6 +15,6 @@ spec:
       navigate:
         - id: install
           type: navigate
-          path: /marketplace/aws-quicksight-datasource/new
+          path: /marketplace/aws-quicksight-system/aws-quicksight-datasource/new
   resourcesRefs:
     items: []

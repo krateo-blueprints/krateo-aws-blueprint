@@ -15,6 +15,6 @@ spec:
       navigate:
         - id: install
           type: navigate
-          path: /marketplace/aws-ssm-document/new
+          path: /marketplace/aws-ssm-system/aws-ssm-document/new
   resourcesRefs:
     items: []

@@ -15,6 +15,6 @@ spec:
       navigate:
         - id: install
           type: navigate
-          path: /marketplace/aws-sagemaker-modelqualityjobdefinition/new
+          path: /marketplace/aws-sagemaker-system/aws-sagemaker-modelqualityjobdefinition/new
   resourcesRefs:
     items: []

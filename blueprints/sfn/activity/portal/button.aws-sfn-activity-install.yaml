@@ -15,6 +15,6 @@ spec:
       navigate:
         - id: install
           type: navigate
-          path: /marketplace/aws-sfn-activity/new
+          path: /marketplace/aws-sfn-system/aws-sfn-activity/new
   resourcesRefs:
     items: []

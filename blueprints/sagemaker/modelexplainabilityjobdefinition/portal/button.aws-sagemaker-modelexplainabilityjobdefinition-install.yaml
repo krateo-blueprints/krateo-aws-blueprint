@@ -15,6 +15,6 @@ spec:
       navigate:
         - id: install
           type: navigate
-          path: /marketplace/aws-sagemaker-modelexplainabilityjobdefinition/new
+          path: /marketplace/aws-sagemaker-system/aws-sagemaker-modelexplainabilityjobdefinition/new
   resourcesRefs:
     items: []

@@ -15,6 +15,6 @@ spec:
       navigate:
         - id: install
           type: navigate
-          path: /marketplace/aws-kafka-serverlesscluster/new
+          path: /marketplace/aws-kafka-system/aws-kafka-serverlesscluster/new
   resourcesRefs:
     items: []

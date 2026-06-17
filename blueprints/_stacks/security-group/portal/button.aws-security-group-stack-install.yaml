@@ -15,6 +15,6 @@ spec:
       navigate:
         - id: install
           type: navigate
-          path: /marketplace/aws-security-group-stack/new
+          path: /marketplace/aws-security-group-system/aws-security-group-stack/new
   resourcesRefs:
     items: []

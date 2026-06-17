@@ -15,6 +15,6 @@ spec:
       navigate:
         - id: install
           type: navigate
-          path: /marketplace/aws-cloudfront-distribution/new
+          path: /marketplace/aws-cloudfront-system/aws-cloudfront-distribution/new
   resourcesRefs:
     items: []

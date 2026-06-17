@@ -15,6 +15,6 @@ spec:
       navigate:
         - id: install
           type: navigate
-          path: /marketplace/aws-kafka-cluster/new
+          path: /marketplace/aws-kafka-system/aws-kafka-cluster/new
   resourcesRefs:
     items: []

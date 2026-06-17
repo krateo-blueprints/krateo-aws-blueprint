@@ -15,6 +15,6 @@ spec:
       navigate:
         - id: install
           type: navigate
-          path: /marketplace/aws-memorydb-snapshot/new
+          path: /marketplace/aws-memorydb-system/aws-memorydb-snapshot/new
   resourcesRefs:
     items: []

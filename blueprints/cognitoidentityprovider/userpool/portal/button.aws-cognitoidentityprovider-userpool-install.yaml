@@ -15,6 +15,6 @@ spec:
       navigate:
         - id: install
           type: navigate
-          path: /marketplace/aws-cognitoidentityprovider-userpool/new
+          path: /marketplace/aws-cognitoidentityprovider-system/aws-cognitoidentityprovider-userpool/new
   resourcesRefs:
     items: []

@@ -15,6 +15,6 @@ spec:
       navigate:
         - id: install
           type: navigate
-          path: /marketplace/aws-cloudtrail-trail/new
+          path: /marketplace/aws-cloudtrail-system/aws-cloudtrail-trail/new
   resourcesRefs:
     items: []

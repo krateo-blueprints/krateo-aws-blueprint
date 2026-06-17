@@ -15,6 +15,6 @@ spec:
       navigate:
         - id: install
           type: navigate
-          path: /marketplace/aws-dynamodb-backup/new
+          path: /marketplace/aws-dynamodb-system/aws-dynamodb-backup/new
   resourcesRefs:
     items: []

@@ -15,6 +15,6 @@ spec:
       navigate:
         - id: install
           type: navigate
-          path: /marketplace/aws-prometheusservice-loggingconfiguration/new
+          path: /marketplace/aws-prometheusservice-system/aws-prometheusservice-loggingconfiguration/new
   resourcesRefs:
     items: []

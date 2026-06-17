@@ -15,6 +15,6 @@ spec:
       navigate:
         - id: install
           type: navigate
-          path: /marketplace/aws-firehose-deliverystream/new
+          path: /marketplace/aws-firehose-system/aws-firehose-deliverystream/new
   resourcesRefs:
     items: []

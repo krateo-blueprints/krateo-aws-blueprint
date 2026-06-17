@@ -15,6 +15,6 @@ spec:
       navigate:
         - id: install
           type: navigate
-          path: /marketplace/aws-applicationautoscaling-scalabletarget/new
+          path: /marketplace/aws-applicationautoscaling-system/aws-applicationautoscaling-scalabletarget/new
   resourcesRefs:
     items: []

@@ -15,6 +15,6 @@ spec:
       navigate:
         - id: install
           type: navigate
-          path: /marketplace/aws-apigatewayv2-stage/new
+          path: /marketplace/aws-apigatewayv2-system/aws-apigatewayv2-stage/new
   resourcesRefs:
     items: []

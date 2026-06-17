@@ -15,6 +15,6 @@ spec:
       navigate:
         - id: install
           type: navigate
-          path: /marketplace/aws-rds-dbclusterparametergroup/new
+          path: /marketplace/aws-rds-system/aws-rds-dbclusterparametergroup/new
   resourcesRefs:
     items: []

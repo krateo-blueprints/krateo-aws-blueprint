@@ -15,6 +15,6 @@ spec:
       navigate:
         - id: install
           type: navigate
-          path: /marketplace/aws-sfn-statemachine/new
+          path: /marketplace/aws-sfn-system/aws-sfn-statemachine/new
   resourcesRefs:
     items: []

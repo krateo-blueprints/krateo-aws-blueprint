@@ -15,6 +15,6 @@ spec:
       navigate:
         - id: install
           type: navigate
-          path: /marketplace/aws-memorydb-acl/new
+          path: /marketplace/aws-memorydb-system/aws-memorydb-acl/new
   resourcesRefs:
     items: []

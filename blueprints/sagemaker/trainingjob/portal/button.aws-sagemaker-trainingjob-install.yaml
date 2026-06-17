@@ -15,6 +15,6 @@ spec:
       navigate:
         - id: install
           type: navigate
-          path: /marketplace/aws-sagemaker-trainingjob/new
+          path: /marketplace/aws-sagemaker-system/aws-sagemaker-trainingjob/new
   resourcesRefs:
     items: []

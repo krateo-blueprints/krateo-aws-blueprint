@@ -15,6 +15,6 @@ spec:
       navigate:
         - id: install
           type: navigate
-          path: /marketplace/aws-sagemaker-model/new
+          path: /marketplace/aws-sagemaker-system/aws-sagemaker-model/new
   resourcesRefs:
     items: []

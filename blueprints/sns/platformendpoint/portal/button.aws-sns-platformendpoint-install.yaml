@@ -15,6 +15,6 @@ spec:
       navigate:
         - id: install
           type: navigate
-          path: /marketplace/aws-sns-platformendpoint/new
+          path: /marketplace/aws-sns-system/aws-sns-platformendpoint/new
   resourcesRefs:
     items: []

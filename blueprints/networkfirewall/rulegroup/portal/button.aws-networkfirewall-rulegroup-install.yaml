@@ -15,6 +15,6 @@ spec:
       navigate:
         - id: install
           type: navigate
-          path: /marketplace/aws-networkfirewall-rulegroup/new
+          path: /marketplace/aws-networkfirewall-system/aws-networkfirewall-rulegroup/new
   resourcesRefs:
     items: []

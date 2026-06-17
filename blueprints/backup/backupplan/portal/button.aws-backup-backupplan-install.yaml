@@ -15,6 +15,6 @@ spec:
       navigate:
         - id: install
           type: navigate
-          path: /marketplace/aws-backup-backupplan/new
+          path: /marketplace/aws-backup-system/aws-backup-backupplan/new
   resourcesRefs:
     items: []

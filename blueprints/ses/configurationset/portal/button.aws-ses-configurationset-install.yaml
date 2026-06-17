@@ -15,6 +15,6 @@ spec:
       navigate:
         - id: install
           type: navigate
-          path: /marketplace/aws-ses-configurationset/new
+          path: /marketplace/aws-ses-system/aws-ses-configurationset/new
   resourcesRefs:
     items: []

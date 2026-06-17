@@ -15,6 +15,6 @@ spec:
       navigate:
         - id: install
           type: navigate
-          path: /marketplace/aws-dynamodb-globaltable/new
+          path: /marketplace/aws-dynamodb-system/aws-dynamodb-globaltable/new
   resourcesRefs:
     items: []

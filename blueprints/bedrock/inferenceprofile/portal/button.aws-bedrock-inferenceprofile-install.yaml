@@ -15,6 +15,6 @@ spec:
       navigate:
         - id: install
           type: navigate
-          path: /marketplace/aws-bedrock-inferenceprofile/new
+          path: /marketplace/aws-bedrock-system/aws-bedrock-inferenceprofile/new
   resourcesRefs:
     items: []

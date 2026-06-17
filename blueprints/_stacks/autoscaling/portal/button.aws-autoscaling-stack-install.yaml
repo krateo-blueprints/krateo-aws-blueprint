@@ -15,6 +15,6 @@ spec:
       navigate:
         - id: install
           type: navigate
-          path: /marketplace/aws-autoscaling-stack/new
+          path: /marketplace/aws-autoscaling-system/aws-autoscaling-stack/new
   resourcesRefs:
     items: []
