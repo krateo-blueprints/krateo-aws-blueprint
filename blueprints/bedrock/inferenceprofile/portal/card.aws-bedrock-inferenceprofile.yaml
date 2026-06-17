@@ -6,7 +6,6 @@ metadata:
   namespace: aws-bedrock-system
   labels:
     krateo.io/portal-page: blueprints
-    krateo.io/category: MachineLearning
 spec:
   apiRef:
     name: aws-bedrock-inferenceprofile-card-data
@@ -19,16 +18,16 @@ spec:
       name: fa-aws
       color: grey
     tags:
-      - MachineLearning
+      - aws
+      - cloud
+      - iaas
     extra: ''
     items: []
     footer:
       - resourceRefId: aws-bedrock-inferenceprofile-install
   widgetDataTemplate:
     - forPath: extra
-      expression: '${ "Ready: " + .ready }'
-    - forPath: tags
-      expression: ${ ["MachineLearning", .version] }
+      expression: '${ "Ready: " + .ready + (if .version != "—" then " · v" + .version else "" end) }'
     - forPath: icon
       expression: '${ { name: "fa-aws", color: (if .ready == "True" then "green" elif .ready == "False" then "orange" else "grey" end) } }'
   resourcesRefs:

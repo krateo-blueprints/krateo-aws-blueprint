@@ -6,7 +6,6 @@ metadata:
   namespace: aws-quicksight-system
   labels:
     krateo.io/portal-page: blueprints
-    krateo.io/category: Analytics
 spec:
   apiRef:
     name: aws-quicksight-dashboard-card-data
@@ -19,16 +18,16 @@ spec:
       name: fa-aws
       color: grey
     tags:
-      - Analytics
+      - aws
+      - cloud
+      - iaas
     extra: ''
     items: []
     footer:
       - resourceRefId: aws-quicksight-dashboard-install
   widgetDataTemplate:
     - forPath: extra
-      expression: '${ "Ready: " + .ready }'
-    - forPath: tags
-      expression: ${ ["Analytics", .version] }
+      expression: '${ "Ready: " + .ready + (if .version != "—" then " · v" + .version else "" end) }'
     - forPath: icon
       expression: '${ { name: "fa-aws", color: (if .ready == "True" then "green" elif .ready == "False" then "orange" else "grey" end) } }'
   resourcesRefs:

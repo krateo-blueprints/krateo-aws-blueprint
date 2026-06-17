@@ -6,7 +6,6 @@ metadata:
   namespace: aws-eks-system
   labels:
     krateo.io/portal-page: blueprints
-    krateo.io/category: Containers
 spec:
   apiRef:
     name: aws-eks-cluster-card-data
@@ -19,16 +18,16 @@ spec:
       name: fa-aws
       color: grey
     tags:
-      - Containers
+      - aws
+      - cloud
+      - iaas
     extra: ''
     items: []
     footer:
       - resourceRefId: aws-eks-cluster-install
   widgetDataTemplate:
     - forPath: extra
-      expression: '${ "Ready: " + .ready }'
-    - forPath: tags
-      expression: ${ ["Containers", .version] }
+      expression: '${ "Ready: " + .ready + (if .version != "—" then " · v" + .version else "" end) }'
     - forPath: icon
       expression: '${ { name: "fa-aws", color: (if .ready == "True" then "green" elif .ready == "False" then "orange" else "grey" end) } }'
   resourcesRefs:

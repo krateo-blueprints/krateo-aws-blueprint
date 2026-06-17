@@ -6,7 +6,6 @@ metadata:
   namespace: aws-acm-system
   labels:
     krateo.io/portal-page: blueprints
-    krateo.io/category: Security
 spec:
   apiRef:
     name: aws-acm-certificate-card-data
@@ -19,16 +18,16 @@ spec:
       name: fa-aws
       color: grey
     tags:
-      - Security
+      - aws
+      - cloud
+      - iaas
     extra: ''
     items: []
     footer:
       - resourceRefId: aws-acm-certificate-install
   widgetDataTemplate:
     - forPath: extra
-      expression: '${ "Ready: " + .ready }'
-    - forPath: tags
-      expression: ${ ["Security", .version] }
+      expression: '${ "Ready: " + .ready + (if .version != "—" then " · v" + .version else "" end) }'
     - forPath: icon
       expression: '${ { name: "fa-aws", color: (if .ready == "True" then "green" elif .ready == "False" then "orange" else "grey" end) } }'
   resourcesRefs:

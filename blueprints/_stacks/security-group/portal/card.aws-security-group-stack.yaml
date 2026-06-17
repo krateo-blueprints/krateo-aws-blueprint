@@ -6,7 +6,6 @@ metadata:
   namespace: aws-security-group-system
   labels:
     krateo.io/portal-page: blueprints
-    krateo.io/category: Security
 spec:
   apiRef:
     name: aws-security-group-stack-card-data
@@ -19,16 +18,16 @@ spec:
       name: fa-shield-halved
       color: grey
     tags:
-      - Security
+      - aws
+      - cloud
+      - iaas
     extra: ''
     items: []
     footer:
       - resourceRefId: aws-security-group-stack-install
   widgetDataTemplate:
     - forPath: extra
-      expression: '${ "Ready: " + .ready }'
-    - forPath: tags
-      expression: ${ ["Security", .version] }
+      expression: '${ "Ready: " + .ready + (if .version != "—" then " · v" + .version else "" end) }'
     - forPath: icon
       expression: '${ { name: "fa-shield-halved", color: (if .ready == "True" then "green" elif .ready == "False" then "orange" else "grey" end) } }'
   resourcesRefs:

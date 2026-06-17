@@ -6,7 +6,6 @@ metadata:
   namespace: aws-memorydb-system
   labels:
     krateo.io/portal-page: blueprints
-    krateo.io/category: Database
 spec:
   apiRef:
     name: aws-memorydb-snapshot-card-data
@@ -19,16 +18,16 @@ spec:
       name: fa-aws
       color: grey
     tags:
-      - Database
+      - aws
+      - cloud
+      - iaas
     extra: ''
     items: []
     footer:
       - resourceRefId: aws-memorydb-snapshot-install
   widgetDataTemplate:
     - forPath: extra
-      expression: '${ "Ready: " + .ready }'
-    - forPath: tags
-      expression: ${ ["Database", .version] }
+      expression: '${ "Ready: " + .ready + (if .version != "—" then " · v" + .version else "" end) }'
     - forPath: icon
       expression: '${ { name: "fa-aws", color: (if .ready == "True" then "green" elif .ready == "False" then "orange" else "grey" end) } }'
   resourcesRefs:

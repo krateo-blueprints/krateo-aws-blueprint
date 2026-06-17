@@ -6,7 +6,6 @@ metadata:
   namespace: aws-vpc-system
   labels:
     krateo.io/portal-page: blueprints
-    krateo.io/category: Networking
 spec:
   apiRef:
     name: aws-vpc-stack-card-data
@@ -19,16 +18,16 @@ spec:
       name: fa-network-wired
       color: grey
     tags:
-      - Networking
+      - aws
+      - cloud
+      - iaas
     extra: ''
     items: []
     footer:
       - resourceRefId: aws-vpc-stack-install
   widgetDataTemplate:
     - forPath: extra
-      expression: '${ "Ready: " + .ready }'
-    - forPath: tags
-      expression: ${ ["Networking", .version] }
+      expression: '${ "Ready: " + .ready + (if .version != "—" then " · v" + .version else "" end) }'
     - forPath: icon
       expression: '${ { name: "fa-network-wired", color: (if .ready == "True" then "green" elif .ready == "False" then "orange" else "grey" end) } }'
   resourcesRefs:
