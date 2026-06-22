@@ -22,7 +22,7 @@ version: CHART_VERSION
 appVersion: "tfmod-7.5.0"
 
 home: https://krateo.io
-icon: "https://github.com/krateoplatformops/krateo/blob/main/docs/media/logo.svg"
+icon: "https://raw.githubusercontent.com/krateoplatformops/krateo/main/docs/media/logo.svg"
 keywords:
   - aws
   - ecs
@@ -34,4 +34,6 @@ sources:
   - https://github.com/braghettos/krateo-aws-blueprint
   - https://registry.terraform.io/modules/terraform-aws-modules/ecs/aws
 annotations:
+  krateo.io/category: "compute"
+  krateo.io/maturity: "beta"
   krateoSupportedVersion: "2.7.0"

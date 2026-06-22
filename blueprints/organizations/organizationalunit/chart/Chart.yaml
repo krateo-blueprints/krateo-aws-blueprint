@@ -17,7 +17,7 @@ version: CHART_VERSION
 appVersion: "v1alpha1"
 
 home: https://krateo.io
-icon: "https://github.com/krateoplatformops/krateo/blob/main/docs/media/logo.svg"
+icon: "https://raw.githubusercontent.com/krateoplatformops/krateo/main/docs/media/logo.svg"
 keywords:
   - aws
   - organizations
@@ -26,4 +26,6 @@ keywords:
 sources:
   - https://github.com/braghettos/krateo-aws-blueprint
 annotations:
+  krateo.io/category: "security"
+  krateo.io/maturity: "beta"
   krateoSupportedVersion: "2.7.0"
