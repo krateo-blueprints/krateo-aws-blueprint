@@ -26,6 +26,6 @@ keywords:
 sources:
   - https://github.com/braghettos/krateo-aws-blueprint
 annotations:
-  krateo.io/category: "network"
+  krateo.io/category: "compute"
   krateo.io/maturity: "beta"
   krateoSupportedVersion: "2.7.0"
