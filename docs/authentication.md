@@ -37,26 +37,62 @@ aws eks create-pod-identity-association \
 
 ## Alternative: static credentials (any cluster)
 
-For non-EKS clusters (kind, on-prem, demos), supply an access key/secret via a Secret and point
-the controller at it. This is simpler but puts long-lived credentials in the cluster — prefer
-IRSA in production.
+For non-EKS clusters (kind, on-prem, demos), give the controller an access key/secret via a
+Secret. This is simpler but puts long-lived credentials in the cluster — prefer IRSA in
+production.
+
+**Important — it's a credentials *file*, not env-var literals.** ACK controllers do **not** read
+`AWS_ACCESS_KEY_ID` / `AWS_SECRET_ACCESS_KEY` keys from the Secret. The chart mounts **one**
+Secret key as an AWS [shared-credentials file](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html)
+(it sets `AWS_SHARED_CREDENTIALS_FILE` to the mounted file and selects a profile via
+`AWS_PROFILE`). So the Secret must hold a single key — here `credentials` — whose value is a
+`[<profile>]` block:
+
+```ini
+[default]
+aws_access_key_id = AKIA...
+aws_secret_access_key = ...
+```
+
+Create the namespace and the Secret:
 
 ```sh
 kubectl create namespace ack-system
 
 kubectl create secret generic aws-credentials -n ack-system \
-  --from-literal=AWS_ACCESS_KEY_ID=<AKIA...> \
-  --from-literal=AWS_SECRET_ACCESS_KEY=<secret>
-
-helm install ack-s3-controller \
-  oci://public.ecr.aws/aws-controllers-k8s/s3-chart \
-  --namespace ack-system \
-  --set aws.region=eu-west-1 \
-  --set "aws.credentials.secretName=aws-credentials" \
-  --set "aws.credentials.secretKey=AWS_ACCESS_KEY_ID"
+  --from-literal=credentials="$(printf '[default]\naws_access_key_id = %s\naws_secret_access_key = %s\n' \
+      'AKIA...' '<secret>')"
 ```
 
-> Exact value keys vary slightly between controller chart versions. Confirm with
+To keep the keys out of your shell history, source them from a local AWS CLI profile instead of
+pasting them (this is the form verified end-to-end in this repo):
+
+```sh
+kubectl create secret generic aws-credentials -n ack-system \
+  --from-literal=credentials="$(printf '[default]\naws_access_key_id = %s\naws_secret_access_key = %s\n' \
+      "$(aws --profile <your-profile> configure get aws_access_key_id)" \
+      "$(aws --profile <your-profile> configure get aws_secret_access_key)")"
+```
+
+Install the controller pointing at that Secret. `secretKey` is the Secret **key name** (the file)
+and `profile` is the header inside it:
+
+```sh
+helm install ack-s3-controller \
+  oci://public.ecr.aws/aws-controllers-k8s/s3-chart --version 1.6.0 \
+  --namespace ack-system \
+  --set aws.region=eu-west-1 \
+  --set aws.credentials.secretName=aws-credentials \
+  --set aws.credentials.secretKey=credentials \
+  --set aws.credentials.profile=default
+```
+
+The same Secret and `--set aws.credentials.*` flags work for every controller — install the
+`ec2`, `rds`, … controllers from `oci://public.ecr.aws/aws-controllers-k8s/<service>-chart` the
+same way.
+
+> Verified end-to-end with the `s3` (v1.6.0) and `ec2` controllers on a kind cluster. Exact value
+> keys can vary between chart versions — confirm with
 > `helm show values oci://public.ecr.aws/aws-controllers-k8s/s3-chart`.
 
 ## Where region comes from
