@@ -1,0 +1,18 @@
+apiVersion: composition.krateo.io/v0-1-1
+kind: AwsS3Bucket
+metadata:
+  name: my-bucket
+  namespace: aws-s3-system
+spec:
+  # Krateo/ACK wiring: becomes the services.k8s.aws/region annotation on the ACK Bucket.
+  # Empty inherits the ACK s3 controller's default region.
+  region: eu-west-1
+  # ACK Bucket spec fields (mirror s3.services.k8s.aws/v1alpha1 Bucket) — see
+  # blueprints/s3/bucket/chart/values.schema.json for the full field list.
+  name: my-unique-bucket-name
+  versioning:
+    status: Enabled
+  tagging:
+    tagSet:
+      - key: owner
+        value: platform

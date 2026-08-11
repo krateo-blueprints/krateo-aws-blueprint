@@ -1,3 +1,12 @@
+---
+type: Runbook
+title: AWS authentication for ACK controllers
+description: How to give the ACK service controllers AWS credentials — IRSA / EKS Pod Identity (recommended) or a static shared-credentials Secret — a cluster-admin prerequisite the blueprints do not carry.
+resource: oci://ghcr.io/krateo-blueprints/charts/aws-s3-bucket
+tags: [aws, ack, authentication, irsa, prerequisite]
+timestamp: 2026-08-11T00:00:00Z
+---
+
 # AWS authentication for ACK controllers (prerequisite)
 
 ACK controllers call the AWS APIs, so each controller needs AWS credentials. This is configured
