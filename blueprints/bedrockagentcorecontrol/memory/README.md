@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsBedrockagentcorecontrolMemory` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsbedrockagentcorecontrolmemories`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-bedrockagentcorecontrol-memory`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-bedrockagentcorecontrol-memory`.
 
 ### Create a Composition
 

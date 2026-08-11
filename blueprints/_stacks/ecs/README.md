@@ -80,7 +80,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
 This publishes an `AwsEcsStack` Composition type (`composition.krateo.io/v0-3-0`, plural
-`awsecsstacks`), pulling `oci://ghcr.io/braghettos/charts/aws-ecs-stack`.
+`awsecsstacks`), pulling `oci://ghcr.io/krateo-blueprints/charts/aws-ecs-stack`.
 
 ### Create a Composition
 

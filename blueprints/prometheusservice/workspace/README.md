@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsPrometheusserviceWorkspace` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsprometheusserviceworkspaces`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-prometheusservice-workspace`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-prometheusservice-workspace`.
 
 ### Create a Composition
 

@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsDynamodbGlobaltable` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsdynamodbglobaltables`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-dynamodb-globaltable`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-dynamodb-globaltable`.
 
 ### Create a Composition
 

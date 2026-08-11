@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsOrganizationsAccount` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsorganizationsaccounts`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-organizations-account`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-organizations-account`.
 
 ### Create a Composition
 

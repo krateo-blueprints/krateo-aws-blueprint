@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsSagemakerModelbiasjobdefinition` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awssagemakermodelbiasjobdefinitions`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-sagemaker-modelbiasjobdefinition`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-sagemaker-modelbiasjobdefinition`.
 
 ### Create a Composition
 

@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsBedrockagentcorecontrolAgentruntime` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsbedrockagentcorecontrolagentruntimes`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-bedrockagentcorecontrol-agentruntime`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-bedrockagentcorecontrol-agentruntime`.
 
 ### Create a Composition
 

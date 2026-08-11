@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsElbv2Listener` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awselbv2listeners`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-elbv2-listener`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-elbv2-listener`.
 
 ### Create a Composition
 

@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsCloudwatchMetricstream` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awscloudwatchmetricstreams`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-cloudwatch-metricstream`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-cloudwatch-metricstream`.
 
 ### Create a Composition
 

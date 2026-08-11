@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsApigatewayv2Domainname` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsapigatewayv2domainnames`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-apigatewayv2-domainname`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-apigatewayv2-domainname`.
 
 ### Create a Composition
 

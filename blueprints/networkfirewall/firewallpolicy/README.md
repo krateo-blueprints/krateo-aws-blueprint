@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsNetworkfirewallFirewallpolicy` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsnetworkfirewallfirewallpolicies`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-networkfirewall-firewallpolicy`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-networkfirewall-firewallpolicy`.
 
 ### Create a Composition
 

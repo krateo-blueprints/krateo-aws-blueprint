@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsBedrockagentcorecontrolCodeinterpreter` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsbedrockagentcorecontrolcodeinterpreters`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-bedrockagentcorecontrol-codeinterpreter`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-bedrockagentcorecontrol-codeinterpreter`.
 
 ### Create a Composition
 

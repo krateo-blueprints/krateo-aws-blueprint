@@ -98,5 +98,5 @@ go run ./tools/ackgen \
 Every chart is published to GHCR as an OCI Helm artifact on a semver tag:
 
 ```
-oci://ghcr.io/braghettos/charts/aws-<service>-<resource>:<version>
+oci://ghcr.io/krateo-blueprints/charts/aws-<service>-<resource>:<version>
 ```

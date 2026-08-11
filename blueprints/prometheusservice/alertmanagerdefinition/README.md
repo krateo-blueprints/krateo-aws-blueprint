@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsPrometheusserviceAlertmanagerdefinition` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsprometheusservicealertmanagerdefinitions`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-prometheusservice-alertmanagerdefinition`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-prometheusservice-alertmanagerdefinition`.
 
 ### Create a Composition
 

@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsAutoscalingAutoscalinggroup` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsautoscalingautoscalinggroups`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-autoscaling-autoscalinggroup`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-autoscaling-autoscalinggroup`.
 
 ### Create a Composition
 

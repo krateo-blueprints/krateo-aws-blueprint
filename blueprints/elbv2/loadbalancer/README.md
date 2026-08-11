@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsElbv2Loadbalancer` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awselbv2loadbalancers`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-elbv2-loadbalancer`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-elbv2-loadbalancer`.
 
 ### Create a Composition
 

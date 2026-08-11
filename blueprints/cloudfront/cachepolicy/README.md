@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsCloudfrontCachepolicy` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awscloudfrontcachepolicies`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-cloudfront-cachepolicy`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-cloudfront-cachepolicy`.
 
 ### Create a Composition
 

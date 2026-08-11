@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsSnsPlatformapplication` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awssnsplatformapplications`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-sns-platformapplication`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-sns-platformapplication`.
 
 ### Create a Composition
 

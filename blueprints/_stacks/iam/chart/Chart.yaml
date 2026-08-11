@@ -28,7 +28,7 @@ keywords:
   - ack
   - stack
 sources:
-  - https://github.com/braghettos/krateo-aws-blueprint
+  - https://github.com/krateo-blueprints/krateo-aws-blueprint
   - https://registry.terraform.io/modules/terraform-aws-modules/iam/aws
 annotations:
   krateo.io/category: "security"

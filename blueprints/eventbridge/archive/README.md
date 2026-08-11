@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsEventbridgeArchive` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awseventbridgearchives`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-eventbridge-archive`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-eventbridge-archive`.
 
 ### Create a Composition
 

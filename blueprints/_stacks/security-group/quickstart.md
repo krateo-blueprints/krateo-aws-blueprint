@@ -112,7 +112,7 @@ kubectl get pods -n krateo-system         # core-provider + chart-inspector Runn
 ## 5. Register the blueprint
 
 Create the stack namespace and apply the `CompositionDefinition`. It pulls the chart straight
-from the public GHCR OCI artifact `oci://ghcr.io/braghettos/charts/aws-security-group-stack:0.3.0`
+from the public GHCR OCI artifact `oci://ghcr.io/krateo-blueprints/charts/aws-security-group-stack:0.3.0`
 (no credentials needed):
 
 ```sh

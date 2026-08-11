@@ -141,7 +141,7 @@ metadata:
   namespace: aws-autoscaling-system
 spec:
   chart:
-    url: oci://ghcr.io/braghettos/charts/aws-autoscaling-stack
+    url: oci://ghcr.io/krateo-blueprints/charts/aws-autoscaling-stack
     version: "0.3.0"
 EOF
 

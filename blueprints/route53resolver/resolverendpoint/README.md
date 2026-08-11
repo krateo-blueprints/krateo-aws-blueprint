@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsRoute53resolverResolverendpoint` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsroute53resolverresolverendpoints`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-route53resolver-resolverendpoint`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-route53resolver-resolverendpoint`.
 
 ### Create a Composition
 

@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsDynamodbBackup` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsdynamodbbackups`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-dynamodb-backup`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-dynamodb-backup`.
 
 ### Create a Composition
 

@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsBackupBackupplan` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsbackupbackupplans`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-backup-backupplan`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-backup-backupplan`.
 
 ### Create a Composition
 

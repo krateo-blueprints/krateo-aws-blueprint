@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsCloudfrontOriginaccesscontrol` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awscloudfrontoriginaccesscontrols`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-cloudfront-originaccesscontrol`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-cloudfront-originaccesscontrol`.
 
 ### Create a Composition
 

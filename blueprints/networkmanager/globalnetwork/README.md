@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsNetworkmanagerGlobalnetwork` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsnetworkmanagerglobalnetworks`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-networkmanager-globalnetwork`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-networkmanager-globalnetwork`.
 
 ### Create a Composition
 

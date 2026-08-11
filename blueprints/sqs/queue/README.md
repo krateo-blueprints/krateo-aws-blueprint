@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsSqsQueue` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awssqsqueues`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-sqs-queue`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-sqs-queue`.
 
 ### Create a Composition
 

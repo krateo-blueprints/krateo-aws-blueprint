@@ -24,7 +24,7 @@ keywords:
   - modelpackagegroup
   - ack
 sources:
-  - https://github.com/braghettos/krateo-aws-blueprint
+  - https://github.com/krateo-blueprints/krateo-aws-blueprint
 annotations:
   krateo.io/category: "compute"
   krateo.io/maturity: "beta"

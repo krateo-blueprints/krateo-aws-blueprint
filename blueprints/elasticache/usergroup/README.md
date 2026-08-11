@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsElasticacheUsergroup` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awselasticacheusergroups`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-elasticache-usergroup`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-elasticache-usergroup`.
 
 ### Create a Composition
 

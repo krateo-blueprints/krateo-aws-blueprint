@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsKafkaServerlesscluster` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awskafkaserverlessclusters`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-kafka-serverlesscluster`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-kafka-serverlesscluster`.
 
 ### Create a Composition
 

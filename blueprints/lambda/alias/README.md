@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsLambdaAlias` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awslambdaalias`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-lambda-alias`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-lambda-alias`.
 
 ### Create a Composition
 

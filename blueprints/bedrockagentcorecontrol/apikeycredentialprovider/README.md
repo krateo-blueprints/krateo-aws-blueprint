@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsBedrockagentcorecontrolApikeycredentialprovider` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsbedrockagentcorecontrolapikeycredentialproviders`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-bedrockagentcorecontrol-apikeycredentialprovider`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-bedrockagentcorecontrol-apikeycredentialprovider`.
 
 ### Create a Composition
 

@@ -82,7 +82,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
 This publishes an `AwsVpcStack` Composition type (`composition.krateo.io/v0-3-0`, plural
-`awsvpcstacks`), pulling `oci://ghcr.io/braghettos/charts/aws-vpc-stack`.
+`awsvpcstacks`), pulling `oci://ghcr.io/krateo-blueprints/charts/aws-vpc-stack`.
 
 ### Create a Composition
 

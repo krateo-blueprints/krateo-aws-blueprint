@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsAcmpcaCertificate` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsacmpcacertificates`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-acmpca-certificate`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-acmpca-certificate`.
 
 ### Create a Composition
 

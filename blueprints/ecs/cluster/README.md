@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsEcsCluster` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsecsclusters`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-ecs-cluster`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-ecs-cluster`.
 
 ### Create a Composition
 

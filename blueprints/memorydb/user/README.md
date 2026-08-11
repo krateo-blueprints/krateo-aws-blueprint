@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsMemorydbUser` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsmemorydbusers`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-memorydb-user`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-memorydb-user`.
 
 ### Create a Composition
 

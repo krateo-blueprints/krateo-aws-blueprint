@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsAthenaWorkgroup` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsathenaworkgroups`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-athena-workgroup`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-athena-workgroup`.
 
 ### Create a Composition
 

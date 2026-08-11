@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsRdsDbclustersnapshot` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsrdsdbclustersnapshots`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-rds-dbclustersnapshot`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-rds-dbclustersnapshot`.
 
 ### Create a Composition
 

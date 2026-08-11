@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsApigatewayStage` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsapigatewaystages`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-apigateway-stage`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-apigateway-stage`.
 
 ### Create a Composition
 

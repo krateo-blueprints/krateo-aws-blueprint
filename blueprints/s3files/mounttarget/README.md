@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsS3filesMounttarget` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awss3filesmounttargets`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-s3files-mounttarget`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-s3files-mounttarget`.
 
 ### Create a Composition
 

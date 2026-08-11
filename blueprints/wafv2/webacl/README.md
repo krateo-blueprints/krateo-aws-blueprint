@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsWafv2Webacl` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awswafv2webacls`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-wafv2-webacl`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-wafv2-webacl`.
 
 ### Create a Composition
 

@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsMemorydbSnapshot` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsmemorydbsnapshots`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-memorydb-snapshot`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-memorydb-snapshot`.
 
 ### Create a Composition
 

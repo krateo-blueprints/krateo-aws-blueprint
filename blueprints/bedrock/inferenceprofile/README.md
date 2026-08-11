@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsBedrockInferenceprofile` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsbedrockinferenceprofiles`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-bedrock-inferenceprofile`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-bedrock-inferenceprofile`.
 
 ### Create a Composition
 

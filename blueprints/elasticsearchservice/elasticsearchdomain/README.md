@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsElasticsearchserviceElasticsearchdomain` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awselasticsearchserviceelasticsearchdomains`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-elasticsearchservice-elasticsearchdomain`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-elasticsearchservice-elasticsearchdomain`.
 
 ### Create a Composition
 

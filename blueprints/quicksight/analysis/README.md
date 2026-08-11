@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsQuicksightAnalysis` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsquicksightanalyses`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-quicksight-analysis`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-quicksight-analysis`.
 
 ### Create a Composition
 

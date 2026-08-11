@@ -24,7 +24,7 @@ keywords:
   - backupselection
   - ack
 sources:
-  - https://github.com/braghettos/krateo-aws-blueprint
+  - https://github.com/krateo-blueprints/krateo-aws-blueprint
 annotations:
   krateo.io/category: "storage"
   krateo.io/maturity: "beta"
