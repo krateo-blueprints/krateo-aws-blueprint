@@ -3,9 +3,11 @@
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="docs/hero-dark.svg">
-    <img alt="Krateo ❤ AWS" src="docs/hero-light.svg" width="820">
+    <img alt="Krateo loves AWS" src="docs/hero-light.svg" width="820">
   </picture>
 </p>
+
+## What is this
 
 A catalog of [Krateo](https://krateo.io) blueprints that expose **AWS resources** as
 self-service Krateo Compositions, backed by the
@@ -14,78 +16,95 @@ self-service Krateo Compositions, backed by the
 Each blueprint is a Helm chart whose templates render a **native ACK custom resource**
 (e.g. `s3.services.k8s.aws/v1alpha1` `Bucket`). When you create a Composition, Krateo
 renders the chart, the ACK custom resource lands in the cluster, and the ACK service
-controller provisions the real AWS resource and reports status back.
+controller provisions the real AWS resource and reports status back. A sibling
+`CompositionDefinition` (`core.krateo.io/v1alpha1`) registers each chart with Krateo.
+
+There are two kinds of blueprint:
+
+- **Single-resource blueprints** under `blueprints/<service>/<resource>/` — one ACK Kind
+  each (242 charts across 68 AWS services). The Composition `spec` mirrors the ACK
+  custom-resource `spec`.
+- **Composite stacks** under `blueprints/_stacks/<name>/` — one Composition wires several
+  ACK resources together (e.g. `aws-alb-stack` renders `LoadBalancer` + `TargetGroup` +
+  `Listener`), with inputs mirroring the equivalent Terraform module.
 
 > **No KOG / oasgen here.** ACK controllers already are Kubernetes controllers that ship
 > their own CRDs and reconcilers, so Krateo consumes them **directly** via
-> `CompositionDefinition`s. The Krateo Operator Generator (RestDefinition) pattern is only
-> for wrapping raw REST APIs — it is intentionally *not* used in this repo.
+> `CompositionDefinition`s. See [`docs/overview.md`](docs/overview.md).
 
-## 🚀 Quickstart
+## Install
 
-New here? Walk through provisioning a **real S3 bucket end-to-end on a local kind cluster** —
-install the ACK controller, register the blueprint, create a Composition, and verify the bucket
-in AWS: **[blueprints/s3/bucket/quickstart.md](blueprints/s3/bucket/quickstart.md)**.
+These blueprints provision AWS resources; they do **not** install the ACK controllers and
+do **not** configure AWS credentials. Both are cluster-admin prerequisites, set up once
+per AWS service:
 
-## How a blueprint works
+1. **Install the ACK service controller** for the resource you want (e.g. the S3
+   controller before `aws-s3-bucket`). See
+   [`docs/installing-controllers.md`](docs/installing-controllers.md):
 
-```
-CompositionDefinition (core.krateo.io)         ← registers the blueprint, pulls the chart
-        │
-        ▼  publishes a Composition type, e.g. composition.krateo.io/v0-1-0 Bucket
-User creates a Composition  ── Krateo renders the chart ──▶  ACK custom resource
-                                                                    │
-                                                              ACK controller
-                                                                    │
-                                                                    ▼
-                                                              real AWS resource
-```
+   ```sh
+   helm install ack-s3-controller \
+     oci://public.ecr.aws/aws-controllers-k8s/s3-chart \
+     --namespace ack-system --create-namespace \
+     --set aws.region=eu-west-1
+   ```
 
-The Composition `spec` **mirrors the ACK custom-resource `spec`** one-to-one (curated to the
-fields worth exposing), plus a small set of Krateo-wiring fields such as `region`. Krateo's
-`core-provider` builds the Composition CRD **only** from each chart's `values.schema.json`
-(it never reads `values.yaml`), so the schema is the contract that drives the portal form.
+2. **Configure AWS authentication** for that controller — IRSA / EKS Pod Identity
+   (recommended) or static credentials. See [`docs/authentication.md`](docs/authentication.md).
 
-## Repository layout
+3. **Krateo `core-provider`** installed in the cluster.
+
+Then register a blueprint and create a Composition — see
+[`docs/usage.md`](docs/usage.md). Every chart is published to GHCR:
 
 ```
-blueprints/<service>/<resource>/     one blueprint per ACK resource Kind
-  chart/
-    Chart.yaml                       name: aws-<service>-<resource>
-    values.yaml
-    values.schema.json               curated projection of the ACK CRD spec — drives the CRD + form
-    templates/<kind>.yaml            renders the ACK custom resource
-  compositiondefinition.yaml         registers the blueprint with Krateo
-  customform.yaml                    portal card + form
-  README.md
-tools/ackgen/                        Go generator that emits blueprints from ACK CRD schemas (Phase 2)
-docs/                                authentication + controller-install prerequisites
+oci://ghcr.io/krateo-blueprints/charts/aws-<service>-<resource>:<version>
 ```
 
-## Prerequisites
+## Configure
 
-These blueprints provision AWS resources; they do **not** install the ACK controllers and do
-**not** configure AWS credentials. Both are cluster-admin prerequisites, set up once:
+A Composition's `spec` **mirrors the ACK custom-resource `spec`** (curated to the fields
+worth exposing), plus a `region` field that becomes the `services.k8s.aws/region`
+annotation. Krateo's `core-provider` builds the Composition CRD **only** from each chart's
+`values.schema.json` (it never reads `values.yaml`), so the schema is the contract that
+drives both the CRD and the portal form. Registration is configured in each blueprint's
+`compositiondefinition.yaml` (`spec.chart.url` + `version`, and optional private-pull
+`credentials`). Full details in [`docs/configuration.md`](docs/configuration.md).
 
-1. **Install the ACK service controller** for the resource you want (e.g. the S3 controller
-   before using `aws-s3-bucket`). See [`docs/installing-controllers.md`](docs/installing-controllers.md).
-2. **Configure AWS authentication** for that controller — IRSA / EKS Pod Identity (default,
-   recommended) or static credentials. See [`docs/authentication.md`](docs/authentication.md).
-3. Krateo `core-provider` installed in the cluster.
+## Examples
 
-## Catalog
+- [`examples/aws-s3-bucket`](examples/aws-s3-bucket/README.md) — the reference example:
+  register the blueprint and create an `AwsS3Bucket` Composition (apply-able manifests).
+- [`blueprints/s3/bucket/quickstart.md`](blueprints/s3/bucket/quickstart.md) — provision a
+  **real S3 bucket end to end on a local kind cluster**.
+- [`blueprints/_stacks/alb/quickstart.md`](blueprints/_stacks/alb/quickstart.md) — the
+  reference composite stack: a real ALB.
 
-**242 blueprints across 68 AWS services**, covering the ACK resource CRDs. The full table
-(service → resource → chart → ACK/Composition Kind → API group) is in
-**[`CATALOG.md`](CATALOG.md)**.
+Index of all examples: [`docs/examples.md`](docs/examples.md).
 
-Every blueprint under `blueprints/<service>/<resource>/` is generated by
-[`tools/ackgen`](tools/ackgen) from the upstream ACK CRD and is validated with `helm template`
-(which enforces `values.schema.json`). The `aws-s3-bucket` blueprint is the reference the
-generator was built and validated against — see its
-[**quickstart**](blueprints/s3/bucket/quickstart.md) for a full end-to-end run.
+## Docs
 
-To (re)generate a blueprint from an ACK CRD:
+The full documentation bundle lives under [`docs/`](docs/index.md):
+
+- [index](docs/index.md) — the map of the bundle.
+- [overview](docs/overview.md) — how a blueprint works, the ACK model, the layout.
+- [usage](docs/usage.md) — prerequisites, register, create, check status.
+- [configuration](docs/configuration.md) — the Composition spec and the schema contract.
+- [api](docs/api.md) — the `CompositionDefinition` CRD and the Composition API.
+- [examples](docs/examples.md) — the runnable example and per-blueprint quickstarts.
+- [release](docs/release.md) — how a tag packages and pushes every chart to GHCR.
+- [log](docs/log.md) — curated history.
+- [llms.txt](docs/llms.txt) — the doc index for LLM tooling.
+- [authentication](docs/authentication.md) / [installing-controllers](docs/installing-controllers.md) — the prerequisites.
+
+**242 blueprints across 68 AWS services.** The full table (service → resource → chart →
+ACK/Composition Kind → API group) is in [`CATALOG.md`](CATALOG.md).
+
+## Develop & release
+
+Every single-resource blueprint under `blueprints/<service>/<resource>/` is generated by
+[`tools/ackgen`](tools/ackgen) from the upstream ACK CRD and validated with `helm template`
+(which enforces `values.schema.json`). To (re)generate a blueprint from an ACK CRD:
 
 ```sh
 go run ./tools/ackgen \
@@ -93,10 +112,8 @@ go run ./tools/ackgen \
   -out blueprints -lint
 ```
 
-## Charts
-
-Every chart is published to GHCR as an OCI Helm artifact on a semver tag:
-
-```
-oci://ghcr.io/krateo-blueprints/charts/aws-<service>-<resource>:<version>
-```
+Pull requests run `.github/workflows/lint.yaml` (renders every chart + enforces
+`values.schema.json`, plus the shared `lint-docs` documentation-standard check) and the
+shared `security.yml`. Every chart is published to GHCR as an OCI Helm artifact on a
+semver tag by `.github/workflows/release-tag.yaml`. Full release procedure:
+[`docs/release.md`](docs/release.md).

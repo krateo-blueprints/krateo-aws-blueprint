@@ -1,0 +1,25 @@
+# krateo-aws-blueprint — LLM doc index
+# One line per file. Read files at the tag that matches the running build: the chart version
+# is CompositionDefinition.spec.chart.version, which also drives the published Composition
+# apiVersion (0.1.1 -> composition.krateo.io/v0-1-1).
+docs/index.md: the map — what the catalog is, the two blueprint kinds, links to the whole bundle and the repo layout
+docs/overview.md: how a blueprint works end to end — chart renders a native ACK CR, the ACK controller provisions the real AWS resource, the schema is the contract, composite stacks, why no KOG/oasgen
+docs/usage.md: prerequisites (install the ACK controller, configure AWS auth), register a CompositionDefinition, create a Composition, check status
+docs/configuration.md: the Composition spec (mirrors the ACK spec), the values.schema.json contract, the region wiring field, the CompositionDefinition registration knobs, chart metadata
+docs/api.md: the CompositionDefinition CRD (core.krateo.io/v1alpha1) this repo consumes, the Composition API each blueprint publishes, the native ACK custom resource each renders
+docs/examples.md: index of the runnable example and the per-blueprint quickstarts
+docs/release.md: how one semver tag packages every chart under blueprints/**/chart and pushes each to GHCR, plus the PR-time lint gate and the ackgen regeneration
+docs/log.md: curated history
+docs/authentication.md: prerequisite — give the ACK controllers AWS credentials (IRSA / EKS Pod Identity, or a static Secret)
+docs/installing-controllers.md: prerequisite — install the ACK service controller for a given AWS service
+examples/aws-s3-bucket/README.md: the reference example — register the aws-s3-bucket blueprint and create an AwsS3Bucket Composition that provisions a real S3 bucket
+examples/aws-s3-bucket/compositiondefinition.yaml: the registration manifest (spec.chart.url + version)
+examples/aws-s3-bucket/composition.yaml: the AwsS3Bucket Composition manifest
+# Source (read at the same tag; the docs above are derived from these):
+blueprints/s3/bucket/chart/Chart.yaml: the reference chart — name aws-s3-bucket -> Kind AwsS3Bucket, version drives the Composition apiVersion
+blueprints/s3/bucket/chart/values.schema.json: the mandatory typed schema core-provider derives the Composition CRD from — mirrors the ACK Bucket spec
+blueprints/s3/bucket/chart/templates/bucket.yaml: renders the native s3.services.k8s.aws/v1alpha1 Bucket, spec passed through, region -> annotation
+blueprints/s3/bucket/compositiondefinition.yaml: the reference registration (sibling to the chart, never templated into it)
+blueprints/s3/bucket/quickstart.md: the full end-to-end run — provision a real S3 bucket on kind
+blueprints/_stacks/alb/README.md: the reference composite stack — one Composition wires LoadBalancer + TargetGroup + Listener
+CATALOG.md: the full service -> resource -> chart -> ACK Kind -> Composition Kind -> API group table

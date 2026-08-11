@@ -6,10 +6,16 @@ on:
   pull_request:
     paths:
       - "blueprints/**"
+      - "docs/**"
+      - "examples/**"
+      - "README.md"
       - ".github/workflows/lint.yaml"
   workflow_dispatch:
 
 jobs:
+  lint-docs:
+    uses: krateo-platformops/.github/.github/workflows/lint-docs.yaml@main
+
   lint:
     runs-on: ubuntu-latest
     steps:

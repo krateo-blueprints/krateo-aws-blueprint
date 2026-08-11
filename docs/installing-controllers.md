@@ -1,3 +1,12 @@
+---
+type: Runbook
+title: Installing ACK service controllers
+description: How to install the AWS Controllers for Kubernetes (ACK) service controller for a given AWS service before registering or using a blueprint that targets it — the install-once, cluster-admin prerequisite.
+resource: oci://ghcr.io/krateo-blueprints/charts/aws-s3-bucket
+tags: [aws, ack, controllers, install, prerequisite]
+timestamp: 2026-08-11T00:00:00Z
+---
+
 # Installing ACK service controllers (prerequisite)
 
 These blueprints render **ACK custom resources**, but they do not install the ACK controllers
