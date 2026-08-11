@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsEmrcontainersJobrun` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsemrcontainersjobruns`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-emrcontainers-jobrun`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-emrcontainers-jobrun`.
 
 ### Create a Composition
 

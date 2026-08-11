@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsEc2Capacityreservation` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsec2capacityreservations`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-ec2-capacityreservation`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-ec2-capacityreservation`.
 
 ### Create a Composition
 

@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsDmsCertificate` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsdmscertificates`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-dms-certificate`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-dms-certificate`.
 
 ### Create a Composition
 

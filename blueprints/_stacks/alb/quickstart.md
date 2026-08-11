@@ -107,7 +107,7 @@ kubectl get pods -n krateo-system         # core-provider + chart-inspector Runn
 ## 4. Register the blueprint
 
 This publishes the `AwsAlbStack` Composition type (`composition.krateo.io/v0-3-0`, plural
-`awsalbstacks`) from the public GHCR OCI artifact `oci://ghcr.io/braghettos/charts/aws-alb-stack`.
+`awsalbstacks`) from the public GHCR OCI artifact `oci://ghcr.io/krateo-blueprints/charts/aws-alb-stack`.
 From `blueprints/_stacks/alb/`:
 
 ```sh

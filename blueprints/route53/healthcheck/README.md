@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsRoute53Healthcheck` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsroute53healthchecks`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-route53-healthcheck`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-route53-healthcheck`.
 
 ### Create a Composition
 

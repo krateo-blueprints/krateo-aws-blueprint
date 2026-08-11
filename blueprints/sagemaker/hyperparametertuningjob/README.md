@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsSagemakerHyperparametertuningjob` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awssagemakerhyperparametertuningjobs`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-sagemaker-hyperparametertuningjob`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-sagemaker-hyperparametertuningjob`.
 
 ### Create a Composition
 

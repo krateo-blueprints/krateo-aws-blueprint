@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsElasticacheSnapshot` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awselasticachesnapshots`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-elasticache-snapshot`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-elasticache-snapshot`.
 
 ### Create a Composition
 

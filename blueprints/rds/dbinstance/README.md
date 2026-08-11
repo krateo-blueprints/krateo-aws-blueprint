@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsRdsDbinstance` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsrdsdbinstances`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-rds-dbinstance`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-rds-dbinstance`.
 
 ### Create a Composition
 

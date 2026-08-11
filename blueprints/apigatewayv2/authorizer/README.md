@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsApigatewayv2Authorizer` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsapigatewayv2authorizers`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-apigatewayv2-authorizer`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-apigatewayv2-authorizer`.
 
 ### Create a Composition
 

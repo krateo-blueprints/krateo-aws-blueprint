@@ -85,7 +85,7 @@ kubectl get pods -n krateo-system         # core-provider + chart-inspector Runn
 ## 5. Register the blueprint
 
 The `CompositionDefinition` pulls the chart straight from the public GHCR OCI artifact
-`oci://ghcr.io/braghettos/charts/aws-s3-bucket:0.1.1` (no credentials needed):
+`oci://ghcr.io/krateo-blueprints/charts/aws-s3-bucket:0.1.1` (no credentials needed):
 
 ```sh
 kubectl create namespace aws-s3-system
@@ -98,7 +98,7 @@ metadata:
   namespace: aws-s3-system
 spec:
   chart:
-    url: oci://ghcr.io/braghettos/charts/aws-s3-bucket
+    url: oci://ghcr.io/krateo-blueprints/charts/aws-s3-bucket
     version: "0.1.1"
 EOF
 

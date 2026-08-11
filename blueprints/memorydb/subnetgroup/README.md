@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsMemorydbSubnetgroup` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsmemorydbsubnetgroups`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-memorydb-subnetgroup`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-memorydb-subnetgroup`.
 
 ### Create a Composition
 

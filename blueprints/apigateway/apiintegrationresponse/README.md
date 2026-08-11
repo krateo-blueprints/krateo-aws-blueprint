@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsApigatewayApiintegrationresponse` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsapigatewayapiintegrationresponses`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-apigateway-apiintegrationresponse`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-apigateway-apiintegrationresponse`.
 
 ### Create a Composition
 

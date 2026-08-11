@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsEcrRepository` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsecrrepositories`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-ecr-repository`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-ecr-repository`.
 
 ### Create a Composition
 

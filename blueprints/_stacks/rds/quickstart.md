@@ -108,7 +108,7 @@ kubectl get pods -n krateo-system         # core-provider + chart-inspector Runn
 ## 5. Register the blueprint
 
 The `CompositionDefinition` pulls the chart straight from the public GHCR OCI artifact
-`oci://ghcr.io/braghettos/charts/aws-rds-stack:0.3.0` (no credentials needed). Apply the
+`oci://ghcr.io/krateo-blueprints/charts/aws-rds-stack:0.3.0` (no credentials needed). Apply the
 bundled `compositiondefinition.yaml` (and, optionally, `customform.yaml` for the Krateo portal
 card + form):
 

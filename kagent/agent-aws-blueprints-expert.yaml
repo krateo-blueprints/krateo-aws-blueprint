@@ -125,7 +125,7 @@ spec:
         not an error.
       - Stack charts are published like any other: `AwsVpcStack` (plural
         `awsvpcstacks`, version `0.3.0`/`v0-3-0`), chart
-        `oci://ghcr.io/braghettos/charts/aws-vpc-stack`.
+        `oci://ghcr.io/krateo-blueprints/charts/aws-vpc-stack`.
 
       ## The generator: tools/ackgen (Go)
 
@@ -143,7 +143,7 @@ spec:
 
       - `.github/workflows/release-tag.yaml`: on a semver tag, packages **every**
         `blueprints/*/*/chart` and pushes it to
-        `oci://ghcr.io/braghettos/charts/aws-<service>-<resource>:<version>`.
+        `oci://ghcr.io/krateo-blueprints/charts/aws-<service>-<resource>:<version>`.
       - `.github/workflows/lint.yaml`: stamps a `0.0.0-ci` version, then runs
         `helm template` (fatal gate) and `helm lint` (informational only).
 

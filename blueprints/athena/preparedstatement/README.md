@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsAthenaPreparedstatement` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsathenapreparedstatements`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-athena-preparedstatement`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-athena-preparedstatement`.
 
 ### Create a Composition
 

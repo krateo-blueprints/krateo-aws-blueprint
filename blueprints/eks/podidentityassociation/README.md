@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsEksPodidentityassociation` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsekspodidentityassociations`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-eks-podidentityassociation`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-eks-podidentityassociation`.
 
 ### Create a Composition
 

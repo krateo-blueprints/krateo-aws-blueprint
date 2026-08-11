@@ -6,7 +6,7 @@ metadata:
 spec:
   chart:
     # OCI artifact published by .github/workflows/release-tag.yaml.
-    url: oci://ghcr.io/braghettos/charts/aws-elbv2-loadbalancer
+    url: oci://ghcr.io/krateo-blueprints/charts/aws-elbv2-loadbalancer
     version: "0.1.1"
     # If the GHCR package is private, provide pull credentials:
     # credentials:

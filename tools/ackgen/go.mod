@@ -1,4 +1,4 @@
-module github.com/braghettos/krateo-aws-blueprint/tools/ackgen
+module github.com/krateo-blueprints/krateo-aws-blueprint/tools/ackgen
 
 go 1.25
 

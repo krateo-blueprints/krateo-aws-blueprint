@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsEfsFilesystem` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsefsfilesystems`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-efs-filesystem`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-efs-filesystem`.
 
 ### Create a Composition
 

@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsFirehoseDeliverystream` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsfirehosedeliverystreams`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-firehose-deliverystream`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-firehose-deliverystream`.
 
 ### Create a Composition
 

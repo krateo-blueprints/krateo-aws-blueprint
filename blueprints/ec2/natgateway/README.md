@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsEc2Natgateway` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsec2natgateways`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-ec2-natgateway`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-ec2-natgateway`.
 
 ### Create a Composition
 

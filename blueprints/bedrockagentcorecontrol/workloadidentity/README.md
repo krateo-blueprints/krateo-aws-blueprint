@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsBedrockagentcorecontrolWorkloadidentity` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsbedrockagentcorecontrolworkloadidentities`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-bedrockagentcorecontrol-workloadidentity`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-bedrockagentcorecontrol-workloadidentity`.
 
 ### Create a Composition
 

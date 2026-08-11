@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsIamServicelinkedrole` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsiamservicelinkedroles`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-iam-servicelinkedrole`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-iam-servicelinkedrole`.
 
 ### Create a Composition
 

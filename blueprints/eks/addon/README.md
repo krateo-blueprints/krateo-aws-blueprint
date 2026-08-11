@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsEksAddon` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awseksaddons`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-eks-addon`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-eks-addon`.
 
 ### Create a Composition
 

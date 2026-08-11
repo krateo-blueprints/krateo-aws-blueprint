@@ -43,7 +43,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsS3Bucket` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awss3buckets`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-s3-bucket`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-s3-bucket`.
 
 ### Create a Composition
 

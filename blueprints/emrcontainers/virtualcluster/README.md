@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsEmrcontainersVirtualcluster` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsemrcontainersvirtualclusters`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-emrcontainers-virtualcluster`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-emrcontainers-virtualcluster`.
 
 ### Create a Composition
 

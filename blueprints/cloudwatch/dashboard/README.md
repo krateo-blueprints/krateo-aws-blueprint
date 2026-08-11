@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsCloudwatchDashboard` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awscloudwatchdashboards`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-cloudwatch-dashboard`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-cloudwatch-dashboard`.
 
 ### Create a Composition
 

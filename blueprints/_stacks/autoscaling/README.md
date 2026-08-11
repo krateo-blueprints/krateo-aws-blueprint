@@ -98,7 +98,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
 This publishes an `AwsAutoscalingStack` Composition type (`composition.krateo.io/v0-3-0`, plural
-`awsautoscalingstacks`), pulling `oci://ghcr.io/braghettos/charts/aws-autoscaling-stack`.
+`awsautoscalingstacks`), pulling `oci://ghcr.io/krateo-blueprints/charts/aws-autoscaling-stack`.
 
 ### Create a Composition
 

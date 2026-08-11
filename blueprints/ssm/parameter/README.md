@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsSsmParameter` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsssmparameters`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-ssm-parameter`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-ssm-parameter`.
 
 ### Create a Composition
 

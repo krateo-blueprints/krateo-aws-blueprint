@@ -109,7 +109,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
 This publishes an `AwsRdsStack` Composition type (`composition.krateo.io/v0-3-0`, plural
-`awsrdsstacks`), pulling `oci://ghcr.io/braghettos/charts/aws-rds-stack`.
+`awsrdsstacks`), pulling `oci://ghcr.io/krateo-blueprints/charts/aws-rds-stack`.
 
 ### Create a Composition
 

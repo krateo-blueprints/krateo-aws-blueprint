@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsDsqlCluster` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsdsqlclusters`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-dsql-cluster`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-dsql-cluster`.
 
 ### Create a Composition
 

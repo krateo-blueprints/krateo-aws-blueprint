@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsLambdaFunctionurlconfig` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awslambdafunctionurlconfigs`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-lambda-functionurlconfig`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-lambda-functionurlconfig`.
 
 ### Create a Composition
 

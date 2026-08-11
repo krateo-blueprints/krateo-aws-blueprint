@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsSagemakerUserprofile` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awssagemakeruserprofiles`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-sagemaker-userprofile`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-sagemaker-userprofile`.
 
 ### Create a Composition
 

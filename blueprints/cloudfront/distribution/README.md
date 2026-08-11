@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsCloudfrontDistribution` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awscloudfrontdistributions`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-cloudfront-distribution`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-cloudfront-distribution`.
 
 ### Create a Composition
 

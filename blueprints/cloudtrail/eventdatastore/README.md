@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsCloudtrailEventdatastore` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awscloudtraileventdatastores`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-cloudtrail-eventdatastore`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-cloudtrail-eventdatastore`.
 
 ### Create a Composition
 

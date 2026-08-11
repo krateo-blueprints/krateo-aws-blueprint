@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsLambdaEventsourcemapping` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awslambdaeventsourcemappings`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-lambda-eventsourcemapping`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-lambda-eventsourcemapping`.
 
 ### Create a Composition
 

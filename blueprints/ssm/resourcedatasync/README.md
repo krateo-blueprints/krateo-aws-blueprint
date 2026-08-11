@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsSsmResourcedatasync` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsssmresourcedatasyncs`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-ssm-resourcedatasync`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-ssm-resourcedatasync`.
 
 ### Create a Composition
 

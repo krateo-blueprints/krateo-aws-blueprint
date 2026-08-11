@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsEc2Dhcpoptions` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsec2dhcpoptions`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-ec2-dhcpoptions`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-ec2-dhcpoptions`.
 
 ### Create a Composition
 

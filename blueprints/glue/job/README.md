@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsGlueJob` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsgluejobs`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-glue-job`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-glue-job`.
 
 ### Create a Composition
 

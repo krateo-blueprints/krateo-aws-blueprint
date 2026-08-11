@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsEksAccessentry` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awseksaccessentries`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-eks-accessentry`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-eks-accessentry`.
 
 ### Create a Composition
 

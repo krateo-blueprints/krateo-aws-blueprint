@@ -72,7 +72,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
 This publishes an `AwsAlbStack` Composition type (`composition.krateo.io/v0-3-0`, plural
-`awsalbstacks`), pulling `oci://ghcr.io/braghettos/charts/aws-alb-stack`.
+`awsalbstacks`), pulling `oci://ghcr.io/krateo-blueprints/charts/aws-alb-stack`.
 
 ### Create a Composition
 

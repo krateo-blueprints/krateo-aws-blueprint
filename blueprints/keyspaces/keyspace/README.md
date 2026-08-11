@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsKeyspacesKeyspace` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awskeyspaceskeyspaces`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-keyspaces-keyspace`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-keyspaces-keyspace`.
 
 ### Create a Composition
 

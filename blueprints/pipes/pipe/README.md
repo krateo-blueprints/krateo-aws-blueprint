@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsPipesPipe` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awspipespipes`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-pipes-pipe`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-pipes-pipe`.
 
 ### Create a Composition
 

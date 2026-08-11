@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsRdsDbclusterparametergroup` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsrdsdbclusterparametergroups`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-rds-dbclusterparametergroup`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-rds-dbclusterparametergroup`.
 
 ### Create a Composition
 

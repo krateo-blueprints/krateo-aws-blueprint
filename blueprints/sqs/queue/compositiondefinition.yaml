@@ -6,7 +6,7 @@ metadata:
 spec:
   chart:
     # OCI artifact published by .github/workflows/release-tag.yaml.
-    url: oci://ghcr.io/braghettos/charts/aws-sqs-queue
+    url: oci://ghcr.io/krateo-blueprints/charts/aws-sqs-queue
     version: "0.1.1"
     # If the GHCR package is private, provide pull credentials:
     # credentials:

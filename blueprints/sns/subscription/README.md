@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsSnsSubscription` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awssnssubscriptions`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-sns-subscription`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-sns-subscription`.
 
 ### Create a Composition
 

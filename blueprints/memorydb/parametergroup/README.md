@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsMemorydbParametergroup` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsmemorydbparametergroups`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-memorydb-parametergroup`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-memorydb-parametergroup`.
 
 ### Create a Composition
 

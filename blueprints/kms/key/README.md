@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsKmsKey` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awskmskeys`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-kms-key`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-kms-key`.
 
 ### Create a Composition
 

@@ -79,7 +79,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
 This publishes an `AwsSecurityGroupStack` Composition type (`composition.krateo.io/v0-3-0`, plural
-`awssecuritygroupstacks`), pulling `oci://ghcr.io/braghettos/charts/aws-security-group-stack`.
+`awssecuritygroupstacks`), pulling `oci://ghcr.io/krateo-blueprints/charts/aws-security-group-stack`.
 
 ### Create a Composition
 

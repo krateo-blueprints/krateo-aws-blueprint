@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsOrganizationsOrganizationalunit` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsorganizationsorganizationalunits`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-organizations-organizationalunit`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-organizations-organizationalunit`.
 
 ### Create a Composition
 

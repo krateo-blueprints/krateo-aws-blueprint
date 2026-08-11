@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsSagemakerEndpointconfig` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awssagemakerendpointconfigs`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-sagemaker-endpointconfig`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-sagemaker-endpointconfig`.
 
 ### Create a Composition
 

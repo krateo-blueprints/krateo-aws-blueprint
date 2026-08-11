@@ -24,7 +24,7 @@ keywords:
   - dbcluster
   - ack
 sources:
-  - https://github.com/braghettos/krateo-aws-blueprint
+  - https://github.com/krateo-blueprints/krateo-aws-blueprint
 annotations:
   krateo.io/category: "database"
   krateo.io/maturity: "beta"

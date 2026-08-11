@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsRecyclebinRule` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsrecyclebinrules`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-recyclebin-rule`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-recyclebin-rule`.
 
 ### Create a Composition
 

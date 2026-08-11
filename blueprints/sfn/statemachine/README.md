@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsSfnStatemachine` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awssfnstatemachines`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-sfn-statemachine`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-sfn-statemachine`.
 
 ### Create a Composition
 

@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsSfnActivity` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awssfnactivities`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-sfn-activity`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-sfn-activity`.
 
 ### Create a Composition
 

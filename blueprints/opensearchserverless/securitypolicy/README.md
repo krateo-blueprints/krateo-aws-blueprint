@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsOpensearchserverlessSecuritypolicy` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awsopensearchserverlesssecuritypolicies`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-opensearchserverless-securitypolicy`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-opensearchserverless-securitypolicy`.
 
 ### Create a Composition
 

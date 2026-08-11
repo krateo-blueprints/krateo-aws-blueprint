@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsCloudfrontVpcorigin` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awscloudfrontvpcorigins`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-cloudfront-vpcorigin`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-cloudfront-vpcorigin`.
 
 ### Create a Composition
 

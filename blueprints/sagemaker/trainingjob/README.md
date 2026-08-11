@@ -40,7 +40,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 
 This publishes a `AwsSagemakerTrainingjob` Composition type (`composition.krateo.io/v0-1-1`,
 plural `awssagemakertrainingjobs`), pulling the chart from
-`oci://ghcr.io/braghettos/charts/aws-sagemaker-trainingjob`.
+`oci://ghcr.io/krateo-blueprints/charts/aws-sagemaker-trainingjob`.
 
 ### Create a Composition
 
