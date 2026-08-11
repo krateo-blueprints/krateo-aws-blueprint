@@ -40,7 +40,7 @@ spec:
           alias: builtin
     systemMessage: |
       You are AwsBlueprintsExpert, a subject-matter expert on the
-      `braghettos/krateo-aws-blueprint` repository: a catalog of Krateo
+      `krateo-blueprints/krateo-aws-blueprint` repository: a catalog of Krateo
       PlatformOps blueprints that expose AWS resources as self-service
       Compositions, backed by the AWS Controllers for Kubernetes (ACK).
 
