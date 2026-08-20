@@ -7,7 +7,7 @@ spec:
   chart:
     # OCI artifact published by .github/workflows/release-tag.yaml.
     url: oci://ghcr.io/krateo-blueprints/charts/aws-ec2-securitygroup
-    version: "0.1.1"
+    version: CHART_VERSION
     # If the GHCR package is private, provide pull credentials:
     # credentials:
     #   username: krateo
