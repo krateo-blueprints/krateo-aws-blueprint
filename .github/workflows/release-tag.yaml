@@ -36,6 +36,14 @@ jobs:
       - name: Package and push every blueprint chart
         run: |
           set -euo pipefail
+          # Stamp every CompositionDefinition (blueprints/**/ and examples/**/). They pin the
+          # version of their chart and sit outside the chart dir, so the per-chart Chart.yaml
+          # stamp misses them -- which is how all 251 drifted to 0.1.1 while charts published
+          # 0.3.x. Hardcoded, they register versions that were never published.
+          cdc=0
+          while IFS= read -r -d "" cd; do sed -i "s/CHART_VERSION/${VERSION}/g" "$cd"; cdc=$((cdc+1)); done \
+            < <(find blueprints examples -type f -name compositiondefinition.yaml -not -path "*/charts/*" -print0 2>/dev/null)
+          echo "stamped ${cdc} CompositionDefinition(s)"
           shopt -s nullglob
           for chart in blueprints/*/*/chart; do
             name=$(awk '/^name:/{print $2; exit}' "${chart}/Chart.yaml")
