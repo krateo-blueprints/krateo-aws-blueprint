@@ -1,0 +1,17 @@
+apiVersion: core.krateo.io/v1alpha1
+kind: CompositionDefinition
+metadata:
+  name: aws-acmpca-certificateauthorityactivation
+  namespace: aws-acmpca-system
+spec:
+  chart:
+    # OCI artifact published by .github/workflows/release-tag.yaml.
+    url: oci://ghcr.io/krateo-blueprints/charts/aws-acmpca-certificateauthorityactivation
+    version: CHART_VERSION
+    # If the GHCR package is private, provide pull credentials:
+    # credentials:
+    #   username: krateo
+    #   passwordRef:
+    #     key: token
+    #     name: ghcr-credentials
+    #     namespace: aws-acmpca-system
