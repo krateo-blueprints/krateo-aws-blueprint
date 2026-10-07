@@ -22,7 +22,10 @@ version: CHART_VERSION
 appVersion: "tfmod-7.5.0"
 
 home: https://krateo.io
-icon: "https://raw.githubusercontent.com/krateoplatformops/krateo/main/docs/media/logo.svg"
+# An ABSOLUTE https URL serving the image itself. A /blob/ URL is a GitHub HTML page, not an SVG:
+# publish-chart.yaml's channel gate only checks the https scheme, so a blob URL passes the gate and
+# renders a broken Marketplace card with nothing failing. Must also be the canonical org.
+icon: "https://raw.githubusercontent.com/krateo-platformops/.github/main/brand/logo.svg"
 keywords:
   - aws
   - ecs

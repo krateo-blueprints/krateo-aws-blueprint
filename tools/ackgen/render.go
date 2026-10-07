@@ -63,6 +63,11 @@ func writeBlueprint(outDir string, data blueprintData, valuesSchema, valuesYAML 
 		{"_helpers.tpl.tmpl", filepath.Join(tplDir, "_helpers.tpl")},
 		{"resource.yaml.tmpl", filepath.Join(tplDir, data.AckKindLower+".yaml")},
 		{"compositiondefinition.yaml.tmpl", filepath.Join(outDir, "compositiondefinition.yaml")},
+		// Also INSIDE the chart: publish-chart.yaml's blueprints channel gate inspects the packaged
+		// .tgz and hard-errors ("::error::<name>: no compositiondefinition.yaml") when it is absent,
+		// so a copy beside the chart is invisible to it. The outDir copy stays: it is what the
+		// release attaches and what the docs point at.
+		{"compositiondefinition.yaml.tmpl", filepath.Join(chartDir, "compositiondefinition.yaml")},
 		{"customform.yaml.tmpl", filepath.Join(outDir, "customform.yaml")},
 		{"blueprint-readme.md.tmpl", filepath.Join(outDir, "README.md")},
 	}
