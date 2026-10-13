@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"text/template"
 
@@ -105,4 +106,40 @@ func marshalValues(values map[string]interface{}, data blueprintData) ([]byte, e
 # `+"`helm template`"+` render without overrides; real Compositions supply the full spec.
 `, data.ChartName)
 	return append([]byte(header), body...), nil
+}
+
+// renderAny executes one embedded template ([[ ]] delimiters) into a file with an arbitrary
+// context. renderTemplate is the blueprintData-typed wrapper kept for the blueprint path.
+func renderAny(name, dst string, data any) error {
+	src, err := templatesFS.ReadFile("templates/" + name)
+	if err != nil {
+		return err
+	}
+	tmpl, err := template.New(name).Delims("[[", "]]").Parse(string(src))
+	if err != nil {
+		return fmt.Errorf("parse %s: %w", name, err)
+	}
+	var buf bytes.Buffer
+	if err := tmpl.Execute(&buf, data); err != nil {
+		return fmt.Errorf("execute %s: %w", name, err)
+	}
+	return os.WriteFile(dst, buf.Bytes(), 0o644)
+}
+
+// runHelm invokes helm and returns its combined output. Both lint paths go through it so "helm not
+// found" is reported once, the same way.
+func runHelm(args ...string) ([]byte, error) {
+	bin, err := exec.LookPath("helm")
+	if err != nil {
+		return nil, fmt.Errorf("helm not found in PATH")
+	}
+	return exec.Command(bin, args...).CombinedOutput()
+}
+
+// copyTree copies a chart directory so a temp CHART_VERSION stamp never dirties the working tree.
+func copyTree(src, dst string) error {
+	if out, err := exec.Command("cp", "-r", src, dst).CombinedOutput(); err != nil {
+		return fmt.Errorf("copy %s: %v: %s", src, err, out)
+	}
+	return nil
 }

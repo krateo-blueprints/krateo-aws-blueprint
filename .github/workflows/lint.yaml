@@ -6,6 +6,7 @@ on:
   pull_request:
     paths:
       - "blueprints/**"
+      - "operator/**"
       - "docs/**"
       - "examples/**"
       - "README.md"
@@ -28,17 +29,35 @@ jobs:
 
       - name: Stamp a temporary chart version
         run: |
-          find blueprints -name Chart.yaml -exec sed -i "s/CHART_VERSION/0.0.0-ci/g" {} +
+          find blueprints operator -name Chart.yaml -exec sed -i "s/CHART_VERSION/0.0.0-ci/g" {} +
 
       - name: helm template (validates values.schema.json) + lint
         run: |
           set -euo pipefail
           shopt -s nullglob
           rc=0
-          for chart in blueprints/*/*/chart; do
+          n=0
+          for chart in blueprints/*/*/chart operator/*; do
+            [ -f "${chart}/Chart.yaml" ] || continue
+            n=$((n+1))
             echo "::group::${chart}"
+            # operator/* charts WRAP the upstream ACK service-controller charts. helm cannot render a
+            # chart whose declared dependency is absent, and the tarballs are gitignored, so they are
+            # pulled here. `update` not `build`: build needs the repository ADDED first and fails on a
+            # clean runner; Chart.yaml pins an exact version, so re-resolving cannot drift.
+            #
+            # Deliberately SERIAL. Pulling these in parallel against public.ecr.aws returns empty
+            # results rather than errors: probing the 68 services with `xargs -P 10` reported 19 as
+            # having no chart, and re-probing those one at a time with a short delay resolved 18 of
+            # them. A parallel pull here would fail the build with "no cached repository" on charts
+            # that exist.
+            if grep -q "^dependencies:" "${chart}/Chart.yaml"; then
+              helm dependency update "${chart}" >/dev/null || rc=1
+            fi
             # `helm template` is the authoritative gate: it renders the manifest AND enforces
-            # values.schema.json against values.yaml. It fails the build.
+            # values.schema.json against values.yaml. For a wrapper it also enforces the UPSTREAM
+            # chart's own schema against the values we forward, which the wrapper cannot check
+            # itself. It fails the build.
             helm template release "${chart}" >/dev/null || rc=1
             # `helm lint` is informational only: its built-in Kubernetes-Kind heuristics produce
             # false positives on CRD-backed custom resources whose Kind collides with a core kind
@@ -46,12 +65,19 @@ jobs:
             helm lint "${chart}" || true
             echo "::endgroup::"
           done
+          echo "rendered ${n} chart(s)"
+          # A glob that matches nothing must not pass as success.
+          [ "${n}" -gt 0 ] || { echo "::error::no charts found to render"; exit 1; }
           exit $rc
 
   # The generator re-derives the Composition plural that plumbing/crdgen stamps and
   # core-provider reads back from discovery. A divergence breaks no build and fails no render --
   # it ships a customform that 404s. tools/ackgen/plural_test.go asserts the derivation AND
   # every plural already committed under blueprints/, so it has to actually run.
+  #
+  # operators_test.go additionally regenerates every operator/ wrapper and diffs it byte-for-byte
+  # against what is committed, so a hand-edited wrapper (a version bumped in place, an alias changed)
+  # fails here instead of silently reverting at the next regeneration.
   generator:
     runs-on: ubuntu-latest
     steps:
@@ -59,6 +85,9 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version-file: tools/ackgen/go.mod
+      # -count=1 is required, not hygiene: operators_test.go reads ../../operator, which is outside
+      # its package, so `go test`'s cache key does not cover it. With a warm cache Go replays a PASS
+      # without running anything, and a drifted wrapper ships green.
       - name: go test
         working-directory: tools/ackgen
-        run: go test ./...
+        run: go test -count=1 ./...

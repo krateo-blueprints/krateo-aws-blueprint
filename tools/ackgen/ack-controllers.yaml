@@ -1,0 +1,162 @@
+# Pinned ACK service-controller chart versions — the INPUT OF RECORD for the operator/ wrappers.
+#
+# Every entry maps an AWS service to the upstream chart version its wrapper depends on. The
+# wrappers under operator/ are GENERATED from this file:
+#
+#   cd tools/ackgen
+#   go build -o ackgen .
+#   ./ackgen -operators ack-controllers.yaml -out ../../operator
+#
+# Why a committed pin list rather than resolving "latest" at generation time: the generator must be
+# deterministic. A floating resolve means two runs a day apart produce different Chart.yaml bytes,
+# which makes a regeneration diff unreviewable and makes "did the generator change, or did upstream?"
+# unanswerable. The azure and gcp catalogues already pin their operator input (ASO 2.21.1 with a
+# committed Chart.lock; Config Connector 1.158.0); this is the same discipline for AWS.
+#
+# To bump a controller: change its version here, re-run the generator, and commit the regenerated
+# wrapper. operators_test.go asserts every committed wrapper matches this file, so a hand-edited
+# Chart.yaml fails CI.
+#
+# Resolved against oci://public.ecr.aws/aws-controllers-k8s/<service>-chart on 2026-10-13.
+#
+# NOT LISTED: networkmanager. blueprints/networkmanager/globalnetwork renders
+# networkmanager.services.k8s.aws/v1alpha1 resources, but AWS publishes no
+# networkmanager-chart — `helm show chart` returns a hard 404 ("The repository with name
+# 'networkmanager-chart' does not exist in the registry with id 'aws-controllers-k8s'"), reproduced
+# on three separate attempts. That blueprint therefore has no controller that can reconcile it. It is
+# left out deliberately rather than pinned to a guess; see docs/installing-controllers.md.
+controllers:
+  - service: acm
+    version: "1.10.0"
+  - service: acmpca
+    version: "1.6.0"
+  - service: apigateway
+    version: "1.10.1"
+  - service: apigatewayv2
+    version: "1.7.1"
+  - service: applicationautoscaling
+    version: "1.8.1"
+  - service: athena
+    version: "1.9.0"
+  - service: autoscaling
+    version: "1.4.0"
+  - service: backup
+    version: "1.3.0"
+  - service: bedrock
+    version: "1.5.0"
+  - service: bedrockagent
+    version: "1.5.0"
+  - service: bedrockagentcorecontrol
+    version: "1.16.0"
+  - service: cloudfront
+    version: "1.9.0"
+  - service: cloudtrail
+    version: "1.8.0"
+  - service: cloudwatch
+    version: "1.10.0"
+  - service: cloudwatchlogs
+    version: "1.7.0"
+  - service: codeartifact
+    version: "1.8.0"
+  - service: cognitoidentityprovider
+    version: "1.8.0"
+  - service: dms
+    version: "0.3.0"
+  - service: documentdb
+    version: "1.8.1"
+  - service: dsql
+    version: "1.3.0"
+  - service: dynamodb
+    version: "1.13.0"
+  - service: ec2
+    version: "1.22.0"
+  - service: ecr
+    version: "1.10.0"
+  - service: ecrpublic
+    version: "1.6.0"
+  - service: ecs
+    version: "1.8.1"
+  - service: efs
+    version: "1.7.1"
+  - service: eks
+    version: "1.24.1"
+  - service: elasticache
+    version: "1.10.1"
+  - service: elasticsearchservice
+    version: "0.0.2"
+  - service: elbv2
+    version: "1.8.1"
+  - service: emrcontainers
+    version: "1.8.0"
+  - service: emrserverless
+    version: "1.3.0"
+  - service: eventbridge
+    version: "1.8.0"
+  - service: firehose
+    version: "0.6.1"
+  - service: glue
+    version: "1.4.0"
+  - service: iam
+    version: "1.10.0"
+  - service: kafka
+    version: "1.13.0"
+  - service: keyspaces
+    version: "1.7.0"
+  - service: kinesis
+    version: "1.6.0"
+  - service: kms
+    version: "1.6.0"
+  - service: lambda
+    version: "1.18.1"
+  - service: memorydb
+    version: "1.8.1"
+  - service: mq
+    version: "1.7.0"
+  - service: mwaa
+    version: "1.3.0"
+  - service: networkfirewall
+    version: "1.6.0"
+  - service: opensearchserverless
+    version: "1.5.0"
+  - service: opensearchservice
+    version: "1.8.0"
+  - service: organizations
+    version: "1.6.1"
+  - service: pipes
+    version: "1.7.0"
+  - service: prometheusservice
+    version: "1.8.1"
+  - service: quicksight
+    version: "1.2.1"
+  - service: ram
+    version: "1.6.0"
+  - service: rds
+    version: "1.13.1"
+  - service: recyclebin
+    version: "1.6.1"
+  - service: route53
+    version: "1.7.0"
+  - service: route53resolver
+    version: "1.10.0"
+  - service: s3
+    version: "1.13.0"
+  - service: s3control
+    version: "1.7.0"
+  - service: s3files
+    version: "1.3.0"
+  - service: sagemaker
+    version: "1.11.0"
+  - service: secretsmanager
+    version: "1.7.0"
+  - service: ses
+    version: "1.6.0"
+  - service: sfn
+    version: "1.8.1"
+  - service: sns
+    version: "1.11.0"
+  - service: sqs
+    version: "1.8.1"
+  - service: ssm
+    version: "1.7.1"
+  - service: wafv2
+    version: "1.7.0"

@@ -4,9 +4,15 @@
 // into a crdgen-safe values.schema.json, and renders a full blueprint directory
 // (chart + CompositionDefinition + customform + README) under <out>/<service>/<resource>.
 //
+// It also generates the operator/ wrappers over the upstream ACK service-controller charts, from
+// the committed pin list, so every blueprint in this repo has an installable controller:
+//
+//	ackgen -operators tools/ackgen/ack-controllers.yaml -out operator
+//
 // Usage:
 //
 //	ackgen -crd <file|url> [-version v1alpha1] [-out blueprints] [-chart-version 0.1.0] [-lint]
+//	ackgen -operators <pins.yaml> [-out operator] [-lint]
 package main
 
 import (
@@ -24,10 +30,29 @@ func main() {
 	outRoot := flag.String("out", "blueprints", "output root directory for blueprints")
 	chartVersion := flag.String("chart-version", "0.1.0", "chart/Composition version to stamp into CompositionDefinition and customform")
 	doLint := flag.Bool("lint", false, "run `helm lint` + `helm template` on the generated chart (requires helm)")
+	operators := flag.String("operators", "", "path to the ACK controller pin list; generates the operator/ wrappers instead of a blueprint")
 	flag.Parse()
 
+	// -operators is a separate mode, not a modifier: its input is the pin list, not a CRD, and its
+	// output root defaults to operator/ rather than blueprints/.
+	if *operators != "" {
+		if *crdSrc != "" {
+			fmt.Fprintln(os.Stderr, "error: -operators and -crd are different modes; pass one")
+			os.Exit(2)
+		}
+		out := *outRoot
+		if out == "blueprints" {
+			out = "operator"
+		}
+		if err := runOperators(*operators, out, *doLint); err != nil {
+			fmt.Fprintln(os.Stderr, "error:", err)
+			os.Exit(1)
+		}
+		return
+	}
+
 	if *crdSrc == "" {
-		fmt.Fprintln(os.Stderr, "error: -crd is required")
+		fmt.Fprintln(os.Stderr, "error: -crd is required (or -operators for the controller wrappers)")
 		flag.Usage()
 		os.Exit(2)
 	}

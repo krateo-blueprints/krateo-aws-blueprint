@@ -39,15 +39,20 @@ do **not** configure AWS credentials. Both are cluster-admin prerequisites, set 
 per AWS service:
 
 1. **Install the ACK service controller** for the resource you want (e.g. the S3
-   controller before `aws-s3-bucket`). See
+   controller before `aws-s3-bucket`). The controllers ship from this repo as **operator
+   blueprints** under [`operator/`](operator) — one per service, each pinning its upstream
+   version and carrying its CRDs. See
    [`docs/installing-controllers.md`](docs/installing-controllers.md):
 
    ```sh
-   helm install ack-s3-controller \
-     oci://public.ecr.aws/aws-controllers-k8s/s3-chart \
+   helm install krateo-aws-ack-s3 \
+     oci://ghcr.io/krateo-blueprints/charts/krateo-aws-ack-s3 \
      --namespace ack-system --create-namespace \
-     --set aws.region=eu-west-1
+     --set ack.aws.region=eu-west-1
    ```
+
+   One exception: `networkmanager` has no upstream controller chart, so
+   `blueprints/networkmanager/globalnetwork` has nothing that can reconcile it.
 
 2. **Configure AWS authentication** for that controller — IRSA / EKS Pod Identity
    (recommended) or static credentials. See [`docs/authentication.md`](docs/authentication.md).
@@ -58,7 +63,8 @@ Then register a blueprint and create a Composition — see
 [`docs/usage.md`](docs/usage.md). Every chart is published to GHCR:
 
 ```
-oci://ghcr.io/krateo-blueprints/charts/aws-<service>-<resource>:<version>
+oci://ghcr.io/krateo-blueprints/charts/aws-<service>-<resource>:<version>   # blueprints channel
+oci://ghcr.io/krateo-blueprints/charts/krateo-aws-ack-<service>:<version>   # operators channel
 ```
 
 ## Configure

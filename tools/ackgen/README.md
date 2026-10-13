@@ -45,6 +45,28 @@ go build -o ackgen .
 ./ackgen -crd ./s3.services.k8s.aws_buckets.yaml -version v1alpha1 -out ../../blueprints
 ```
 
+### Operator wrappers
+
+A second, separate mode generates the `operator/` wrappers over the upstream ACK service-controller
+charts — one per service, so every blueprint in this repo has an installable controller:
+
+```sh
+./ackgen -operators ack-controllers.yaml -out ../../operator
+```
+
+`-operators` and `-crd` are different modes, not modifiers: the input is the committed pin list
+rather than a CRD, and the default output root becomes `operator`. The generator never resolves
+"latest" from the registry — see the header of `ack-controllers.yaml` for why.
+
+Each wrapper is metadata only (`Chart.yaml`, `values.yaml`, `values.schema.json`, `README.md`) with
+no `templates/`: a single dependency on `oci://public.ecr.aws/aws-controllers-k8s/<service>-chart`,
+aliased to `ack` so the values path is identical across the catalogue. The upstream chart ships its
+service CRDs in its own `crds/`, so there is no companion `-crds` chart.
+
+`-lint` in this mode runs `helm dependency update` + `helm template` per wrapper, which is the only
+check that proves a pinned version actually exists upstream. It needs the network, and 67 serial
+pulls are slow — CI does it in its own job.
+
 ### Flags
 
 | Flag             | Default       | Description                                                        |
@@ -53,6 +75,7 @@ go build -o ackgen .
 | `-version`       | storage/served| CRD version to target.                                             |
 | `-out`           | `blueprints`  | Output root; blueprint lands at `<out>/<service>/<resource>`.      |
 | `-chart-version` | `0.1.0`       | Version stamped into CompositionDefinition and customform.         |
+| `-operators`     | _(unset)_     | Path to the controller pin list; switches to operator-wrapper mode. |
 | `-lint`          | `false`       | Run `helm lint` + `helm template` on the generated chart.          |
 
 ## Validated against

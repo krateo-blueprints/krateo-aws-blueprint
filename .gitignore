@@ -11,3 +11,13 @@ tools/ackgen/bin/
 
 # Claude Code session data
 .claude/
+
+# Operator-wrapper dependencies, restored by `helm dependency update` in CI.
+#
+# Chart.lock is NOT committed here, unlike krateo-azure-blueprint's single operator chart. A lock
+# file records the resolved digest, which would make the pull byte-reproducible — but producing one
+# requires a network pull per wrapper at generation time, and that would make tools/ackgen
+# non-deterministic offline and its output dependent on registry availability. Chart.yaml pins an
+# exact upstream version instead (see tools/ackgen/ack-controllers.yaml), which is what CI resolves.
+operator/*/charts/
+operator/*/Chart.lock

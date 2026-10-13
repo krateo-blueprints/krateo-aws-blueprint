@@ -34,14 +34,14 @@ jobs:
           # Collected for publish-chart.yaml: the Marketplace index is built from the .tgz
           # this run uploads, NOT from the OCI registry. Charts pushed only to GHCR stay
           # invisible there — which is why the 250 entries in the index were hand-seeded.
-          mkdir -p "${RUNNER_TEMP}/charts-dist"
+          mkdir -p "${RUNNER_TEMP}/charts-dist" "${RUNNER_TEMP}/charts-dist-operators"
 
       - name: Log in to GHCR
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | \
             helm registry login ghcr.io --username "${{ github.actor }}" --password-stdin
 
-      - name: Package and push every blueprint chart
+      - name: Package and push every chart (operators first, then blueprints)
         run: |
           set -euo pipefail
           # Stamp every CompositionDefinition (blueprints/**/ and examples/**/). They pin the
@@ -53,18 +53,66 @@ jobs:
             < <(find blueprints examples -type f -name compositiondefinition.yaml -not -path "*/charts/*" -print0 2>/dev/null)
           echo "stamped ${cdc} CompositionDefinition(s)"
           shopt -s nullglob
-          for chart in blueprints/*/*/chart; do
+          published=0
+          # operator/ FIRST: it is the part an install cannot proceed without, and GHCR starts
+          # rejecting pushes ("failed to perform Tag on destination: ... not found") once a run has
+          # pushed a couple of hundred artifacts. This repo publishes ~250 blueprint charts per run,
+          # well past where krateo-azure-blueprint hit that wall, so the controllers go first rather
+          # than being the casualties.
+          for chart in operator/* blueprints/*/*/chart; do
+            [ -f "${chart}/Chart.yaml" ] || continue
             name=$(awk '/^name:/{print $2; exit}' "${chart}/Chart.yaml")
             echo "::group::${name} (${chart})"
             # Stamp the version placeholder used by Chart.yaml.
             sed -i "s/CHART_VERSION/${VERSION}/g" "${chart}/Chart.yaml"
+            # AFTER the version stamp, never before: helm refuses to read a chart whose version is
+            # the literal CHART_VERSION ("validation: chart.metadata.version is invalid"), so a
+            # dependency update placed earlier fails the whole release. The operator/ wrappers carry
+            # the upstream ACK controller chart as a gitignored dependency and must have it restored
+            # before packaging, or the .tgz ships without it and the controller is never deployed.
+            # `update` not `build`: build needs the repository ADDED first and fails on a clean
+            # runner. Chart.yaml pins an exact version, so re-resolving cannot drift.
+            if grep -q "^dependencies:" "${chart}/Chart.yaml"; then
+              helm dependency update "${chart}"
+            fi
             helm package "${chart}" --destination .
-            helm push "${name}-${VERSION}.tgz" "${OCI_REPO}"
+            # Retry: the GHCR tag error above is transient, and a single push failure otherwise
+            # abandons every chart after it in the loop.
+            ok=0
+            for attempt in 1 2 3 4 5; do
+              if helm push "${name}-${VERSION}.tgz" "${OCI_REPO}"; then ok=1; break; fi
+              echo "push attempt ${attempt} failed for ${name}; retrying in $((attempt*10))s"
+              sleep $((attempt*10))
+            done
+            if [ "${ok}" -ne 1 ]; then
+              echo "::error::${name} failed to publish after 5 attempts"
+              exit 1
+            fi
             echo "Published ${OCI_REPO}/${name}:${VERSION}"
-            # Same bytes to the publisher.
-            cp "${name}-${VERSION}.tgz" "${RUNNER_TEMP}/charts-dist/"
+            # Same bytes to the publisher. operator/ charts are the controllers that reconcile these
+            # blueprints and go to the operators channel; blueprints/ to blueprints.
+            case "${chart}" in
+              operator/*)   cp "${name}-${VERSION}.tgz" "${RUNNER_TEMP}/charts-dist-operators/" ;;
+              blueprints/*) cp "${name}-${VERSION}.tgz" "${RUNNER_TEMP}/charts-dist/" ;;
+            esac
+            published=$((published+1))
             echo "::endgroup::"
           done
+          # Assert the loop actually did something: a glob that matches nothing would otherwise
+          # finish green having published no charts at all.
+          echo "published ${published} chart(s)"
+          if [ "${published}" -eq 0 ]; then
+            echo "::error::no charts published — the chart glob matched nothing"
+            exit 1
+          fi
+
+      - name: Upload operator charts for the publisher
+        uses: actions/upload-artifact@v4
+        with:
+          name: charts-dist-operators
+          path: ${{ runner.temp }}/charts-dist-operators/*.tgz
+          if-no-files-found: error
+          retention-days: 1
 
       - name: Upload packaged charts for the publisher
         uses: actions/upload-artifact@v4
@@ -88,5 +136,20 @@ jobs:
       source_repo: ${{ github.repository }}
       git_tag: ${{ needs.package-and-push.outputs.version }}
       channel: blueprints
+    secrets:
+      PUBLISH_TOKEN: ${{ secrets.CHARTS_PUBLISH_TOKEN || secrets.RELEASE_FEED_TOKEN }}
+
+  # publish-chart.yaml is called once PER CHANNEL, as that workflow requires. The operator wrappers
+  # are plain Helm charts with no compositiondefinition.yaml, which the blueprints channel gate
+  # hard-errors on ("::error::<name>: no compositiondefinition.yaml") — they belong in operators.
+  publish-operators:
+    needs: package-and-push
+    uses: krateo-blueprints/charts/.github/workflows/publish-chart.yaml@main
+    permissions:
+      contents: read
+    with:
+      source_repo: ${{ github.repository }}
+      git_tag: ${{ needs.package-and-push.outputs.version }}
+      channel: operators
     secrets:
       PUBLISH_TOKEN: ${{ secrets.CHARTS_PUBLISH_TOKEN || secrets.RELEASE_FEED_TOKEN }}
