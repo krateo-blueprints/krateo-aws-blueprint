@@ -4,7 +4,7 @@ apiVersion: v2
 # Renders a native lambda.services.k8s.aws/v1alpha1 Alias resource; the ACK lambda
 # controller reconciles it into the real AWS resource.
 #
-# Composition Kind: AwsLambdaAlias (plural awslambdaalias) in the composition.krateo.io group.
+# Composition Kind: AwsLambdaAlias (plural awslambdaaliases) in the composition.krateo.io group.
 # The Composition spec mirrors the ACK Alias spec; core-provider builds the Composition
 # CRD from values.schema.json only.
 name: aws-lambda-alias

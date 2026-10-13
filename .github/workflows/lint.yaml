@@ -9,6 +9,7 @@ on:
       - "docs/**"
       - "examples/**"
       - "README.md"
+      - "tools/**"
       - ".github/workflows/lint.yaml"
   workflow_dispatch:
 
@@ -46,3 +47,18 @@ jobs:
             echo "::endgroup::"
           done
           exit $rc
+
+  # The generator re-derives the Composition plural that plumbing/crdgen stamps and
+  # core-provider reads back from discovery. A divergence breaks no build and fails no render --
+  # it ships a customform that 404s. tools/ackgen/plural_test.go asserts the derivation AND
+  # every plural already committed under blueprints/, so it has to actually run.
+  generator:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: tools/ackgen/go.mod
+      - name: go test
+        working-directory: tools/ackgen
+        run: go test ./...
