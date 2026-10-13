@@ -54,9 +54,20 @@ func compositionKind(chartName string) string {
 	return flect.Pascalize(toGolangName(chartName))
 }
 
-// compositionPlural reproduces core-provider: flect.Pluralize(strings.ToLower(kind)).
+// compositionPlural reproduces the plural that crdgen stamps into the generated Composition
+// CRD's spec.names.plural, which is what core-provider later reads back from apiserver discovery
+// (it does NOT pluralize offline itself).
+//
+// ORDER MATTERS: crdgen does Pluralize-then-Lower (plumbing crdgen/transpile.go:660), not
+// Lower-then-Pluralize. The two are not equivalent -- "AwsKmsAlias" gives "awskmsaliases" one way
+// and "awskmsalias" the other, because flect's pluralization is case-sensitive and the rule keyed
+// on the word "alias" does not fire on an unsegmentable lowercase compound. Getting this backwards
+// puts a plural that does not exist into the customform's resource path and the getCRD API path:
+// the form 404s while everything else about the chart looks correct. Mirror crdgen exactly rather
+// than relying on the two orders happening to coincide -- they coincide for 248 of this
+// catalogue's 250 Kinds, which is precisely why the exceptions ship unnoticed.
 func compositionPlural(kind string) string {
-	return flect.Pluralize(strings.ToLower(kind))
+	return strings.ToLower(flect.Pluralize(kind))
 }
 
 // serviceFromGroup turns an ACK API group like "s3.services.k8s.aws" into "s3".

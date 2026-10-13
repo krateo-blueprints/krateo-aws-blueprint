@@ -39,7 +39,7 @@ kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
 This publishes a `AwsKmsAlias` Composition type (`composition.krateo.io/v0-1-1`,
-plural `awskmsalias`), pulling the chart from
+plural `awskmsaliases`), pulling the chart from
 `oci://ghcr.io/krateo-blueprints/charts/aws-kms-alias`.
 
 ### Create a Composition
@@ -58,6 +58,6 @@ spec:
 ### Check status
 
 ```sh
-kubectl get awskmsalias.composition.krateo.io -n aws-kms-system
+kubectl get awskmsaliases.composition.krateo.io -n aws-kms-system
 kubectl get aliass.kms.services.k8s.aws -A
 ```

@@ -4,7 +4,7 @@ apiVersion: v2
 # Renders a native kms.services.k8s.aws/v1alpha1 Alias resource; the ACK kms
 # controller reconciles it into the real AWS resource.
 #
-# Composition Kind: AwsKmsAlias (plural awskmsalias) in the composition.krateo.io group.
+# Composition Kind: AwsKmsAlias (plural awskmsaliases) in the composition.krateo.io group.
 # The Composition spec mirrors the ACK Alias spec; core-provider builds the Composition
 # CRD from values.schema.json only.
 name: aws-kms-alias
