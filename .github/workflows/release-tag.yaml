@@ -57,7 +57,7 @@ jobs:
       # the charts. Refuse here, before anything is pushed, so a missing token fails the release
       # instead of leaving GHCR and the Marketplace index at different versions. Whether the token
       # can write is the publisher's first step; only presence can be seen from here.
-      - name: The Marketplace index token must be present
+      - name: The Marketplace index token must be present and well-formed
         env:
           CHARTS_PUBLISH_TOKEN: ${{ secrets.CHARTS_PUBLISH_TOKEN }}
         run: |
@@ -66,6 +66,17 @@ jobs:
             echo "::error::Marketplace index and the Marketplace would keep installing an old version."
             exit 1
           fi
+          # PUBLISHING.md rule 7. A token carrying whitespace or a control character, usually a
+          # trailing newline from piping into `gh secret set`, passes the API, which trims it, and then
+          # breaks git: publisher 1.0.0's first two real releases failed that way after their GHCR
+          # push. Refuse it here, before anything is pushed. The value is never printed.
+          case "${CHARTS_PUBLISH_TOKEN}" in
+            *[[:space:]]*|*[[:cntrl:]]*)
+              echo "::error::secret CHARTS_PUBLISH_TOKEN contains whitespace or a control character,"
+              echo "::error::usually a trailing newline. Re-save it by pasting the token at the prompt of"
+              echo "::error::'gh secret set CHARTS_PUBLISH_TOKEN --org krateo-blueprints --visibility all'."
+              exit 1 ;;
+          esac
 
       - name: Install Helm
         uses: azure/setup-helm@v4
@@ -245,9 +256,9 @@ jobs:
   # installs it. One token, no fallback (rule 7).
   publish-blueprints:
     needs: package-and-push
-    # PUBLISHING.md rule 9: the full commit SHA of release 1.0.0, which cannot move;
+    # PUBLISHING.md rule 9: the full commit SHA of release 1.0.1, which cannot move;
     # .github/dependabot.yml keeps it current.
-    uses: krateo-blueprints/charts/.github/workflows/publish-chart.yaml@a2d63ba50e138b17f678528d6d6be3afef48715a # 1.0.0
+    uses: krateo-blueprints/charts/.github/workflows/publish-chart.yaml@36ea357cb0fe4b49628cc984d9939babf0049d03 # 1.0.1
     permissions:
       contents: read
     with:
