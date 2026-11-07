@@ -16,7 +16,7 @@ on:
       - "[0-9]+.[0-9]+.[0-9]+"
 
 permissions:
-  contents: read
+  contents: write # this tag's release and its CompositionDefinition assets
   packages: write
   actions: read # the lint-run check reads this repository's workflow runs
 
@@ -166,6 +166,67 @@ jobs:
             echo "::error::no charts pushed"
             exit 1
           fi
+
+      # The documented install path. Each blueprint's README applies its CompositionDefinition from
+      # this tag's release, as compositiondefinition-<chart>.yaml: the committed file carries the
+      # CHART_VERSION placeholder, which only this workflow replaces, so it cannot be applied from a
+      # checkout. One asset per blueprint rather than one bundle, because a reader registers one
+      # blueprint, and applying a bundle would register every one of them, each pulling its chart.
+      # The asset is the copy the archive carries, so the two cannot disagree.
+      - name: Prepare the stamped CompositionDefinitions as release assets
+        run: |
+          set -euo pipefail
+          assets="${RUNNER_TEMP}/compositiondefinitions"
+          mkdir -p "${assets}"
+          n=0
+          for chart in blueprints/*/*/chart; do
+            name=$(awk '/^name:/{print $2; exit}' "${chart}/Chart.yaml")
+            cp "${chart}/compositiondefinition.yaml" "${assets}/compositiondefinition-${name}.yaml"
+            n=$((n+1))
+          done
+          if grep -l CHART_VERSION "${assets}"/*.yaml; then
+            echo "::error::the CompositionDefinitions above still carry the CHART_VERSION placeholder"
+            exit 1
+          fi
+          echo "prepared ${n} CompositionDefinition asset(s)"
+          if [ "${n}" -eq 0 ]; then
+            echo "::error::no CompositionDefinition assets prepared — the chart glob matched nothing"
+            exit 1
+          fi
+
+      # GHCR already holds every chart these install. release-notes.yaml creates the release for this
+      # same tag, so it may not exist yet: create it idempotently rather than ordering two
+      # tag-triggered workflows; whichever gets there first wins and the other falls through to the
+      # upload. Then read back what is attached, and fetch each asset anonymously, the way a reader
+      # following the README will.
+      - name: Attach them to this tag's release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          assets="${RUNNER_TEMP}/compositiondefinitions"
+          for _ in 1 2 3 4 5 6; do
+            gh release view "${VERSION}" >/dev/null 2>&1 && break
+            gh release create "${VERSION}" --verify-tag --title "${VERSION}" --notes "" >/dev/null 2>&1 && break
+            sleep 10
+          done
+          gh release view "${VERSION}" >/dev/null # no release by now is a real failure
+          gh release upload "${VERSION}" "${assets}"/*.yaml --clobber
+          id=$(gh api "repos/${GITHUB_REPOSITORY}/releases/tags/${VERSION}" --jq .id)
+          attached=$(gh api --paginate "repos/${GITHUB_REPOSITORY}/releases/${id}/assets?per_page=100" --jq '.[].name')
+          missing=0
+          for f in "${assets}"/*.yaml; do
+            base=$(basename "${f}")
+            if ! grep -qxF "${base}" <<< "${attached}"; then
+              echo "::error::${base} is not attached to release ${VERSION}"; missing=$((missing+1)); continue
+            fi
+            url="https://github.com/${GITHUB_REPOSITORY}/releases/download/${VERSION}/${base}"
+            if ! curl -fsSL --retry 5 --retry-delay 5 "${url}" | cmp -s - "${f}"; then
+              echo "::error::${url} does not download anonymously as the stamped file"; missing=$((missing+1))
+            fi
+          done
+          echo "release ${VERSION}: $(find "${assets}" -name '*.yaml' | wc -l | tr -d ' ') CompositionDefinition asset(s) attached and downloadable, ${missing} problem(s)"
+          [ "${missing}" -eq 0 ]
 
       - name: Upload packaged charts for the publisher
         uses: actions/upload-artifact@v4

@@ -4,7 +4,7 @@ title: krateo-aws-blueprint — usage
 description: The prerequisites and the steps to use a blueprint — install the ACK controller, configure AWS auth, register the CompositionDefinition, then create a Composition and check status.
 resource: oci://ghcr.io/krateo-blueprints/charts/aws-s3-bucket
 tags: [aws, ack, usage, compositiondefinition, quickstart]
-timestamp: 2026-08-11T00:00:00Z
+timestamp: 2026-11-07T00:00:00Z
 ---
 
 # Usage
@@ -42,15 +42,20 @@ Each blueprint ships a `compositiondefinition.yaml` (and an optional `customform
 for the portal card + form). Applying the `CompositionDefinition` publishes the
 Composition type and pulls the chart from GHCR. For `aws-s3-bucket`:
 
+Apply the stamped CompositionDefinition attached to a release of this repository. The
+`compositiondefinition.yaml` in the checkout carries the `CHART_VERSION` placeholder, which
+only the release replaces.
+
 ```sh
+VERSION=X.Y.Z   # a release of this repository: https://github.com/krateo-blueprints/krateo-aws-blueprint/releases
 kubectl create namespace aws-s3-system
-kubectl apply -f blueprints/s3/bucket/compositiondefinition.yaml   # publishes AwsS3Bucket
+kubectl apply -f "https://github.com/krateo-blueprints/krateo-aws-blueprint/releases/download/${VERSION}/compositiondefinition-aws-s3-bucket.yaml"   # publishes AwsS3Bucket
 kubectl apply -f blueprints/s3/bucket/customform.yaml              # optional: portal card + form
 ```
 
-This publishes an `AwsS3Bucket` Composition type (`composition.krateo.io/v0-1-1`,
-plural `awss3buckets`), pulling the chart from
-`oci://ghcr.io/krateo-blueprints/charts/aws-s3-bucket`.
+This publishes an `AwsS3Bucket` Composition type (`composition.krateo.io/vX-Y-Z`, the release
+version with dashes, e.g. `0.3.4` → `v0-3-4`; plural `awss3buckets`), pulling the chart from
+`oci://ghcr.io/krateo-blueprints/charts/aws-s3-bucket` at that version.
 
 > If the GHCR package is private, add pull credentials under `spec.chart.credentials`
 > in the `compositiondefinition.yaml` (a commented example is in the file).
@@ -62,7 +67,7 @@ Create a Composition of the published type. Its `spec` mirrors the ACK custom-re
 `region` field:
 
 ```yaml
-apiVersion: composition.krateo.io/v0-1-1
+apiVersion: composition.krateo.io/vX-Y-Z   # VERSION with dashes, e.g. v0-3-4
 kind: AwsS3Bucket
 metadata:
   name: my-bucket

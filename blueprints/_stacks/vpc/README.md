@@ -75,19 +75,25 @@ of its 200+ inputs). Full schema in [`chart/values.schema.json`](chart/values.sc
 
 ## How to install
 
+Register it with the CompositionDefinition attached to a release of this repository, stamped
+with that release's chart version. The `compositiondefinition.yaml` beside this README carries
+the `CHART_VERSION` placeholder, which only the release replaces, so it is not meant to be applied.
+
 ```sh
+VERSION=X.Y.Z   # a release of this repository: https://github.com/krateo-blueprints/krateo-aws-blueprint/releases
 kubectl create namespace aws-vpc-system
-kubectl apply -f compositiondefinition.yaml   # publishes the AwsVpcStack type
+kubectl apply -f "https://github.com/krateo-blueprints/krateo-aws-blueprint/releases/download/${VERSION}/compositiondefinition-aws-vpc-stack.yaml"   # publishes the AwsVpcStack type
 kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
-This publishes an `AwsVpcStack` Composition type (`composition.krateo.io/v0-3-0`, plural
-`awsvpcstacks`), pulling `oci://ghcr.io/krateo-blueprints/charts/aws-vpc-stack`.
+This publishes an `AwsVpcStack` Composition type (`composition.krateo.io/vX-Y-Z`, the release
+version with dashes, e.g. `0.1.6` → `v0-1-6`; plural `awsvpcstacks`), pulling the chart from
+`oci://ghcr.io/krateo-blueprints/charts/aws-vpc-stack` at that version.
 
 ### Create a Composition
 
 ```yaml
-apiVersion: composition.krateo.io/v0-3-0
+apiVersion: composition.krateo.io/vX-Y-Z   # VERSION with dashes, e.g. v0-1-6
 kind: AwsVpcStack
 metadata:
   name: my-vpc
