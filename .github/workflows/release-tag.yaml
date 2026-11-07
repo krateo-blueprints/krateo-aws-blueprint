@@ -245,9 +245,9 @@ jobs:
   # installs it. One token, no fallback (rule 7).
   publish-blueprints:
     needs: package-and-push
-    # PUBLISHING.md rule 9: to be replaced by the 1.0.0 commit SHA (with a `# 1.0.0` comment) once
-    # tagged; .github/dependabot.yml then keeps it current.
-    uses: krateo-blueprints/charts/.github/workflows/publish-chart.yaml@1.0.0
+    # PUBLISHING.md rule 9: the full commit SHA of release 1.0.0, which cannot move;
+    # .github/dependabot.yml keeps it current.
+    uses: krateo-blueprints/charts/.github/workflows/publish-chart.yaml@a2d63ba50e138b17f678528d6d6be3afef48715a # 1.0.0
     permissions:
       contents: read
     with:
