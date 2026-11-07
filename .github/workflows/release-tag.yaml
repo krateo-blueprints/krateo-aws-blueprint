@@ -176,13 +176,17 @@ jobs:
           if-no-files-found: error
           retention-days: 1
 
-  # The organisation's one publisher, at its major tag (krateo-blueprints/charts PUBLISHING.md rule
-  # 9), called once per channel; this repository has one. It stores the tarballs, merges the channel index on gh-pages that
-  # the Marketplace reads, and succeeds only once the served index lists every chart and an
-  # anonymous `helm pull --repo` installs it. One token, no fallback (rule 7).
+  # The organisation's one publisher, pinned to an exact release (krateo-blueprints/charts
+  # PUBLISHING.md rule 9: it receives an org-wide write token, so a movable ref would let whoever
+  # moves it run code with that token here), called once per channel; this repository has one. It
+  # stores the tarballs, merges the channel index on gh-pages that the Marketplace reads, and
+  # succeeds only once the served index lists every chart and an anonymous `helm pull --repo`
+  # installs it. One token, no fallback (rule 7).
   publish-blueprints:
     needs: package-and-push
-    uses: krateo-blueprints/charts/.github/workflows/publish-chart.yaml@1
+    # PUBLISHING.md rule 9: to be replaced by the 1.0.0 commit SHA (with a `# 1.0.0` comment) once
+    # tagged; .github/dependabot.yml then keeps it current.
+    uses: krateo-blueprints/charts/.github/workflows/publish-chart.yaml@1.0.0
     permissions:
       contents: read
     with:

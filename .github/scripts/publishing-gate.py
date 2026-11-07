@@ -9,25 +9,28 @@ rules earlier, in two modes:
   tree      the committed checkout, on every pull request (lint.yaml) and before a release
             packages anything (release-tag.yaml):
               - every chart is at blueprints/<service>/<resource>/chart (blueprints channel) or
-                operator/<name> (operators channel), the only places the release publishes from;
-              - every Chart.yaml version is the CHART_VERSION placeholder (rule 4);
+                operator/<name> (operators channel), the only places the release publishes from,
+                and its content belongs in that channel (rule 2);
+              - every Chart.yaml version is the CHART_VERSION placeholder, and so is every
+                CompositionDefinition's spec.chart.version: this repository's charts version
+                together, so tag, chart and CompositionDefinition are one number (rule 4). A
+                literal there is how the published gcp-storage-bucket 0.1.5 and
+                azure-storage-account 0.1.3 shipped a CompositionDefinition that installs 0.1.0:
+                the release stamps the placeholder, and a file without one went out unchanged;
+              - every Chart.yaml lists this repository in sources: (rule 3);
               - every blueprint has values.schema.json, an https icon, non-empty keywords, and
                 ONE committed CompositionDefinition, beside the chart, whose spec.chart.url is
-                oci://ghcr.io/krateo-blueprints/charts/<name> and whose spec.chart.version is the
-                CHART_VERSION placeholder (rules 3 and 4). A literal there is how the published
-                gcp-storage-bucket 0.1.5 and azure-storage-account 0.1.3 shipped a
-                CompositionDefinition that installs 0.1.0: the release stamps the placeholder,
-                and a file without one went out unchanged;
-              - no operator chart is a blueprint (rule 2).
+                oci://ghcr.io/krateo-blueprints/charts/<name> (rule 3).
 
   archives  the packaged .tgz files of one channel, after `helm package` and before any push.
             The same content gate publish-chart.yaml applies, plus: every archive is at the
-            version being released. `helm package` exits 0 whether or not the
+            version being released, so chart version == CompositionDefinition version == tag is
+            proven on the bytes that ship. `helm package` exits 0 whether or not the
             CompositionDefinition was copied into the chart, so only the archive can say.
 
-Usage:
+Usage (GITHUB_REPOSITORY, owner/repo, must be set; Actions sets it):
   publishing-gate.py tree <repo-root>
-  publishing-gate.py archives <blueprints|operators> <dir-of-tgz> <version>
+  publishing-gate.py archives <blueprints|operators|pages> <dir-of-tgz> <version>
 
 Exits 1 on any violation, and also when it finds nothing to check: a gate with no input passes
 nothing.
@@ -54,6 +57,20 @@ def composition_definitions(text):
     return [d for d in yaml.safe_load_all(text) if isinstance(d, dict) and d.get("kind") == "CompositionDefinition"]
 
 
+def channel_for(chart, has_schema, has_cd):
+    """The channel publish-chart.yaml requires for this content (PUBLISHING.md rule 2)."""
+    if has_schema and has_cd:
+        kind = (chart.get("annotations") or {}).get("krateo.io/kind")
+        return "pages" if kind == "page-set" else "blueprints"
+    return "operators"
+
+
+def check_sources(where, chart, source_url):
+    sources = chart.get("sources")
+    if not isinstance(sources, list) or source_url not in sources:
+        error(f"{where}: Chart.yaml sources: must list {source_url}, the repository that builds it")
+
+
 def check_listing_metadata(where, chart):
     icon = chart.get("icon") or ""
     if not isinstance(icon, str) or not icon.startswith("https://"):
@@ -76,7 +93,7 @@ def check_cd(where, cds, name, want_version):
         error(f"{where}: CompositionDefinition spec.chart.version is {version!r}, must be {want_version!r}")
 
 
-def tree(root):
+def tree(root, source_url):
     os.chdir(root)
     charts = sorted(
         os.path.dirname(p)
@@ -99,20 +116,22 @@ def tree(root):
         name = chart.get("name")
         if str(chart.get("version")) != PLACEHOLDER:
             error(f"{d}/Chart.yaml: version is {chart.get('version')!r}; commit the {PLACEHOLDER} placeholder, the release stamps it from the tag")
+        check_sources(d, chart, source_url)
         has_schema = os.path.isfile(os.path.join(d, "values.schema.json"))
         inner_cd = os.path.join(d, "compositiondefinition.yaml")
-        if channel == "operators":
-            if has_schema and os.path.isfile(inner_cd):
-                error(f"{d}: has values.schema.json and a CompositionDefinition, so it is a blueprint; it cannot go to operators")
-            continue
-        if not has_schema:
-            error(f"{d}: no values.schema.json; a blueprint needs one")
-        if os.path.exists(inner_cd):
-            error(f"{inner_cd}: do not commit a copy inside the chart; the release copies the stamped {os.path.dirname(d)}/compositiondefinition.yaml there")
         outer_cd = os.path.join(os.path.dirname(d), "compositiondefinition.yaml")
-        if not os.path.isfile(outer_cd):
-            error(f"{outer_cd}: missing; a blueprint needs its CompositionDefinition")
-        else:
+        # What the archive will hold: the release copies the outer file into blueprint charts only.
+        has_cd = os.path.isfile(inner_cd) or (channel == "blueprints" and os.path.isfile(outer_cd))
+        want = channel_for(chart, has_schema, has_cd)
+        if want != channel:
+            error(f"{d}: its content belongs in {want}, but the release publishes this path to {channel} "
+                  f"(values.schema.json: {'yes' if has_schema else 'no'}, CompositionDefinition: {'yes' if has_cd else 'no'})")
+            continue
+        if channel == "operators":
+            continue
+        if os.path.exists(inner_cd):
+            error(f"{inner_cd}: do not commit a copy inside the chart; the release copies the stamped {outer_cd} there")
+        if os.path.isfile(outer_cd):
             with open(outer_cd) as f:
                 check_cd(outer_cd, composition_definitions(f.read()), name, PLACEHOLDER)
         check_listing_metadata(d, chart)
@@ -121,9 +140,9 @@ def tree(root):
         error("no blueprint charts found under blueprints/*/*/chart; refusing to report a pass over nothing")
 
 
-def archives(channel, directory, version):
-    if channel not in ("blueprints", "operators"):
-        error(f"channel must be blueprints or operators, got {channel!r}")
+def archives(channel, directory, version, source_url):
+    if channel not in ("blueprints", "operators", "pages"):
+        error(f"channel must be blueprints, operators or pages, got {channel!r}")
         return
     tgzs = sorted(glob.glob(os.path.join(directory, "*.tgz")))
     for tgz in tgzs:
@@ -143,19 +162,18 @@ def archives(channel, directory, version):
                 continue
             if chart_version != version:
                 error(f"{base}: packaged at {chart_version}, but this release is {version}")
+            check_sources(base, chart, source_url)
             has_schema = f"{name}/values.schema.json" in members
             cd_member = f"{name}/compositiondefinition.yaml"
             has_cd = cd_member in members
-            if channel == "operators":
-                if has_schema and has_cd:
-                    error(f"{base}: is a blueprint (schema and CompositionDefinition); publish it to blueprints")
+            want = channel_for(chart, has_schema, has_cd)
+            if want != channel:
+                error(f"{base}: belongs in {want}, not {channel} (PUBLISHING.md rule 2; "
+                      f"{name}/values.schema.json: {'yes' if has_schema else 'no'}, {cd_member}: {'yes' if has_cd else 'no'})")
                 continue
-            if not has_schema:
-                error(f"{base}: no {name}/values.schema.json")
-            if not has_cd:
-                error(f"{base}: no {cd_member}; copy the stamped CompositionDefinition into the chart before helm package")
-            else:
-                check_cd(f"{base}:{cd_member}", composition_definitions(tar.extractfile(cd_member).read()), name, version)
+            if channel == "operators":
+                continue
+            check_cd(f"{base}:{cd_member}", composition_definitions(tar.extractfile(cd_member).read()), name, version)
             check_listing_metadata(base, chart)
     print(f"checked {len(tgzs)} {channel} archive(s) at {version}, {len(errors)} violation(s)")
     if not tgzs:
@@ -163,10 +181,15 @@ def archives(channel, directory, version):
 
 
 def main(argv):
+    repo = os.environ.get("GITHUB_REPOSITORY", "")
+    if "/" not in repo:
+        print("::error::GITHUB_REPOSITORY (owner/repo) is not set; it names the repository every Chart.yaml sources: must list")
+        return 1
+    source_url = f"https://github.com/{repo}"
     if len(argv) == 3 and argv[1] == "tree":
-        tree(argv[2])
+        tree(argv[2], source_url)
     elif len(argv) == 5 and argv[1] == "archives":
-        archives(argv[2], argv[3], argv[4])
+        archives(argv[2], argv[3], argv[4], source_url)
     else:
         print(__doc__, file=sys.stderr)
         return 2
