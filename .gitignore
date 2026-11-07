@@ -11,3 +11,7 @@ tools/ackgen/bin/
 
 # Claude Code session data
 .claude/
+
+# Copied from blueprints/<service>/<resource>/compositiondefinition.yaml by release-tag.yaml, after
+# stamping, so the archive carries it. Never committed: the file beside the chart is the only one.
+blueprints/*/*/chart/compositiondefinition.yaml

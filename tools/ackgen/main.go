@@ -22,7 +22,7 @@ func main() {
 	crdSrc := flag.String("crd", "", "path or URL to an ACK CustomResourceDefinition (required)")
 	version := flag.String("version", "", "CRD version to target (default: storage/served version)")
 	outRoot := flag.String("out", "blueprints", "output root directory for blueprints")
-	chartVersion := flag.String("chart-version", "0.1.0", "chart/Composition version to stamp into CompositionDefinition and customform")
+	chartVersion := flag.String("chart-version", "0.1.0", "Composition version to stamp into customform (Chart.yaml and the CompositionDefinition carry the CHART_VERSION placeholder, stamped from the release tag)")
 	doLint := flag.Bool("lint", false, "run `helm lint` + `helm template` on the generated chart (requires helm)")
 	flag.Parse()
 
