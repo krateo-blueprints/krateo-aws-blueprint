@@ -32,20 +32,25 @@ AWS region (empty = controller default).
 
 ## How to install
 
+Register it with the CompositionDefinition attached to a release of this repository, stamped
+with that release's chart version. The `compositiondefinition.yaml` beside this README carries
+the `CHART_VERSION` placeholder, which only the release replaces, so it is not meant to be applied.
+
 ```sh
+VERSION=X.Y.Z   # a release of this repository: https://github.com/krateo-blueprints/krateo-aws-blueprint/releases
 kubectl create namespace aws-route53-system
-kubectl apply -f compositiondefinition.yaml   # publishes the AwsRoute53Hostedzone type
+kubectl apply -f "https://github.com/krateo-blueprints/krateo-aws-blueprint/releases/download/${VERSION}/compositiondefinition-aws-route53-hostedzone.yaml"   # publishes the AwsRoute53Hostedzone type
 kubectl apply -f customform.yaml              # optional: portal card + form
 ```
 
-This publishes a `AwsRoute53Hostedzone` Composition type (`composition.krateo.io/v0-1-1`,
-plural `awsroute53hostedzones`), pulling the chart from
-`oci://ghcr.io/krateo-blueprints/charts/aws-route53-hostedzone`.
+This publishes a `AwsRoute53Hostedzone` Composition type (`composition.krateo.io/vX-Y-Z`, the release
+version with dashes, e.g. `0.1.6` → `v0-1-6`; plural `awsroute53hostedzones`), pulling the chart from
+`oci://ghcr.io/krateo-blueprints/charts/aws-route53-hostedzone` at that version.
 
 ### Create a Composition
 
 ```yaml
-apiVersion: composition.krateo.io/v0-1-1
+apiVersion: composition.krateo.io/vX-Y-Z   # VERSION with dashes, e.g. v0-1-6
 kind: AwsRoute53Hostedzone
 metadata:
   name: my-hostedzone

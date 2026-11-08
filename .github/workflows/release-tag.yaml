@@ -1,17 +1,24 @@
 name: release-tag
 
-# Packages every blueprint chart in blueprints/**/chart and publishes each to the GitHub
-# Container Registry as an OCI Helm artifact on every semver tag.
+# Packages every chart in this repo, pushes each to the GitHub Container Registry as an OCI Helm
+# artifact, and hands the same bytes to the organisation's publisher, on every semver tag. How a
+# chart is published is decided once, in krateo-blueprints/charts PUBLISHING.md; this workflow
+# follows it.
 #
-# Pushing tag "0.1.0" publishes, for each chart named aws-<service>-<resource>:
-#   oci://ghcr.io/<owner>/charts/aws-<service>-<resource>:0.1.0
+# Pushing tag "0.1.0" publishes, for each chart named aws-<service>-<resource>, to channel blueprints:
+#   oci://ghcr.io/krateo-blueprints/charts/aws-<service>-<resource>:0.1.0
+#
+# Order: refuse what cannot be published, package everything, check every archive, and only then
+# push. Nothing reaches GHCR unless every chart would also be accepted by the Marketplace index.
 on:
   push:
-    tags: ["[0-9]+.[0-9]+.[0-9]+"]
+    tags:
+      - "[0-9]+.[0-9]+.[0-9]+"
 
 permissions:
-  contents: read
+  contents: write # this tag's release and its CompositionDefinition assets
   packages: write
+  actions: read # the lint-run check reads this repository's workflow runs
 
 jobs:
   package-and-push:
@@ -22,8 +29,72 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # PUBLISHING.md rule 10. A quiet check list reads as success, and a commit no lint ever ran
+      # against looks exactly like one whose lint has not finished. This asserts only what it can
+      # see: that THIS commit has a successful run of lint.yaml.
+      - name: The commit being released must have passed lint
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          runs=$(gh api "repos/${GITHUB_REPOSITORY}/actions/workflows/lint.yaml/runs?head_sha=${SHA}&per_page=100" \
+            --jq '[.workflow_runs[] | select(.status == "completed")] | length')
+          ok=$(gh api "repos/${GITHUB_REPOSITORY}/actions/workflows/lint.yaml/runs?head_sha=${SHA}&per_page=100" \
+            --jq '[.workflow_runs[] | select(.conclusion == "success")] | length')
+          echo "lint runs on ${SHA}: ${runs} completed, ${ok} successful"
+          if [ "${runs}" -eq 0 ]; then
+            echo "::error::No completed lint run exists for ${SHA}, so no gate has seen these charts."
+            echo "::error::Run lint.yaml on this commit, confirm it passes, then re-run this release."
+            exit 1
+          fi
+          if [ "${ok}" -eq 0 ]; then
+            echo "::error::lint ran on ${SHA} but never succeeded. Refusing to publish."
+            exit 1
+          fi
+
+      # PUBLISHING.md rule 7. The publish jobs below need this secret, and they run AFTER GHCR has
+      # the charts. Refuse here, before anything is pushed, so a missing token fails the release
+      # instead of leaving GHCR and the Marketplace index at different versions. Whether the token
+      # can write is the publisher's first step; only presence can be seen from here.
+      - name: The Marketplace index token must be present and well-formed
+        env:
+          CHARTS_PUBLISH_TOKEN: ${{ secrets.CHARTS_PUBLISH_TOKEN }}
+        run: |
+          if [ -z "${CHARTS_PUBLISH_TOKEN}" ]; then
+            echo "::error::secret CHARTS_PUBLISH_TOKEN is not set, so this release could not reach the"
+            echo "::error::Marketplace index and the Marketplace would keep installing an old version."
+            exit 1
+          fi
+          # PUBLISHING.md rule 7. A token carrying whitespace or a control character, usually a
+          # trailing newline from piping into `gh secret set`, passes the API, which trims it, and then
+          # breaks git: publisher 1.0.0's first two real releases failed that way after their GHCR
+          # push. Refuse it here, before anything is pushed. The value is never printed.
+          case "${CHARTS_PUBLISH_TOKEN}" in
+            *[[:space:]]*|*[[:cntrl:]]*)
+              echo "::error::secret CHARTS_PUBLISH_TOKEN contains whitespace or a control character,"
+              echo "::error::usually a trailing newline. Re-save it by pasting the token at the prompt of"
+              echo "::error::'gh secret set CHARTS_PUBLISH_TOKEN --org krateo-blueprints --visibility all'."
+              exit 1 ;;
+          esac
+
       - name: Install Helm
         uses: azure/setup-helm@v4
+
+      - name: Install Python (for the publishing gate)
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install PyYAML
+        run: python3 -m pip install --disable-pip-version-check pyyaml==6.0.2
+
+      # The committed tree first: every CompositionDefinition carries the CHART_VERSION placeholder,
+      # and so on (see the script). A literal there passes through the stamp below unchanged: that
+      # is how krateo-gcp-blueprint 0.1.5 and krateo-azure-blueprint 0.1.3 shipped
+      # CompositionDefinitions installing 0.1.0, and how these 251 once drifted to 0.1.1.
+      - name: The committed charts follow the publishing standard
+        run: python3 .github/scripts/publishing-gate.py tree .
 
       - name: Resolve version and registry
         id: resolve
@@ -31,40 +102,142 @@ jobs:
           echo "VERSION=${GITHUB_REF_NAME}" >> "$GITHUB_ENV"
           echo "OCI_REPO=oci://ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/charts" >> "$GITHUB_ENV"
           echo "version=${GITHUB_REF_NAME}" >> "$GITHUB_OUTPUT"
-          # Collected for publish-chart.yaml: the Marketplace index is built from the .tgz
-          # this run uploads, NOT from the OCI registry. Charts pushed only to GHCR stay
-          # invisible there — which is why the 250 entries in the index were hand-seeded.
+
+      # The publisher reads the .tgz this run uploads, NOT the OCI registry, so a chart pushed to
+      # GHCR and never handed to it stays invisible in the Marketplace. Every chart here is a
+      # blueprint (values.schema.json and a CompositionDefinition), so all go to the blueprints
+      # channel (PUBLISHING.md rule 2).
+      - name: Package every chart
+        run: |
+          set -euo pipefail
+          # Stamp every CompositionDefinition (blueprints/**/ and examples/**/). They live beside
+          # the chart, not in it, so the per-chart Chart.yaml stamp would miss them.
+          cdc=0
+          while IFS= read -r -d "" cd; do
+            sed -i "s/CHART_VERSION/${VERSION}/g" "$cd"; cdc=$((cdc+1))
+          done < <(find blueprints examples -type f -name compositiondefinition.yaml -not -path "*/charts/*" -print0)
+          echo "stamped ${cdc} CompositionDefinition(s)"
+
           mkdir -p "${RUNNER_TEMP}/charts-dist"
+          shopt -s nullglob
+          packaged=0
+          for chart in blueprints/*/*/chart; do
+            sed -i "s/CHART_VERSION/${VERSION}/g" "${chart}/Chart.yaml"
+            # Ship the stamped CompositionDefinition inside its own chart, at the chart root, where
+            # helm packages it and never renders it (PUBLISHING.md rule 3). The copy is made from
+            # the one committed file, so the archive and the repo cannot disagree.
+            cp "$(dirname "${chart}")/compositiondefinition.yaml" "${chart}/compositiondefinition.yaml"
+            helm package "${chart}" --destination "${RUNNER_TEMP}/charts-dist" >/dev/null
+            packaged=$((packaged+1))
+          done
+          # A glob that matches nothing would otherwise finish green having packaged nothing.
+          echo "packaged ${packaged} chart(s)"
+          if [ "${packaged}" -eq 0 ]; then
+            echo "::error::no charts packaged — the chart glob matched nothing"
+            exit 1
+          fi
+
+      # The archives, not the copy above: helm package exits 0 whether or not the
+      # CompositionDefinition is in the chart directory. The same content gate publish-chart.yaml
+      # applies, run before GHCR holds this version rather than after.
+      - name: Every archive passes the Marketplace content gate
+        run: |
+          set -euo pipefail
+          python3 .github/scripts/publishing-gate.py archives blueprints "${RUNNER_TEMP}/charts-dist" "${VERSION}"
 
       - name: Log in to GHCR
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | \
             helm registry login ghcr.io --username "${{ github.actor }}" --password-stdin
 
-      - name: Package and push every blueprint chart
+      - name: Push every chart
         run: |
           set -euo pipefail
-          # Stamp every CompositionDefinition (blueprints/**/ and examples/**/). They pin the
-          # version of their chart and sit outside the chart dir, so the per-chart Chart.yaml
-          # stamp misses them -- which is how all 251 drifted to 0.1.1 while charts published
-          # 0.3.x. Hardcoded, they register versions that were never published.
-          cdc=0
-          while IFS= read -r -d "" cd; do sed -i "s/CHART_VERSION/${VERSION}/g" "$cd"; cdc=$((cdc+1)); done \
-            < <(find blueprints examples -type f -name compositiondefinition.yaml -not -path "*/charts/*" -print0 2>/dev/null)
-          echo "stamped ${cdc} CompositionDefinition(s)"
           shopt -s nullglob
+          pushed=0
+          for tgz in "${RUNNER_TEMP}"/charts-dist/*.tgz; do
+            base=$(basename "${tgz}" .tgz)
+            # Retry: GHCR rejects pushes transiently ("failed to perform Tag on destination: ...
+            # not found") once a run has pushed a couple of hundred artifacts, and a single push
+            # failure otherwise abandons every chart after it.
+            ok=0
+            for attempt in 1 2 3 4 5; do
+              if helm push "${tgz}" "${OCI_REPO}"; then ok=1; break; fi
+              echo "push attempt ${attempt} failed for ${base}; retrying in $((attempt*10))s"
+              sleep $((attempt*10))
+            done
+            if [ "${ok}" -ne 1 ]; then
+              echo "::error::${base} failed to publish after 5 attempts"
+              exit 1
+            fi
+            pushed=$((pushed+1))
+          done
+          echo "pushed ${pushed} chart(s) to ${OCI_REPO}"
+          if [ "${pushed}" -eq 0 ]; then
+            echo "::error::no charts pushed"
+            exit 1
+          fi
+
+      # The documented install path. Each blueprint's README applies its CompositionDefinition from
+      # this tag's release, as compositiondefinition-<chart>.yaml: the committed file carries the
+      # CHART_VERSION placeholder, which only this workflow replaces, so it cannot be applied from a
+      # checkout. One asset per blueprint rather than one bundle, because a reader registers one
+      # blueprint, and applying a bundle would register every one of them, each pulling its chart.
+      # The asset is the copy the archive carries, so the two cannot disagree.
+      - name: Prepare the stamped CompositionDefinitions as release assets
+        run: |
+          set -euo pipefail
+          assets="${RUNNER_TEMP}/compositiondefinitions"
+          mkdir -p "${assets}"
+          n=0
           for chart in blueprints/*/*/chart; do
             name=$(awk '/^name:/{print $2; exit}' "${chart}/Chart.yaml")
-            echo "::group::${name} (${chart})"
-            # Stamp the version placeholder used by Chart.yaml.
-            sed -i "s/CHART_VERSION/${VERSION}/g" "${chart}/Chart.yaml"
-            helm package "${chart}" --destination .
-            helm push "${name}-${VERSION}.tgz" "${OCI_REPO}"
-            echo "Published ${OCI_REPO}/${name}:${VERSION}"
-            # Same bytes to the publisher.
-            cp "${name}-${VERSION}.tgz" "${RUNNER_TEMP}/charts-dist/"
-            echo "::endgroup::"
+            cp "${chart}/compositiondefinition.yaml" "${assets}/compositiondefinition-${name}.yaml"
+            n=$((n+1))
           done
+          if grep -l CHART_VERSION "${assets}"/*.yaml; then
+            echo "::error::the CompositionDefinitions above still carry the CHART_VERSION placeholder"
+            exit 1
+          fi
+          echo "prepared ${n} CompositionDefinition asset(s)"
+          if [ "${n}" -eq 0 ]; then
+            echo "::error::no CompositionDefinition assets prepared — the chart glob matched nothing"
+            exit 1
+          fi
+
+      # GHCR already holds every chart these install. release-notes.yaml creates the release for this
+      # same tag, so it may not exist yet: create it idempotently rather than ordering two
+      # tag-triggered workflows; whichever gets there first wins and the other falls through to the
+      # upload. Then read back what is attached, and fetch each asset anonymously, the way a reader
+      # following the README will.
+      - name: Attach them to this tag's release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          assets="${RUNNER_TEMP}/compositiondefinitions"
+          for _ in 1 2 3 4 5 6; do
+            gh release view "${VERSION}" >/dev/null 2>&1 && break
+            gh release create "${VERSION}" --verify-tag --title "${VERSION}" --notes "" >/dev/null 2>&1 && break
+            sleep 10
+          done
+          gh release view "${VERSION}" >/dev/null # no release by now is a real failure
+          gh release upload "${VERSION}" "${assets}"/*.yaml --clobber
+          id=$(gh api "repos/${GITHUB_REPOSITORY}/releases/tags/${VERSION}" --jq .id)
+          attached=$(gh api --paginate "repos/${GITHUB_REPOSITORY}/releases/${id}/assets?per_page=100" --jq '.[].name')
+          missing=0
+          for f in "${assets}"/*.yaml; do
+            base=$(basename "${f}")
+            if ! grep -qxF "${base}" <<< "${attached}"; then
+              echo "::error::${base} is not attached to release ${VERSION}"; missing=$((missing+1)); continue
+            fi
+            url="https://github.com/${GITHUB_REPOSITORY}/releases/download/${VERSION}/${base}"
+            if ! curl -fsSL --retry 5 --retry-delay 5 "${url}" | cmp -s - "${f}"; then
+              echo "::error::${url} does not download anonymously as the stamped file"; missing=$((missing+1))
+            fi
+          done
+          echo "release ${VERSION}: $(find "${assets}" -name '*.yaml' | wc -l | tr -d ' ') CompositionDefinition asset(s) attached and downloadable, ${missing} problem(s)"
+          [ "${missing}" -eq 0 ]
 
       - name: Upload packaged charts for the publisher
         uses: actions/upload-artifact@v4
@@ -75,13 +248,17 @@ jobs:
           if-no-files-found: error
           retention-days: 1
 
-  # krateo-blueprints/charts uploads each package to its Releases and merges its entry into the
-  # blueprints channel index on gh-pages, which the Marketplace reads. This repo never called it:
-  # its 250 index entries were seeded onto gh-pages by hand, which is also how they came to be
-  # there without a compositiondefinition.yaml the channel gate requires.
+  # The organisation's one publisher, pinned to an exact release (krateo-blueprints/charts
+  # PUBLISHING.md rule 9: it receives an org-wide write token, so a movable ref would let whoever
+  # moves it run code with that token here), called once per channel; this repository has one. It
+  # stores the tarballs, merges the channel index on gh-pages that the Marketplace reads, and
+  # succeeds only once the served index lists every chart and an anonymous `helm pull --repo`
+  # installs it. One token, no fallback (rule 7).
   publish-blueprints:
     needs: package-and-push
-    uses: krateo-blueprints/charts/.github/workflows/publish-chart.yaml@main
+    # PUBLISHING.md rule 9: the full commit SHA of release 1.0.3, which cannot move;
+    # .github/dependabot.yml keeps it current.
+    uses: krateo-blueprints/charts/.github/workflows/publish-chart.yaml@ae5e19976a126abf5fb99c14c78180885ef3c97b # 1.0.3
     permissions:
       contents: read
     with:
@@ -89,4 +266,4 @@ jobs:
       git_tag: ${{ needs.package-and-push.outputs.version }}
       channel: blueprints
     secrets:
-      PUBLISH_TOKEN: ${{ secrets.CHARTS_PUBLISH_TOKEN || secrets.RELEASE_FEED_TOKEN }}
+      PUBLISH_TOKEN: ${{ secrets.CHARTS_PUBLISH_TOKEN }}

@@ -62,12 +62,13 @@ func writeBlueprint(outDir string, data blueprintData, valuesSchema, valuesYAML 
 		{"helmignore.tmpl", filepath.Join(chartDir, ".helmignore")},
 		{"_helpers.tpl.tmpl", filepath.Join(tplDir, "_helpers.tpl")},
 		{"resource.yaml.tmpl", filepath.Join(tplDir, data.AckKindLower+".yaml")},
+		// The ONE committed CompositionDefinition, beside the chart. Its spec.chart.version is the
+		// CHART_VERSION placeholder, which release-tag.yaml stamps from the tag and then copies into
+		// the chart before `helm package`, so the archive carries it as the Marketplace index
+		// requires. Never write a second copy inside the chart, and never a literal version: the
+		// template rendered -chart-version here until now, so every regeneration undid the
+		// placeholder these files were converted to by hand.
 		{"compositiondefinition.yaml.tmpl", filepath.Join(outDir, "compositiondefinition.yaml")},
-		// Also INSIDE the chart: publish-chart.yaml's blueprints channel gate inspects the packaged
-		// .tgz and hard-errors ("::error::<name>: no compositiondefinition.yaml") when it is absent,
-		// so a copy beside the chart is invisible to it. The outDir copy stays: it is what the
-		// release attaches and what the docs point at.
-		{"compositiondefinition.yaml.tmpl", filepath.Join(chartDir, "compositiondefinition.yaml")},
 		{"customform.yaml.tmpl", filepath.Join(outDir, "customform.yaml")},
 		{"blueprint-readme.md.tmpl", filepath.Join(outDir, "README.md")},
 	}

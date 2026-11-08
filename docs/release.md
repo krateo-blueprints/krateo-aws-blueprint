@@ -1,10 +1,10 @@
 ---
 type: Runbook
 title: krateo-aws-blueprint — release
-description: How a release ships — one semver tag packages every blueprint chart under blueprints/**/chart and pushes each to GHCR as an OCI Helm artifact, plus the PR-time lint gate and the version-bump step.
+description: How a release ships — one semver tag packages every blueprint chart under blueprints/**/chart, checks each archive against the organisation's publishing standard, pushes each to GHCR, attaches the stamped CompositionDefinitions to the tag's release, and publishes the charts to the Marketplace index; plus the PR-time gates.
 resource: oci://ghcr.io/krateo-blueprints/charts/aws-s3-bucket
 tags: [aws, ack, release, oci, ghcr]
-timestamp: 2026-08-11T00:00:00Z
+timestamp: 2026-11-07T00:00:00Z
 ---
 
 # Release
@@ -21,18 +21,28 @@ For each chart named `aws-<service>-<resource>`, pushing tag `X.Y.Z` publishes:
 oci://ghcr.io/krateo-blueprints/charts/aws-<service>-<resource>:X.Y.Z
 ```
 
-The workflow:
+The workflow follows the organisation's publishing standard,
+[krateo-blueprints/charts `PUBLISHING.md`](https://github.com/krateo-blueprints/charts/blob/main/PUBLISHING.md).
+Nothing is pushed until every check before the push has passed:
 
-1. Resolves `VERSION` from the tag and `OCI_REPO` from the repository owner
-   (`oci://ghcr.io/<owner>/charts`), so it always writes its own namespace —
-   `GITHUB_TOKEN` can only push there.
-2. Logs in to GHCR with `GITHUB_TOKEN`.
-3. For each `blueprints/*/*/chart`: stamps the `CHART_VERSION` placeholder in
-   `Chart.yaml` with the tag, `helm package`s the chart, and `helm push`es the `.tgz` to
-   `OCI_REPO`.
+1. Refuses a commit with no successful `lint.yaml` run, and refuses if the org secret
+   `CHARTS_PUBLISH_TOKEN` is empty.
+2. Runs `.github/scripts/publishing-gate.py tree .` over the committed charts.
+3. Stamps the `CHART_VERSION` placeholder with the tag in every `compositiondefinition.yaml` and
+   `Chart.yaml`, copies each blueprint's stamped `compositiondefinition.yaml` into its chart, and
+   `helm package`s every chart.
+4. Runs `publishing-gate.py archives` over the packaged `.tgz`: each must carry its
+   CompositionDefinition, at the tag's version, with the canonical `spec.chart.url`.
+5. Pushes each `.tgz` to `oci://ghcr.io/<owner>/charts` with `GITHUB_TOKEN`.
+6. Attaches each stamped CompositionDefinition to the tag's GitHub release as
+   `compositiondefinition-<chart>.yaml`, which is what the blueprint READMEs apply.
+7. Hands the same `.tgz` to `krateo-blueprints/charts`' `publish-chart.yaml`, which publishes them
+   to the Marketplace index and succeeds only when the Marketplace can install them.
 
-The `CHART_VERSION` placeholder in each `Chart.yaml` drives both the chart version and,
-downstream, the published Composition `apiVersion` (`0.1.0` → `composition.krateo.io/v0-1-0`).
+The `CHART_VERSION` placeholder drives the chart version, the CompositionDefinition's
+`spec.chart.version` and, downstream, the published Composition `apiVersion`
+(`0.1.0` → `composition.krateo.io/v0-1-0`). Never commit a literal version there: the release
+would pass it through unchanged, and `publishing-gate.py` refuses it on every pull request.
 
 ## Steps
 
@@ -46,9 +56,8 @@ Then verify the workflow went green and an artifact exists, e.g. for the referen
 $ helm show chart oci://ghcr.io/krateo-blueprints/charts/aws-s3-bucket --version X.Y.Z | head -3
 ```
 
-After the charts are published, bump the `spec.chart.version` in the affected
-`compositiondefinition.yaml` files (and the example under `examples/`) to the released
-version so they point at a chart that exists.
+Nothing is bumped by hand afterwards: register a blueprint with the stamped asset on the
+release, `https://github.com/krateo-blueprints/krateo-aws-blueprint/releases/download/X.Y.Z/compositiondefinition-<chart>.yaml`.
 
 ## PR-time checks
 
@@ -57,7 +66,9 @@ Two workflows gate pull requests:
 - **`lint.yaml`** — for every `blueprints/*/*/chart`, stamps a temporary version, then
   `helm template` (the authoritative gate: it renders the manifest **and** enforces
   `values.schema.json` against `values.yaml`) and an informational `helm lint`. It also
-  runs the shared documentation-standard check (`lint-docs`).
+  runs the shared documentation-standard check (`lint-docs`) and `publishing-gate.py tree .`
+  (`publishing-standard`), and it runs on every push to `main` as well, because a release
+  refuses a commit with no successful lint run.
 - **`security.yml`** — the shared Krateo security scan.
 
 ## Regenerating a blueprint
