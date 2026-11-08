@@ -65,9 +65,17 @@ def channel_for(chart, has_schema, has_cd):
     return "operators"
 
 
+def normalize_repo_url(url):
+    """As publish-chart.yaml compares them: GitHub owner and repository names are case-insensitive,
+    and a trailing slash names the same repository. Anything else, such as a /tree/main suffix or a
+    longer name sharing the prefix, is a different URL."""
+    return str(url).lower().rstrip("/")
+
+
 def check_sources(where, chart, source_url):
     sources = chart.get("sources")
-    if not isinstance(sources, list) or source_url not in sources:
+    want = normalize_repo_url(source_url)
+    if not isinstance(sources, list) or want not in {normalize_repo_url(s) for s in sources}:
         error(f"{where}: Chart.yaml sources: must list {source_url}, the repository that builds it")
 
 
