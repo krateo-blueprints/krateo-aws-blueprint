@@ -41,7 +41,19 @@ jobs:
           echo "${{ secrets.GITHUB_TOKEN }}" | \
             helm registry login ghcr.io --username "${{ github.actor }}" --password-stdin
 
+      # krateo-blueprints/charts PUBLISHING.md rule 14: charts are pushed through the organisation's chart-push
+      # action, whose push.sh retries GHCR's tag read-after-write race (and only that) onto the same digest. Locate
+      # mode: it outputs push.sh's path, and the next step runs it once per chart.
+      - name: Locate the shared chart push
+        id: chart-push
+        uses: krateo-platformops/.github/.github/actions/chart-push@5f126b7d93ec5302eb9cc57a3af157550175fbaf # main 2026-11-18
+
       - name: Package and push every blueprint chart
+        env:
+          CHART_PUSH: ${{ steps.chart-push.outputs.path }}
+          # push.sh reads the manifest back with these, after the registry login above.
+          REGISTRY_USERNAME: ${{ github.actor }}
+          REGISTRY_PASSWORD: ${{ github.token }}
         run: |
           set -euo pipefail
           # Stamp every CompositionDefinition (blueprints/**/ and examples/**/). They pin the
@@ -59,7 +71,7 @@ jobs:
             # Stamp the version placeholder used by Chart.yaml.
             sed -i "s/CHART_VERSION/${VERSION}/g" "${chart}/Chart.yaml"
             helm package "${chart}" --destination .
-            helm push "${name}-${VERSION}.tgz" "${OCI_REPO}"
+            bash "${CHART_PUSH}" "${name}-${VERSION}.tgz" "${OCI_REPO}"
             echo "Published ${OCI_REPO}/${name}:${VERSION}"
             # Same bytes to the publisher.
             cp "${name}-${VERSION}.tgz" "${RUNNER_TEMP}/charts-dist/"
