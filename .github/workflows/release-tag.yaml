@@ -81,7 +81,7 @@ jobs:
   # there without a compositiondefinition.yaml the channel gate requires.
   publish-blueprints:
     needs: package-and-push
-    uses: krateo-blueprints/charts/.github/workflows/publish-chart.yaml@main
+    uses: krateo-blueprints/charts/.github/workflows/publish-chart.yaml@33c79510d5042e0fcb5227176bd138d993cb4ef6 # 1.2.0
     permissions:
       contents: read
     with:
