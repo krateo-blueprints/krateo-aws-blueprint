@@ -14,7 +14,20 @@ permissions:
   packages: write
 
 jobs:
+  # krateo-blueprints/charts PUBLISHING.md rule 12: the release runs this repository's preflight before it publishes
+  # anything, and the pushing job needs it. The shared job first refuses a version that is not a plain X.Y.Z (rule
+  # 13's pattern, the one publish-chart refuses at index time), so nothing is pushed that could never be indexed;
+  # then it runs hack/release-preflight if this repository has one.
+  release-preflight:
+    uses: krateo-blueprints/charts/.github/workflows/release-preflight.yaml@70095ab05f1c5dc6c8dd39d0b1fdbbc7382a841c # 1.4.3
+    permissions:
+      contents: read
+    with:
+      version: ${{ github.ref_name }}
+
   package-and-push:
+    needs:
+      - release-preflight
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.resolve.outputs.version }}
@@ -93,7 +106,7 @@ jobs:
   # there without a compositiondefinition.yaml the channel gate requires.
   publish-blueprints:
     needs: package-and-push
-    uses: krateo-blueprints/charts/.github/workflows/publish-chart.yaml@aea92de356085f50ea45477a4e6ae2b026cd6b14 # 1.4.2
+    uses: krateo-blueprints/charts/.github/workflows/publish-chart.yaml@70095ab05f1c5dc6c8dd39d0b1fdbbc7382a841c # 1.4.3
     permissions:
       contents: read
     with:
